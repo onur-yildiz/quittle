@@ -40,6 +40,38 @@ class Addictions with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> fetchAddictions() async {
+    final List<Addiction> loadedAddictions = [];
+    final List<PersonalNote> personalNotes = [];
+
+    final addictionsTable = await DBHelper.getData('addictions');
+    addictionsTable.forEach((addiction) async {
+      // 'CREATE TABLE addictions(id TEXT PRIMARY KEY, name TEXT, quit_date TEXT, consumption_type INTEGER, daily_consumption REAL, unit_cost REAL); CREATE TABLE personal_notes(id INTEGER PRIMARY KEY title TEXT, text TEXT, date TEXT)'), //TODO TABLES
+      final notesTable =
+          await DBHelper.getData('personal_notes', addiction['id']);
+      notesTable.forEach((note) {
+        personalNotes.add(PersonalNote(
+          // id: note['id'],
+          title: note['title'],
+          text: note['text'],
+          date: note['date'],
+        ));
+      });
+
+      loadedAddictions.add(
+        Addiction(
+          id: addiction['id'],
+          name: addiction['name'],
+          quitDate: addiction['quit_date'],
+          consumptionType: addiction['consumption_type'],
+          dailyConsumption: addiction['daily_consumption'],
+          unitCost: addiction['unit_cost'],
+          personalNotes: personalNotes,
+        ),
+      );
+    });
+  }
+
   // Future<void> addPersonalNote(
   //     {String id, String title = '', String text, String date}) async {
   //   final newPersonalNote = PersonalNote(

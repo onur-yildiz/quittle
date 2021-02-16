@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
-        home: CreateAddictionScreen(),
+        home: AddictionsScreen(),
         routes: {
           CreateAddictionScreen.routeName: (ctx) => CreateAddictionScreen(),
           AddictionsScreen.routeName: (ctx) => AddictionsScreen(),

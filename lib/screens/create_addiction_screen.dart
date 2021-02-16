@@ -126,7 +126,7 @@ class _AddictionCardState extends State<AddictionCard> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                        padding: const EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
                           color: Theme.of(context).cardColor.withAlpha(150),
@@ -151,27 +151,31 @@ class _AddictionCardState extends State<AddictionCard> {
                                 Container(
                                   child: Text(addictionData['quit_date']),
                                 ),
-                                FlatButton(
-                                  materialTapTargetSize:
-                                      MaterialTapTargetSize.shrinkWrap,
-                                  visualDensity: VisualDensity.compact,
-                                  child: Text(
-                                    'Change',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Theme.of(context)
-                                          .accentTextTheme
-                                          .button
-                                          .color,
-                                    ),
+                                Container(
+                                  width: deviceSize.width * .1,
+                                  child: FlatButton(
+                                    materialTapTargetSize:
+                                        MaterialTapTargetSize.shrinkWrap,
+                                    visualDensity: VisualDensity.compact,
+                                    child: Icon(Icons.date_range),
+                                    // Text(
+                                    //   'Change',
+                                    //   style: TextStyle(
+                                    //     fontWeight: FontWeight.bold,
+                                    //     color: Theme.of(context)
+                                    //         .accentTextTheme
+                                    //         .button
+                                    //         .color,
+                                    //   ),
+                                    // ),
+                                    onPressed: () {
+                                      setState(
+                                        () {
+                                          _selectQuitDate(context);
+                                        },
+                                      );
+                                    },
                                   ),
-                                  onPressed: () {
-                                    setState(
-                                      () {
-                                        _selectQuitDate(context);
-                                      },
-                                    );
-                                  },
                                 ),
                               ],
                             ),
@@ -179,6 +183,7 @@ class _AddictionCardState extends State<AddictionCard> {
                         ),
                       ),
                       Container(
+                        // for some reason, it needs 2 higher padding than the other container to be at the same height
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
@@ -188,7 +193,6 @@ class _AddictionCardState extends State<AddictionCard> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                              // padding: EdgeInsets.only(right: 10),
                               child: Text(
                                 'Consumption Type',
                                 style: TextStyle(
@@ -199,8 +203,7 @@ class _AddictionCardState extends State<AddictionCard> {
                               ),
                             ),
                             DropdownButton(
-                              dropdownColor:
-                                  Theme.of(context).cardColor.withAlpha(150),
+                              dropdownColor: Theme.of(context).cardColor,
                               isDense: true,
                               underline: Container(),
                               value: _consumptionType,

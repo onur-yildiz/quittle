@@ -7,8 +7,12 @@ class DBHelper {
     final dbPath = await getDatabasesPath();
     return openDatabase(
       join(dbPath, 'user.db'),
-      onCreate: (db, version) => db.execute(
-          'CREATE TABLE addictions(id TEXT PRIMARY KEY, name TEXT, quit_date TEXT, consumption_type INTEGER, daily_consumption REAL, unit_cost REAL); CREATE TABLE personal_notes(id INTEGER PRIMARY KEY title TEXT, text TEXT, date TEXT)'), //TODO TABLES
+      onCreate: (db, version) async {
+        await db.execute(
+            'CREATE TABLE addictions(id TEXT PRIMARY KEY, name TEXT, quit_date TEXT, consumption_type INTEGER, daily_consumption REAL, unit_cost REAL)');
+        await db.execute(
+            'CREATE TABLE personal_notes(id INTEGER PRIMARY KEY, title TEXT, text TEXT, date TEXT)');
+      },
       version: 1,
     );
   }
@@ -22,8 +26,19 @@ class DBHelper {
     );
   }
 
-  static Future<List<Map<String, Object>>> getData(String table) async {
+  static Future<List<Map<String, Object>>> getData(
+    String table, [
+    String id = '',
+  ]) async {
     final db = await DBHelper.database();
-    return db.query(table);
+    print(await db.query('sqlite_master'));
+    if (id == '') {
+      return db.query(table);
+    } else {
+      return db.query(table,
+          columns: ['id', 'title', 'text', 'date'],
+          where: "'id' = ?",
+          whereArgs: [id]);
+    }
   }
 }
