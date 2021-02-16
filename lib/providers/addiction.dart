@@ -3,14 +3,16 @@ import 'package:flutter/foundation.dart';
 enum ConsumptionType { quantity, hour }
 
 class Addiction {
+  final String id;
   final String name;
-  final DateTime quitDate;
-  final ConsumptionType consumptionType;
+  final String quitDate;
+  final int consumptionType;
   final double dailyConsumption;
   final double unitCost;
   final List<PersonalNote> personalNotes;
 
   Addiction({
+    @required this.id,
     @required this.name,
     @required this.quitDate,
     @required this.consumptionType,
@@ -23,10 +25,10 @@ class Addiction {
 class PersonalNote {
   final String title;
   final String text;
-  final DateTime date;
+  final String date;
 
   PersonalNote({
-    this.title = '',
+    @required this.title,
     @required this.text,
     @required this.date,
   });

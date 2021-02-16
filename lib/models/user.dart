@@ -1,4 +1,4 @@
-import 'addiction.dart';
+import '../providers/addiction.dart';
 
 // enum Trophy {
 //   bronze,
