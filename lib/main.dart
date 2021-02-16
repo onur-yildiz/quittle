@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
           // dialogBackgroundColor: Color.fromRGBO(247, 244, 243, .4),
           canvasColor: Color.fromRGBO(247, 244, 243, 1),
           cardColor: Color.fromRGBO(247, 244, 243, 1),
-          hintColor: Colors.grey[800],
+          hintColor: Colors.grey[750],
           visualDensity: VisualDensity.adaptivePlatformDensity,
           accentTextTheme: TextTheme(
             button: TextStyle(

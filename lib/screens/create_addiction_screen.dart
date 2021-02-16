@@ -10,6 +10,7 @@ class CreateAddictionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final statusBarHeight = MediaQuery.of(context).padding.top;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
@@ -31,7 +32,7 @@ class CreateAddictionScreen extends StatelessWidget {
               ),
             ),
           ),
-          AddictionCard(),
+          AddictionCard(statusBarHeight),
         ],
       ),
     );
@@ -39,8 +40,13 @@ class CreateAddictionScreen extends StatelessWidget {
 }
 
 class AddictionCard extends StatefulWidget {
+  AddictionCard(
+    this.statusBarHeight,
+  );
   @override
   _AddictionCardState createState() => _AddictionCardState();
+
+  final statusBarHeight;
 }
 
 class _AddictionCardState extends State<AddictionCard> {
@@ -88,13 +94,17 @@ class _AddictionCardState extends State<AddictionCard> {
     final deviceSize = MediaQuery.of(context).size;
     final formNode = FocusScope.of(context);
     return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(0),
+      ),
       margin: EdgeInsets.all(0),
       color: Theme.of(context).cardColor.withAlpha(110),
       child: Form(
         key: _formKey,
         child: SingleChildScrollView(
           child: Container(
-            height: deviceSize.height * .9,
+            height:
+                deviceSize.height - (kToolbarHeight + widget.statusBarHeight),
             padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -259,14 +269,23 @@ class _AddictionCardState extends State<AddictionCard> {
                   isLast: true,
                 ),
                 RaisedButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                   onPressed: () => trySubmit(context),
-                  child: Text(
-                    'Quit Addiction',
-                    style: TextStyle(
-                      color: Theme.of(context).accentTextTheme.button.color,
+                  child: Container(
+                    width: deviceSize.width,
+                    height: deviceSize.height * .15,
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Quit Addiction!',
+                      style: TextStyle(
+                        color: Theme.of(context).accentTextTheme.button.color,
+                        fontSize: 20,
+                      ),
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),
