@@ -16,18 +16,24 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Quit Addiction',
         theme: ThemeData(
+          fontFamily: 'Lato',
           // https://coolors.co/3f2333-f7f4f3-564d4a-f24333-ba1b1d
           primaryColorLight: Color.fromRGBO(134, 70, 102, 1),
           primaryColor: Color.fromRGBO(91, 35, 51, 1),
           primaryColorDark: Color.fromRGBO(82, 35, 51, 1),
           primarySwatch: Colors.red,
-          accentColor: Color.fromRGBO(186, 27, 29, 1),
+          accentColor: Color.fromRGBO(200, 143, 145, 1),
           buttonColor: Color.fromRGBO(247, 244, 243, 1),
           // dialogBackgroundColor: Color.fromRGBO(247, 244, 243, .4),
           canvasColor: Color.fromRGBO(247, 244, 243, 1),
-          cardColor: Color.fromRGBO(247, 244, 243, 1),
+          cardColor: Color.fromRGBO(238, 230, 230, 1),
           hintColor: Colors.grey[750],
           visualDensity: VisualDensity.adaptivePlatformDensity,
+          textTheme: TextTheme(
+            headline6: TextStyle(
+                // TODO: FIND A BETTER WAY TO CHANGE THIS
+                fontSize: Theme.of(context).textTheme.headline6.fontSize * .9),
+          ),
           accentTextTheme: TextTheme(
             button: TextStyle(
               color: Colors.blueGrey[900],

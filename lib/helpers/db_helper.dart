@@ -31,7 +31,7 @@ class DBHelper {
     String id = '',
   ]) async {
     final db = await DBHelper.database();
-    print(await db.query('sqlite_master'));
+    // print(await db.query('sqlite_master'));
     if (id == '') {
       return db.query(table);
     } else {

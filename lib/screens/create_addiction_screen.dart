@@ -54,7 +54,7 @@ class _AddictionCardState extends State<AddictionCard> {
   var _consumptionType = ConsumptionType.quantity;
   var addictionData = {
     'name': '',
-    'quit_date': DateFormat('dd/MM/yyyy').format(DateTime.now()),
+    'quit_date': DateTime.now().toString(),
     'consumption_type': 0,
     'daily_consumption': 1.0,
     'unit_cost': 1.0,
@@ -73,7 +73,8 @@ class _AddictionCardState extends State<AddictionCard> {
       lastDate: DateTime.now(),
     );
     setState(() {
-      addictionData['quit_date'] = DateFormat('dd/MM/yyyy').format(date);
+      print(date.toString());
+      addictionData['quit_date'] = date.toString();
     });
   }
 
@@ -149,7 +150,12 @@ class _AddictionCardState extends State<AddictionCard> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Container(
-                                  child: Text(addictionData['quit_date']),
+                                  child: Text(
+                                    DateFormat('dd/MM/yyyy').format(
+                                      DateTime.parse(
+                                          addictionData['quit_date']),
+                                    ),
+                                  ),
                                 ),
                                 Container(
                                   width: deviceSize.width * .1,

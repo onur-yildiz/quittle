@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_quit_addiction_app/helpers/db_helper.dart';
 import 'package:flutter_quit_addiction_app/providers/addiction.dart';
-import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
 class Addictions with ChangeNotifier {
