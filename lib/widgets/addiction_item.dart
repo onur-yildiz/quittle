@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quit_addiction_app/providers/addiction.dart';
 import 'package:flutter_quit_addiction_app/widgets/duration_counter.dart';
+import 'package:flutter_quit_addiction_app/widgets/target_duration_indicator.dart';
 import 'package:intl/intl.dart';
 
 class AddictionItem extends StatelessWidget {
@@ -40,18 +41,19 @@ class AddictionItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(5),
       ),
       height: deviceSize.height * .4,
-      padding: const EdgeInsets.all(10),
+      // padding: const EdgeInsets.all(10),
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Container(
             width: deviceSize.width * .4,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
+                  alignment: Alignment.centerLeft,
                   child: Text(
                     addictionData.name.toUpperCase(),
                     style: TextStyle(
@@ -61,64 +63,38 @@ class AddictionItem extends StatelessWidget {
                     ),
                   ),
                 ),
-                Stack(
-                  children: [
-                    Center(
-                      child: SizedBox(
-                        height: deviceSize.height * .15,
-                        width: deviceSize.width * .25,
-                        child: CircularProgressIndicator(
-                          value: abstinenceTime.inHours.remainder(24) / 24,
-                          strokeWidth:
-                              Theme.of(context).textTheme.headline6.fontSize,
-                          backgroundColor: Colors.white,
-                        ),
-                      ),
-                    ),
-                    Center(
-                      child: SizedBox(
-                        height: deviceSize.height * .15,
-                        width: deviceSize.width * .25,
-                        child: Center(
-                          child: Text(
-                              abstinenceTime.inHours.remainder(24).toString() +
-                                  ' Hours'),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('Since '),
-                          Text(formattedQuitDate),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('For '),
-                          DurationCounter(duration: abstinenceTime),
-                        ],
-                      ),
-                    ],
-                  ),
-                )
+                TargetDurationIndicator(duration: abstinenceTime),
+                // Container(
+                //   child: Column(
+                //     crossAxisAlignment: CrossAxisAlignment.start,
+                //     children: [
+                //       Row(
+                //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //         children: [
+                //           Text('Since '),
+                //           Text(formattedQuitDate),
+                //         ],
+                //       ),
+                //       Row(
+                //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //         children: [
+                //           Text('For '),
+                //           DurationCounter(duration: abstinenceTime),
+                //         ],
+                //       ),
+                //     ],
+                //   ),
+                // )
               ],
             ),
           ),
           Container(
             width: deviceSize.width * .4,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
                       child: Row(

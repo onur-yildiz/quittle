@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_quit_addiction_app/providers/addictions.dart';
 import 'package:flutter_quit_addiction_app/screens/create_addiction_screen.dart';

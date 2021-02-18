@@ -1,12 +1,12 @@
-import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart' as sql;
+import 'package:path/path.dart' as path;
 import 'package:sqflite/sqlite_api.dart';
 
 class DBHelper {
   static Future<Database> database() async {
-    final dbPath = await getDatabasesPath();
-    return openDatabase(
-      join(dbPath, 'user.db'),
+    final dbPath = await sql.getDatabasesPath();
+    return sql.openDatabase(
+      path.join(dbPath, 'user.db'),
       onCreate: (db, version) async {
         await db.execute(
             'CREATE TABLE addictions(id TEXT PRIMARY KEY, name TEXT, quit_date TEXT, consumption_type INTEGER, daily_consumption REAL, unit_cost REAL)');

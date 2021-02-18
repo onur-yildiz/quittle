@@ -69,6 +69,7 @@ class Addictions with ChangeNotifier {
         ),
       );
     });
+    _addictions = loadedAddictions;
   }
 
   // Future<void> addPersonalNote(
