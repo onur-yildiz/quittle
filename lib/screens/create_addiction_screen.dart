@@ -52,6 +52,7 @@ class AddictionCard extends StatefulWidget {
 
 class _AddictionCardState extends State<AddictionCard> {
   final GlobalKey<FormState> _formKey = GlobalKey();
+  FocusNode focusNode;
   var _consumptionType = ConsumptionType.quantity;
   var addictionData = {
     'name': '',
@@ -61,12 +62,7 @@ class _AddictionCardState extends State<AddictionCard> {
     'unit_cost': 1.0,
   };
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  // }
-
-  Future<void> _selectQuitDate(context) async {
+  Future<void> _selectDate(context) async {
     final date = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -75,7 +71,11 @@ class _AddictionCardState extends State<AddictionCard> {
     );
     setState(() {
       print(date.toString());
-      addictionData['quit_date'] = date.toString();
+      if (date != null) {
+        addictionData['quit_date'] = date.toString();
+      } else {
+        addictionData['quit_date'] = DateTime.now().toString();
+      }
     });
   }
 
@@ -92,9 +92,21 @@ class _AddictionCardState extends State<AddictionCard> {
   }
 
   @override
+  void initState() {
+    focusNode = new FocusNode();
+    focusNode.requestFocus();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
-    final formNode = FocusScope.of(context);
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(0),
@@ -114,8 +126,8 @@ class _AddictionCardState extends State<AddictionCard> {
                 CustomTextFormField(
                   data: addictionData,
                   inputName: 'Name',
-                  inputType: TextInputType.text,
-                  formNode: formNode,
+                  inputType: TextInputType.name,
+                  focusNode: focusNode,
                 ),
                 Container(
                   decoration: BoxDecoration(
@@ -141,7 +153,10 @@ class _AddictionCardState extends State<AddictionCard> {
                               child: Text(
                                 'Date',
                                 style: TextStyle(
-                                  fontSize: 12,
+                                  fontSize: Theme.of(context)
+                                      .textTheme
+                                      .subtitle2
+                                      .fontSize,
                                   fontWeight: FontWeight.bold,
                                   color: Theme.of(context).hintColor,
                                 ),
@@ -165,20 +180,10 @@ class _AddictionCardState extends State<AddictionCard> {
                                         MaterialTapTargetSize.shrinkWrap,
                                     visualDensity: VisualDensity.compact,
                                     child: Icon(Icons.date_range),
-                                    // Text(
-                                    //   'Change',
-                                    //   style: TextStyle(
-                                    //     fontWeight: FontWeight.bold,
-                                    //     color: Theme.of(context)
-                                    //         .accentTextTheme
-                                    //         .button
-                                    //         .color,
-                                    //   ),
-                                    // ),
                                     onPressed: () {
                                       setState(
                                         () {
-                                          _selectQuitDate(context);
+                                          _selectDate(context);
                                         },
                                       );
                                     },
@@ -203,7 +208,10 @@ class _AddictionCardState extends State<AddictionCard> {
                               child: Text(
                                 'Consumption Type',
                                 style: TextStyle(
-                                  fontSize: 12,
+                                  fontSize: Theme.of(context)
+                                      .textTheme
+                                      .subtitle2
+                                      .fontSize,
                                   fontWeight: FontWeight.bold,
                                   color: Theme.of(context).hintColor,
                                 ),
@@ -251,7 +259,6 @@ class _AddictionCardState extends State<AddictionCard> {
                   data: addictionData,
                   inputName: 'Daily Consumption',
                   inputType: TextInputType.number,
-                  formNode: formNode,
                   validator: (value) {
                     if (double.tryParse(value) == null) {
                       return 'Please enter a number';
@@ -266,7 +273,7 @@ class _AddictionCardState extends State<AddictionCard> {
                   data: addictionData,
                   inputName: 'Unit Cost',
                   inputType: TextInputType.number,
-                  formNode: formNode,
+                  // onSubmit: () => trySubmit(context),
                   validator: (value) {
                     if (double.tryParse(value) == null) {
                       return 'Please enter a number';

@@ -9,7 +9,7 @@ class Addiction {
   final int consumptionType;
   final double dailyConsumption;
   final double unitCost;
-  final List<PersonalNote> personalNotes;
+  List<PersonalNote> personalNotes;
 
   Addiction({
     @required this.id,

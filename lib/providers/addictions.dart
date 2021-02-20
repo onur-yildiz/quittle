@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_quit_addiction_app/helpers/db_helper.dart';
 import 'package:flutter_quit_addiction_app/providers/addiction.dart';
@@ -35,42 +33,96 @@ class Addictions with ChangeNotifier {
         'unit_cost': data['unit_cost'],
       },
     );
-    print(json.encode(data));
     notifyListeners();
   }
 
   Future<void> fetchAddictions() async {
     final List<Addiction> loadedAddictions = [];
-    final List<PersonalNote> personalNotes = [];
 
     final addictionsTable = await DBHelper.getData('addictions');
-    addictionsTable.forEach((addiction) async {
-      // 'CREATE TABLE addictions(id TEXT PRIMARY KEY, name TEXT, quit_date TEXT, consumption_type INTEGER, daily_consumption REAL, unit_cost REAL); CREATE TABLE personal_notes(id INTEGER PRIMARY KEY title TEXT, text TEXT, date TEXT)'), //TODO TABLES
-      final notesTable =
-          await DBHelper.getData('personal_notes', addiction['id']);
-      notesTable.forEach((note) {
-        personalNotes.add(PersonalNote(
-          // id: note['id'],
-          title: note['title'],
-          text: note['text'],
-          date: note['date'],
-        ));
-      });
+    if (addictionsTable.length <= 0) {
+      _addictions = [];
+      notifyListeners();
+      return;
+    }
+    addictionsTable.forEach(
+      (addiction) async {
+        // ! COMMENTED CODE ABOVE MAKES ADDICTIONS NOT LOAD SOMETIMES
 
-      loadedAddictions.add(
-        Addiction(
+        var temp = Addiction(
           id: addiction['id'],
           name: addiction['name'],
           quitDate: addiction['quit_date'],
           consumptionType: addiction['consumption_type'],
           dailyConsumption: addiction['daily_consumption'],
           unitCost: addiction['unit_cost'],
-          personalNotes: personalNotes,
+          personalNotes: [],
+        );
+        loadedAddictions.add(temp);
+        print(loadedAddictions.length);
+        _addictions = loadedAddictions;
+      },
+    );
+    notifyListeners();
+  }
+
+  void createNote(Map<String, dynamic> data, String id) {
+    final addiction = _addictions.firstWhere((addiction) => addiction.id == id);
+    final newNote = PersonalNote(
+      title: data['title'],
+      text: data['text'],
+      date: data['date'],
+    );
+    addiction.personalNotes.add(newNote);
+
+    DBHelper.insert(
+      'personal_notes',
+      {
+        'id': id,
+        'title': data['title'],
+        'text': data['text'],
+        'date': data['date'],
+      },
+    );
+
+    print(_addictions
+            .firstWhere((addiction) => addiction.id == id)
+            .personalNotes
+            .length
+            .toString() +
+        ' LENGTH');
+    notifyListeners();
+  }
+
+  Future<void> fetchNotes(String id) async {
+    final List<PersonalNote> loadedNotes = [];
+    final addiction = _addictions.firstWhere((addiction) => addiction.id == id);
+    final notes = await DBHelper.getData('personal_notes', id);
+    print(notes[1]);
+    notes.forEach((note) {
+      loadedNotes.add(
+        PersonalNote(
+          title: note['title'],
+          text: note['text'],
+          date: note['date'],
         ),
       );
     });
-    _addictions = loadedAddictions;
+    addiction.personalNotes = loadedNotes;
+    notifyListeners();
   }
+
+  // Future<void> toggleAddiction(String addictionId, bool isExpanded) async {
+  //   if (isExpanded) {
+  //     _addictions = [
+  //       addictions.firstWhere((addiction) => addictionId == addiction.id)
+  //     ];
+  //     print('picked');
+  //   } else {
+  //     fetchAddictions();
+  //   }
+  //   notifyListeners();
+  // }
 
   // Future<void> addPersonalNote(
   //     {String id, String title = '', String text, String date}) async {

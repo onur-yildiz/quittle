@@ -11,7 +11,7 @@ class DBHelper {
         await db.execute(
             'CREATE TABLE addictions(id TEXT PRIMARY KEY, name TEXT, quit_date TEXT, consumption_type INTEGER, daily_consumption REAL, unit_cost REAL)');
         await db.execute(
-            'CREATE TABLE personal_notes(id INTEGER PRIMARY KEY, title TEXT, text TEXT, date TEXT)');
+            'CREATE TABLE personal_notes(id TEXT, title TEXT, text TEXT, date TEXT)');
       },
       version: 1,
     );
@@ -35,10 +35,13 @@ class DBHelper {
     if (id == '') {
       return db.query(table);
     } else {
-      return db.query(table,
-          columns: ['id', 'title', 'text', 'date'],
-          where: "'id' = ?",
-          whereArgs: [id]);
+      // final result = db.query(
+      //   table,
+      //   columns: ['id', 'title', 'text', 'date'],
+      //   where: '$id = ?',
+      //   whereArgs: [id],
+      // );
+      return db.rawQuery('SELECT * FROM personal_notes WHERE id = ?', [id]);
     }
   }
 }

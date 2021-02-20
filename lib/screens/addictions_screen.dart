@@ -12,11 +12,16 @@ class AddictionsScreen extends StatefulWidget {
 }
 
 class _AddictionsScreenState extends State<AddictionsScreen> {
+  Future<void> _fetchAddictions() async {
+    await Provider.of<Addictions>(context, listen: false).fetchAddictions();
+  }
+
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
+        title: Text('QuitAll'),
         backgroundColor: Theme.of(context).primaryColor,
         actions: [
           IconButton(
@@ -41,48 +46,38 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
           ],
         ),
       ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Theme.of(context).canvasColor,
-              Theme.of(context).accentColor.withAlpha(30),
-            ],
-            stops: [.4, 1],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
-        child: FutureBuilder(
-          future:
-              Provider.of<Addictions>(context, listen: false).fetchAddictions(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
+      body: FutureBuilder(
+        future: _fetchAddictions(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            if (snapshot.error != null) {
               return Center(
-                child: CircularProgressIndicator(),
-              );
-            } else {
-              if (snapshot.error != null) {
-                return Center(
-                  child: Text('An error occured.'),
-                );
-              }
-              return Consumer<Addictions>(
-                builder: (ctx, addictionData, child) => RefreshIndicator(
-                  onRefresh: () async {
-                    await addictionData.fetchAddictions();
-                  },
-                  child: ListView.builder(
-                    itemCount: addictionData.addictions.length,
-                    itemBuilder: (ctx, index) => AddictionItem(
-                      addictionData.addictions[index],
-                    ),
-                  ),
-                ),
+                child: Text('An error occured.'),
               );
             }
-          },
-        ),
+            return Consumer<Addictions>(
+              builder: (ctx, addictionsData, child) => RefreshIndicator(
+                onRefresh: () async {
+                  await addictionsData.fetchAddictions();
+                  print('refresh test');
+                },
+                child: ListView.builder(
+                  itemCount: addictionsData.addictions.length,
+                  itemBuilder: (ctx, index) {
+                    print(addictionsData.addictions[index].name);
+                    return AddictionItem(
+                      addictionData: addictionsData.addictions[index],
+                    );
+                  },
+                ),
+              ),
+            );
+          }
+        },
       ),
     );
   }

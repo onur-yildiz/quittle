@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => Addictions(),
+      create: (_) => new Addictions(),
       child: MaterialApp(
         title: 'Quit Addiction',
         theme: ThemeData(
@@ -31,8 +31,12 @@ class MyApp extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity,
           textTheme: TextTheme(
             headline6: TextStyle(
-                // TODO: FIND A BETTER WAY TO CHANGE THIS
-                fontSize: Theme.of(context).textTheme.headline6.fontSize * .9),
+              // TODO: FIND A BETTER WAY TO CHANGE THIS
+              fontSize: Theme.of(context).textTheme.headline6.fontSize * .9,
+            ),
+            bodyText2: TextStyle(
+              color: Colors.blueGrey[800],
+            ),
           ),
           accentTextTheme: TextTheme(
             button: TextStyle(

@@ -5,9 +5,10 @@ class CustomTextFormField extends StatelessWidget {
     Key key,
     @required this.data,
     @required this.inputName,
-    @required this.formNode,
+    this.focusNode,
     this.inputType,
     this.validator,
+    // this.onSubmit,
     this.isLast,
   }) : super(key: key);
 
@@ -15,13 +16,15 @@ class CustomTextFormField extends StatelessWidget {
   final String inputName;
   final TextInputType inputType;
   final Function validator;
-  final FocusNode formNode;
+  // final Function onSubmit;
+  final FocusNode focusNode;
   final bool isLast;
 
   @override
   Widget build(BuildContext context) {
     final valKey = inputName.toLowerCase().split(' ').join('_');
     return TextFormField(
+      focusNode: focusNode,
       key: ValueKey(valKey),
       decoration: InputDecoration(
         filled: true,
@@ -40,8 +43,11 @@ class CustomTextFormField extends StatelessWidget {
       ),
       keyboardType: inputType,
       validator: validator,
-      onEditingComplete: () =>
-          isLast == true ? formNode.unfocus() : formNode.nextFocus(),
+      textInputAction:
+          isLast == true ? TextInputAction.done : TextInputAction.next,
+      onEditingComplete: () => isLast == true
+          ? FocusScope.of(context).unfocus()
+          : FocusScope.of(context).nextFocus(),
       onSaved: (input) {
         var value;
         switch (data[valKey].runtimeType) {

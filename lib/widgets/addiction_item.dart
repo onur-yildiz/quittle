@@ -1,29 +1,64 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quit_addiction_app/providers/addiction.dart';
+import 'package:flutter_quit_addiction_app/providers/addictions.dart';
 import 'package:flutter_quit_addiction_app/widgets/duration_counter.dart';
+import 'package:flutter_quit_addiction_app/widgets/personal_notes_view.dart';
 import 'package:flutter_quit_addiction_app/widgets/target_duration_indicator.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
-class AddictionItem extends StatelessWidget {
-  const AddictionItem(
-    this.addictionData,
-  );
+import 'addiction_details.dart';
+
+const Duration _kExpand = Duration(milliseconds: 200);
+
+class AddictionItem extends StatefulWidget {
+  const AddictionItem({
+    @required this.addictionData,
+    Key key,
+  }) : super(key: key);
 
   final Addiction addictionData;
 
   @override
-  Widget build(BuildContext context) {
-    final deviceSize = MediaQuery.of(context).size;
+  _AddictionItemState createState() => _AddictionItemState();
+}
 
-    final quitDate = DateTime.parse(addictionData.quitDate);
-    final formattedQuitDate = DateFormat('dd/MM/yyyy').format(quitDate);
+class _AddictionItemState extends State<AddictionItem> {
+  var expansionHeight = 0.0;
+  void _changeExpansion(bool isExpanded, double deviceHeight) {
+    setState(() {
+      isExpanded ? expansionHeight = deviceHeight * .5 : expansionHeight = 0;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final expansionTileTheme = Theme.of(context).copyWith(
+      dividerColor: Colors.transparent,
+      accentColor: Theme.of(context).primaryColorDark,
+      buttonColor: Theme.of(context).accentColor,
+      textTheme: TextTheme(
+        subtitle1: TextStyle(
+          color: Theme.of(context).primaryColorLight,
+          fontWeight: FontWeight.w800,
+        ),
+      ),
+    );
+
+    final deviceSize = MediaQuery.of(context).size;
+    final deviceWidth = deviceSize.width;
+    final deviceHeight = deviceSize.height -
+        (kToolbarHeight + MediaQuery.of(context).padding.top);
+
+    final quitDate = DateTime.parse(widget.addictionData.quitDate);
     final abstinenceTime = DateTime.now().difference(quitDate);
-    final notUsedFor = (addictionData.dailyConsumption *
+    final notUsedFor = (widget.addictionData.dailyConsumption *
         (abstinenceTime.inDays)); // TODO CHANGE notusedfor NAME
     final consumptionType =
-        (addictionData.consumptionType == 1) ? 'Hours' : 'Times';
+        (widget.addictionData.consumptionType == 1) ? 'Hours' : 'Times';
 
-    return Container(
+    return AnimatedContainer(
+      duration: _kExpand,
       decoration: BoxDecoration(
         border: Border.all(
           width: .5,
@@ -40,143 +75,222 @@ class AddictionItem extends StatelessWidget {
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(5),
       ),
-      height: deviceSize.height * .4,
-      // padding: const EdgeInsets.all(10),
-      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+      height: deviceHeight * .4 +
+          expansionHeight +
+          20, // 20 = (containerpadding) + (expansiontilemargin)
+      padding: const EdgeInsets.only(top: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Container(
-            width: deviceSize.width * .4,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.start,
+            height: deviceHeight * .3,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Container(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    addictionData.name.toUpperCase(),
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: Theme.of(context).textTheme.headline6.fontSize,
-                      color: Theme.of(context).primaryColorDark,
-                    ),
+                  width: deviceWidth * .4,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          widget.addictionData.name.toUpperCase(),
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize:
+                                Theme.of(context).textTheme.headline5.fontSize,
+                            color: Theme.of(context).primaryColorDark,
+                          ),
+                        ),
+                      ),
+                      Flexible(
+                        flex: 3,
+                        child:
+                            TargetDurationIndicator(duration: abstinenceTime),
+                      ),
+                    ],
                   ),
                 ),
-                TargetDurationIndicator(duration: abstinenceTime),
-                // Container(
-                //   child: Column(
-                //     crossAxisAlignment: CrossAxisAlignment.start,
-                //     children: [
-                //       Row(
-                //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //         children: [
-                //           Text('Since '),
-                //           Text(formattedQuitDate),
-                //         ],
-                //       ),
-                //       Row(
-                //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //         children: [
-                //           Text('For '),
-                //           DurationCounter(duration: abstinenceTime),
-                //         ],
-                //       ),
-                //     ],
-                //   ),
-                // )
+                Container(
+                  width: deviceWidth * .4,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Daily Use:'),
+                                Text(
+                                  (widget.addictionData.dailyConsumption % 1 ==
+                                              0
+                                          ? widget
+                                              .addictionData.dailyConsumption
+                                              .toStringAsFixed(0)
+                                          : widget
+                                              .addictionData.dailyConsumption
+                                              .toString()) +
+                                      ' ' +
+                                      consumptionType,
+                                ),
+                              ],
+                            ),
+                          ),
+                          if (widget.addictionData.unitCost > 0)
+                            Container(
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text('Total ' + consumptionType + ' Saved'),
+                                  Text(
+                                    notUsedFor % 1 == 0
+                                        ? notUsedFor.toStringAsFixed(0)
+                                        : notUsedFor.toString(),
+                                  ),
+                                ],
+                              ),
+                            ),
+                        ],
+                      ),
+                      if (widget.addictionData.unitCost == 0)
+                        DefaultTextStyle(
+                          style: TextStyle(
+                            fontSize:
+                                Theme.of(context).textTheme.headline6.fontSize,
+                            color: Theme.of(context).primaryColorLight,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          child: Container(
+                            height: deviceHeight * .25,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text('Total ' + consumptionType + ' Saved'),
+                                Text(
+                                  notUsedFor % 1 == 0
+                                      ? notUsedFor.toStringAsFixed(0)
+                                      : notUsedFor.toString(),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      if (widget.addictionData.unitCost > 0)
+                        DefaultTextStyle(
+                          style: TextStyle(
+                            fontSize:
+                                Theme.of(context).textTheme.headline6.fontSize,
+                            color: Theme.of(context).primaryColorLight,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          child: Container(
+                            height: deviceHeight * .2,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Money Saved',
+                                ),
+                                Text(
+                                  (widget.addictionData.unitCost * notUsedFor)
+                                          .toString() +
+                                      ' \$',
+                                )
+                              ],
+                            ),
+                          ),
+                        )
+                    ],
+                  ),
+                )
               ],
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.only(top: 10.0),
+            child: Divider(
+              height: 1,
+              color: Theme.of(context).accentColor.withAlpha(50),
+              thickness: 2,
+            ),
+          ),
           Container(
-            width: deviceSize.width * .4,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+            child: DefaultTabController(
+              length: 2,
+              initialIndex: 0,
+              child: Theme(
+                data: expansionTileTheme,
+                child: ExpansionTile(
+                  backgroundColor: Colors.transparent,
+                  onExpansionChanged: (isExpanded) {
+                    // Provider.of<Addictions>(context, listen: false)
+                    //     .toggleAddiction(widget.addictionData.id, isExpanded);
+                    _changeExpansion(isExpanded, deviceHeight);
+                  },
+                  title: Text('More'),
                   children: [
-                    Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    SizedBox(
+                      height: expansionHeight,
+                      child: Column(
                         children: [
-                          Text('Daily Use:'),
-                          Text(
-                            (addictionData.dailyConsumption % 1 == 0
-                                    ? addictionData.dailyConsumption
-                                        .toStringAsFixed(0)
-                                    : addictionData.dailyConsumption
-                                        .toString()) +
-                                ' ' +
-                                consumptionType,
+                          Flexible(
+                            flex: 0,
+                            child: TabBar(
+                              labelPadding: const EdgeInsets.all(8.0),
+                              labelColor: Theme.of(context).primaryColorDark,
+                              indicatorWeight: 3,
+                              indicatorColor:
+                                  Theme.of(context).primaryColor.withAlpha(150),
+                              tabs: [
+                                Text(
+                                  'Details',
+                                ),
+                                InkWell(
+                                  child: Text(
+                                    'Notes',
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Flexible(
+                            flex: 1,
+                            child: Container(
+                              child: TabBarView(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: AddictionDetails(
+                                      startDate: quitDate,
+                                      totalTime: abstinenceTime,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(0),
+                                    child: PersonalNotesView(
+                                      addictionData: widget.addictionData,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
                           ),
                         ],
                       ),
                     ),
-                    if (addictionData.unitCost > 0)
-                      Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('Total ' + consumptionType + ' Saved'),
-                            Text(
-                              notUsedFor % 1 == 0
-                                  ? notUsedFor.toStringAsFixed(0)
-                                  : notUsedFor.toString(),
-                            ),
-                          ],
-                        ),
-                      ),
                   ],
                 ),
-                if (addictionData.unitCost == 0)
-                  DefaultTextStyle(
-                    style: TextStyle(
-                      fontSize: Theme.of(context).textTheme.headline6.fontSize,
-                      color: Theme.of(context).primaryColorLight,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    child: Container(
-                      height: deviceSize.height * .25,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text('Total ' + consumptionType + ' Saved'),
-                          Text(
-                            notUsedFor % 1 == 0
-                                ? notUsedFor.toStringAsFixed(0)
-                                : notUsedFor.toString(),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                if (addictionData.unitCost > 0)
-                  DefaultTextStyle(
-                    style: TextStyle(
-                      fontSize: Theme.of(context).textTheme.headline6.fontSize,
-                      color: Theme.of(context).primaryColorLight,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    child: Container(
-                      height: deviceSize.height * .25,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Money Saved',
-                          ),
-                          Text(
-                            (addictionData.unitCost * notUsedFor).toString() +
-                                ' \$',
-                          )
-                        ],
-                      ),
-                    ),
-                  )
-              ],
+              ),
             ),
-          )
+          ),
         ],
       ),
     );

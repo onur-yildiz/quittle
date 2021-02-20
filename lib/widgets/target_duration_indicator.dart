@@ -36,7 +36,7 @@ class _TargetDurationIndicatorState extends State<TargetDurationIndicator> {
 
   void setValues(Duration time) {
     if (time.inHours < 24) {
-      if (time.inHours <= 1) {
+      if (time.inHours < 1) {
         targetUnit = 'An Hour';
         counterUnit = 'Minutes';
         counterValue = time.inMinutes;
@@ -45,7 +45,8 @@ class _TargetDurationIndicatorState extends State<TargetDurationIndicator> {
         targetUnit = '24 Hours';
         counterUnit = 'Hours';
         counterValue = time.inHours;
-        percentage = counterValue / 24;
+        percentage = time.inMinutes.remainder(Duration.minutesPerDay) /
+            Duration.minutesPerDay;
       }
       targetValue = null;
     } else if (time.inDays < 30) {
@@ -111,7 +112,7 @@ class _TargetDurationIndicatorState extends State<TargetDurationIndicator> {
 
     return Container(
       // color: Colors.red,
-      height: deviceSize.height * .2,
+      height: 140,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -121,8 +122,8 @@ class _TargetDurationIndicatorState extends State<TargetDurationIndicator> {
               Center(
                 child: Container(
                   padding: const EdgeInsets.all(10),
-                  height: deviceSize.height * .175,
-                  width: deviceSize.width * .3,
+                  height: 120,
+                  width: 120,
                   child: CircularProgressIndicator(
                     value: percentage,
                     strokeWidth: Theme.of(context).textTheme.headline6.fontSize,
@@ -132,7 +133,7 @@ class _TargetDurationIndicatorState extends State<TargetDurationIndicator> {
               ),
               Center(
                 child: SizedBox(
-                  height: deviceSize.height * .175,
+                  height: 120,
                   // width: deviceSize.width * .25,
                   child: Center(
                     child: Text(
