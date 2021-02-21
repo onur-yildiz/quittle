@@ -47,8 +47,6 @@ class Addictions with ChangeNotifier {
     }
     addictionsTable.forEach(
       (addiction) async {
-        // ! COMMENTED CODE ABOVE MAKES ADDICTIONS NOT LOAD SOMETIMES
-
         var temp = Addiction(
           id: addiction['id'],
           name: addiction['name'],
@@ -59,7 +57,6 @@ class Addictions with ChangeNotifier {
           personalNotes: [],
         );
         loadedAddictions.add(temp);
-        print(loadedAddictions.length);
         _addictions = loadedAddictions;
       },
     );
@@ -84,13 +81,6 @@ class Addictions with ChangeNotifier {
         'date': data['date'],
       },
     );
-
-    print(_addictions
-            .firstWhere((addiction) => addiction.id == id)
-            .personalNotes
-            .length
-            .toString() +
-        ' LENGTH');
     notifyListeners();
   }
 
@@ -108,38 +98,5 @@ class Addictions with ChangeNotifier {
       );
     });
     addiction.personalNotes = loadedNotes;
-    // notifyListeners();
   }
-
-  // Future<void> toggleAddiction(String addictionId, bool isExpanded) async {
-  //   if (isExpanded) {
-  //     _addictions = [
-  //       addictions.firstWhere((addiction) => addictionId == addiction.id)
-  //     ];
-  //     print('picked');
-  //   } else {
-  //     fetchAddictions();
-  //   }
-  //   notifyListeners();
-  // }
-
-  // Future<void> addPersonalNote(
-  //     {String id, String title = '', String text, String date}) async {
-  //   final newPersonalNote = PersonalNote(
-  //     title: title,
-  //     text: text,
-  //     date: date,
-  //   );
-  //   _addictions
-  //       .firstWhere((addiction) => addiction.id == id)
-  //       .personalNotes
-  //       .add(newPersonalNote);
-  //   DBHelper.insert('personal_notes', {
-  //     'id': id,
-  //     'title': title,
-  //     'text': text,
-  //     'date': date != null ? date : DateTime.now(),
-  //   });
-  //   notifyListeners();
-  // }
 }

@@ -31,7 +31,6 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
       lastDate: DateTime.now(),
     );
     setState(() {
-      print(date.toString());
       if (date != null) {
         noteData['date'] = date.toString();
       } else {
@@ -50,7 +49,6 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
         noteData,
         widget.addictionId,
       );
-      print('NOTE CREATED');
       Navigator.of(ctx).pop();
     }
   }

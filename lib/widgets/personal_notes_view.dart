@@ -76,26 +76,19 @@ class _PersonalNotesViewState extends State<PersonalNotesView> {
                         )
                       : Consumer<Addictions>(
                           builder: (_, addictionsData, _child) =>
-                              RefreshIndicator(
-                            onRefresh: () async {
-                              await addictionsData
-                                  .fetchNotes(widget.addictionData.id);
-                              print('refresh test notes');
+                              ListView.builder(
+                            physics: BouncingScrollPhysics(),
+                            itemCount:
+                                widget.addictionData.personalNotes.length,
+                            itemBuilder: (_, index) {
+                              return Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: Note(
+                                  data:
+                                      widget.addictionData.personalNotes[index],
+                                ),
+                              );
                             },
-                            child: ListView.builder(
-                              physics: BouncingScrollPhysics(),
-                              itemCount:
-                                  widget.addictionData.personalNotes.length,
-                              itemBuilder: (_, index) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(top: 8.0),
-                                  child: Note(
-                                    data: widget
-                                        .addictionData.personalNotes[index],
-                                  ),
-                                );
-                              },
-                            ),
                           ),
                         );
             },

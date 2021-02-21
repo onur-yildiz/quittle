@@ -22,12 +22,12 @@ class AddictionItem extends StatefulWidget {
 }
 
 class _AddictionItemState extends State<AddictionItem> {
-  var expansionHeight = 0.0;
+  var _isPanelExpanded = false;
 
-  void _changeExpansion(bool isExpanded, double deviceHeight) {
-    setState(() {
-      isExpanded ? expansionHeight = deviceHeight * .5 : expansionHeight = 0;
-    });
+  @override
+  void didUpdateWidget(covariant AddictionItem oldWidget) {
+    _isPanelExpanded = false;
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -37,7 +37,7 @@ class _AddictionItemState extends State<AddictionItem> {
       accentColor: Theme.of(context).primaryColorDark,
       buttonColor: Theme.of(context).accentColor,
       textTheme: TextTheme(
-        subtitle1: TextStyle(
+        bodyText2: TextStyle(
           color: Theme.of(context).primaryColorLight,
           fontWeight: FontWeight.w800,
         ),
@@ -48,6 +48,7 @@ class _AddictionItemState extends State<AddictionItem> {
     final deviceWidth = deviceSize.width;
     final deviceHeight = deviceSize.height -
         (kToolbarHeight + MediaQuery.of(context).padding.top);
+    final expansionHeight = deviceHeight * .5;
 
     final quitDate = DateTime.parse(widget.addictionData.quitDate);
     final abstinenceTime = DateTime.now().difference(quitDate);
@@ -58,6 +59,7 @@ class _AddictionItemState extends State<AddictionItem> {
 
     return AnimatedContainer(
       duration: _kExpand,
+      curve: Curves.fastOutSlowIn,
       decoration: BoxDecoration(
         border: Border.all(
           width: .5,
@@ -74,15 +76,12 @@ class _AddictionItemState extends State<AddictionItem> {
         color: Theme.of(context).canvasColor,
         borderRadius: BorderRadius.circular(5),
       ),
-      height: deviceHeight * .4 +
-          expansionHeight +
-          20, // 20 = (titlemargin) + (dividerpadding)
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Container(
-            margin: const EdgeInsets.symmetric(vertical: 5),
+            margin: const EdgeInsets.only(top: 8.0),
             height: deviceHeight * .05,
             alignment: Alignment.center,
             child: Text(
@@ -170,28 +169,40 @@ class _AddictionItemState extends State<AddictionItem> {
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 10.0),
-            child: Divider(
-              height: 0,
-              color: Theme.of(context).accentColor,
-              thickness: .5,
-            ),
-          ),
-          Container(
-            child: DefaultTabController(
-              length: 2,
-              initialIndex: 0,
-              child: Theme(
-                data: expansionTileTheme,
-                child: ExpansionTile(
-                  backgroundColor: Theme.of(context).cardColor,
-                  onExpansionChanged: (isExpanded) {
-                    _changeExpansion(isExpanded, deviceHeight);
-                  },
-                  title: Text('More'),
-                  children: [
-                    SizedBox(
+          DefaultTabController(
+            length: 2,
+            initialIndex: 0,
+            child: Theme(
+              data: expansionTileTheme,
+              child: ExpansionPanelList(
+                animationDuration: _kExpand,
+                expandedHeaderPadding: EdgeInsets.zero,
+                elevation: 0,
+                expansionCallback: (panelIndex, isExpanded) {
+                  setState(() {
+                    _isPanelExpanded = !isExpanded;
+                  });
+                },
+                children: [
+                  ExpansionPanel(
+                    headerBuilder: (context, isExpanded) {
+                      return Container(
+                        height: deviceHeight * .1,
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'More',
+                          style: TextStyle(
+                              fontSize: Theme.of(context)
+                                  .textTheme
+                                  .headline6
+                                  .fontSize),
+                        ),
+                      );
+                    },
+                    canTapOnHeader: true,
+                    isExpanded: _isPanelExpanded,
+                    body: SizedBox(
                       height: expansionHeight,
                       child: Column(
                         children: [
@@ -239,8 +250,8 @@ class _AddictionItemState extends State<AddictionItem> {
                         ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),

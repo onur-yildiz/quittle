@@ -31,16 +31,9 @@ class DBHelper {
     String id = '',
   ]) async {
     final db = await DBHelper.database();
-    // print(await db.query('sqlite_master'));
     if (id == '') {
       return db.query(table);
     } else {
-      // final result = db.query(
-      //   table,
-      //   columns: ['id', 'title', 'text', 'date'],
-      //   where: '$id = ?',
-      //   whereArgs: [id],
-      // );
       return db.rawQuery('SELECT * FROM personal_notes WHERE id = ?', [id]);
     }
   }

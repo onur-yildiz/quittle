@@ -141,25 +141,3 @@ class _SettingsViewState extends State<SettingsView> {
     );
   }
 }
-
-// Column(
-//   mainAxisAlignment: MainAxisAlignment.center,
-//   children: [
-//     Row(
-//       mainAxisAlignment: MainAxisAlignment.start,
-//       // mainAxisSize: MainAxisSize.max,
-//       children: [
-//         Text('data'),
-//         Checkbox(
-//           value: _check,
-//           onChanged: (value) {
-//             setState(() {
-//               print('CHECK');
-//               _check = value;
-//             });
-//           },
-//         ),
-//       ],
-//     ),
-//   ],
-// ),

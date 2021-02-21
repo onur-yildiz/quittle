@@ -70,7 +70,6 @@ class _AddictionCardState extends State<AddictionCard> {
       lastDate: DateTime.now(),
     );
     setState(() {
-      print(date.toString());
       if (date != null) {
         addictionData['quit_date'] = date.toString();
       } else {

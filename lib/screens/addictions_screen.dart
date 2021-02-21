@@ -53,13 +53,11 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
               builder: (ctx, addictionsData, child) => RefreshIndicator(
                 onRefresh: () async {
                   await addictionsData.fetchAddictions();
-                  print('refresh test');
                 },
                 child: ListView.builder(
                   physics: BouncingScrollPhysics(),
                   itemCount: addictionsData.addictions.length,
                   itemBuilder: (ctx, index) {
-                    print(addictionsData.addictions[index].name);
                     return AddictionItem(
                       addictionData: addictionsData.addictions[index],
                     );
