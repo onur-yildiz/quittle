@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_quit_addiction_app/providers/addiction.dart';
+import 'package:flutter_quit_addiction_app/models/addiction.dart';
 import 'package:flutter_quit_addiction_app/providers/addictions.dart';
 import 'package:flutter_quit_addiction_app/screens/addictions_screen.dart';
 import 'package:flutter_quit_addiction_app/widgets/custom_text_form_field.dart';

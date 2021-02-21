@@ -54,12 +54,12 @@ class _TargetDurationIndicatorState extends State<TargetDurationIndicator> {
         targetUnit = 'A Week';
         counterUnit = 'Days';
         counterValue = time.inDays % 7;
-        percentage = counterValue / 7;
+        percentage = counterValue * 24 / (7 * 24);
       } else {
         targetUnit = 'A Month';
         counterUnit = 'Days';
         counterValue = time.inDays % 30;
-        percentage = counterValue / 30;
+        percentage = counterValue * 24 / (30 * 24);
       }
       targetValue = null;
     } else if (time.inDays ~/ 30 < 12) {
@@ -110,39 +110,34 @@ class _TargetDurationIndicatorState extends State<TargetDurationIndicator> {
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
 
-    return Container(
-      // color: Colors.red,
-      height: 140,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Center(
+      child: Wrap(
+        direction: Axis.vertical,
+        spacing: 10,
+        runSpacing: 10,
+        alignment: WrapAlignment.center,
+        crossAxisAlignment: WrapCrossAlignment.center,
         children: [
-          Stack(
-            // alignment: Alignment.bottomCenter,
-            children: [
-              Center(
-                child: Container(
-                  padding: const EdgeInsets.all(10),
-                  height: 120,
-                  width: 120,
-                  child: CircularProgressIndicator(
-                    value: percentage,
-                    strokeWidth: Theme.of(context).textTheme.headline6.fontSize,
-                    backgroundColor: Colors.white,
+          SizedBox.fromSize(
+            size: Size.square(deviceSize.height * .15),
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    Theme.of(context).accentColor,
+                  ),
+                  value: percentage,
+                  strokeWidth: Theme.of(context).textTheme.headline6.fontSize,
+                  backgroundColor: Theme.of(context).accentColor.withAlpha(50),
+                ),
+                Center(
+                  child: Text(
+                    counterValue.toString() + ' ' + counterUnit,
                   ),
                 ),
-              ),
-              Center(
-                child: SizedBox(
-                  height: 120,
-                  // width: deviceSize.width * .25,
-                  child: Center(
-                    child: Text(
-                      counterValue.toString() + ' ' + counterUnit,
-                    ),
-                  ),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
           Container(
             child: Text(

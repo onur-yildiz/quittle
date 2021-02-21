@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_quit_addiction_app/providers/addiction.dart';
+import 'package:flutter_quit_addiction_app/models/addiction.dart';
 import 'package:flutter_quit_addiction_app/providers/addictions.dart';
 import 'package:flutter_quit_addiction_app/widgets/create_personal_note.dart';
 import 'package:flutter_quit_addiction_app/widgets/note.dart';
@@ -83,6 +83,7 @@ class _PersonalNotesViewState extends State<PersonalNotesView> {
                               print('refresh test notes');
                             },
                             child: ListView.builder(
+                              physics: BouncingScrollPhysics(),
                               itemCount:
                                   widget.addictionData.personalNotes.length,
                               itemBuilder: (_, index) {

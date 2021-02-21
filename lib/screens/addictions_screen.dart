@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quit_addiction_app/providers/addictions.dart';
 import 'package:flutter_quit_addiction_app/screens/create_addiction_screen.dart';
 import 'package:flutter_quit_addiction_app/widgets/addiction_item.dart';
+import 'package:flutter_quit_addiction_app/widgets/settings_view.dart';
 import 'package:provider/provider.dart';
 
 class AddictionsScreen extends StatefulWidget {
@@ -18,7 +19,7 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final deviceSize = MediaQuery.of(context).size;
+    // final deviceSize = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: Text('QuitAll'),
@@ -34,18 +35,7 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
         ],
       ),
       // ? MAKE DRAWER THE SETTINGS SCREEN MAYBE ??
-      drawer: Container(
-        height: deviceSize.height,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Placeholder'),
-            Text('Placeholder'),
-            Text('Placeholder'),
-            Text('Placeholder'),
-          ],
-        ),
-      ),
+      drawer: SettingsView(),
       body: FutureBuilder(
         future: _fetchAddictions(),
         builder: (context, snapshot) {
@@ -56,7 +46,7 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
           } else {
             if (snapshot.error != null) {
               return Center(
-                child: Text('An error occured.'),
+                child: Text('An error occured'),
               );
             }
             return Consumer<Addictions>(
@@ -66,6 +56,7 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
                   print('refresh test');
                 },
                 child: ListView.builder(
+                  physics: BouncingScrollPhysics(),
                   itemCount: addictionsData.addictions.length,
                   itemBuilder: (ctx, index) {
                     print(addictionsData.addictions[index].name);

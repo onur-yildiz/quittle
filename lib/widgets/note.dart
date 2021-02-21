@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_quit_addiction_app/providers/addiction.dart';
+import 'package:flutter_quit_addiction_app/models/addiction.dart';
 import 'package:intl/intl.dart';
 
 class Note extends StatelessWidget {

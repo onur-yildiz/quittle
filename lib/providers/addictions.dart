@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quit_addiction_app/helpers/db_helper.dart';
-import 'package:flutter_quit_addiction_app/providers/addiction.dart';
+import 'package:flutter_quit_addiction_app/models/addiction.dart';
 import 'package:uuid/uuid.dart';
 
 class Addictions with ChangeNotifier {
@@ -98,7 +98,6 @@ class Addictions with ChangeNotifier {
     final List<PersonalNote> loadedNotes = [];
     final addiction = _addictions.firstWhere((addiction) => addiction.id == id);
     final notes = await DBHelper.getData('personal_notes', id);
-    print(notes[1]);
     notes.forEach((note) {
       loadedNotes.add(
         PersonalNote(
@@ -109,7 +108,7 @@ class Addictions with ChangeNotifier {
       );
     });
     addiction.personalNotes = loadedNotes;
-    notifyListeners();
+    // notifyListeners();
   }
 
   // Future<void> toggleAddiction(String addictionId, bool isExpanded) async {
