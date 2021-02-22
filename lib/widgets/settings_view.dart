@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_quit_addiction_app/providers/settings.dart';
+import 'package:flutter_quit_addiction_app/widgets/currency_picker.dart';
+import 'package:provider/provider.dart';
 
 class SettingsView extends StatefulWidget {
   @override
@@ -72,66 +75,13 @@ class _SettingsViewState extends State<SettingsView> {
                 ListTile(
                   onTap: () => showDialog(
                     context: context,
-                    builder: (context) => new SimpleDialog(
-                      backgroundColor: Theme.of(context).cardColor,
-                      contentPadding: EdgeInsets.zero,
-                      children: [
-                        Container(
-                          color: Theme.of(context).canvasColor,
-                          height: deviceHeight * .75,
-                          width: deviceWidth * .3,
-                          child: SingleChildScrollView(
-                            physics: BouncingScrollPhysics(),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                FlatButton(
-                                  onPressed: () {},
-                                  child: Text('data'),
-                                  materialTapTargetSize:
-                                      MaterialTapTargetSize.shrinkWrap,
-                                ),
-                                FlatButton(
-                                  onPressed: () {},
-                                  child: Text('data'),
-                                  materialTapTargetSize:
-                                      MaterialTapTargetSize.shrinkWrap,
-                                ),
-                                FlatButton(
-                                    onPressed: () {}, child: Text('data')),
-                                FlatButton(
-                                    onPressed: () {}, child: Text('data')),
-                                FlatButton(
-                                    onPressed: () {}, child: Text('data')),
-                                FlatButton(
-                                    onPressed: () {}, child: Text('data')),
-                                FlatButton(
-                                    onPressed: () {}, child: Text('data')),
-                                FlatButton(
-                                    onPressed: () {}, child: Text('data')),
-                                FlatButton(
-                                    onPressed: () {}, child: Text('data')),
-                                FlatButton(
-                                    onPressed: () {}, child: Text('data')),
-                                FlatButton(
-                                    onPressed: () {}, child: Text('data')),
-                                FlatButton(
-                                    onPressed: () {}, child: Text('data')),
-                                FlatButton(
-                                    onPressed: () {}, child: Text('data')),
-                              ],
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
+                    builder: (context) => CurrencyPicker(),
                   ),
                   isThreeLine: true,
                   contentPadding: EdgeInsets.zero,
                   leading: Icon(Icons.attach_money),
                   title: Text('Currency'),
-                  subtitle: Text('USD'),
+                  subtitle: Text(Provider.of<Settings>(context).currency),
                 ),
               ],
             ),

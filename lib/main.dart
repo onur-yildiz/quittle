@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quit_addiction_app/providers/addictions.dart';
-import 'package:flutter_quit_addiction_app/providers/refresh.dart';
+import 'package:flutter_quit_addiction_app/providers/settings.dart';
 import 'package:flutter_quit_addiction_app/screens/addictions_screen.dart';
 import 'package:flutter_quit_addiction_app/screens/create_addiction_screen.dart';
 import 'package:provider/provider.dart';
@@ -17,9 +17,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => new Addictions(),
         ),
-        // ChangeNotifierProvider(
-        //   create: (_) => new Refresh(),
-        // ),
+        ChangeNotifierProvider(
+          create: (_) => new Settings(),
+        ),
       ],
       child: MaterialApp(
         title: 'Quit Addiction',

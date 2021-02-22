@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quit_addiction_app/models/addiction.dart';
-import 'package:flutter_quit_addiction_app/providers/refresh.dart';
+import 'package:flutter_quit_addiction_app/providers/settings.dart';
 import 'package:flutter_quit_addiction_app/widgets/personal_notes_view.dart';
 import 'package:flutter_quit_addiction_app/widgets/target_duration_indicator.dart';
 import 'package:provider/provider.dart';
