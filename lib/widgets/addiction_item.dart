@@ -80,10 +80,12 @@ class _AddictionItemState extends State<AddictionItem> {
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             margin: const EdgeInsets.only(top: 8.0),
             height: deviceHeight * .05,
+            width: deviceWidth * .4,
             alignment: Alignment.center,
             child: Text(
               widget.addictionData.name.toUpperCase(),
@@ -91,15 +93,75 @@ class _AddictionItemState extends State<AddictionItem> {
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: Theme.of(context).textTheme.headline5.fontSize,
-                color: Theme.of(context).primaryColorLight,
+                // color: Theme.of(context).hintColor,
               ),
             ),
           ),
           Container(
             height: deviceHeight * .25,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                SizedBox(
+                  width: deviceWidth * .4,
+                  child: Flex(
+                    direction: Axis.vertical,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Flexible(
+                        flex: 1,
+                        child: Text(local.level.capitalizeWords() + '1'),
+                      ),
+                      Flexible(
+                        flex: 3,
+                        child: DefaultTextStyle(
+                          style: TextStyle(
+                            fontSize:
+                                Theme.of(context).textTheme.headline6.fontSize,
+                            color: Theme.of(context).hintColor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          child: widget.addictionData.unitCost == 0
+                              ? Container(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(local.savedFor
+                                          .capitalizeFirstLetter()),
+                                      Text(
+                                        notUsedCount.toStringAsFixed(0) +
+                                            ' ' +
+                                            consumptionType,
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              : Container(
+                                  height: deviceHeight * .2,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        local.moneySaved.capitalizeWords(),
+                                      ),
+                                      Consumer<Settings>(
+                                        builder: (_, settings, _ch) => Text(
+                                          (widget.addictionData.unitCost *
+                                                      notUsedCount)
+                                                  .toStringAsFixed(2) +
+                                              ' ' +
+                                              settings.currency,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
                 Container(
                   width: deviceWidth * .4,
                   child: Column(
@@ -114,62 +176,6 @@ class _AddictionItemState extends State<AddictionItem> {
                     ],
                   ),
                 ),
-                Flex(
-                  direction: Axis.vertical,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Flexible(
-                      flex: 1,
-                      child: Text(local.level.capitalizeWords() + '1'),
-                    ),
-                    Flexible(
-                      flex: 3,
-                      child: DefaultTextStyle(
-                        style: TextStyle(
-                          fontSize:
-                              Theme.of(context).textTheme.headline6.fontSize,
-                          color: Theme.of(context).primaryColorLight,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        child: widget.addictionData.unitCost == 0
-                            ? Container(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                        local.savedFor.capitalizeFirstLetter()),
-                                    Text(
-                                      notUsedCount.toStringAsFixed(0) +
-                                          ' ' +
-                                          consumptionType,
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : Container(
-                                height: deviceHeight * .2,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      local.moneySaved.capitalizeWords(),
-                                    ),
-                                    Consumer<Settings>(
-                                      builder: (_, settings, _ch) => Text(
-                                        (widget.addictionData.unitCost *
-                                                    notUsedCount)
-                                                .toStringAsFixed(2) +
-                                            ' ' +
-                                            settings.currency,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                      ),
-                    )
-                  ],
-                )
               ],
             ),
           ),

@@ -84,10 +84,10 @@
   "newNote": "yeni not",
   "@newNote": {},
 
-  "progressNotification": "ilerleyiş bildirimleri",
+  "progressNotification": "İlerleyiş bildirimleri",
   "@progressNotification": {},
 
-  "progressNotificationDesc": "ilerleyiş bildirimlerini aktif et",
+  "progressNotificationDesc": "İlerleyiş bildirimlerini aktif et",
   "@progressNotificationDesc": {},
 
   "quoteOfTheDay": "günün sözü",
