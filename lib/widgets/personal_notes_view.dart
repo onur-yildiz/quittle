@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_quit_addiction_app/extensions/string_extension.dart';
 import 'package:flutter_quit_addiction_app/models/addiction.dart';
 import 'package:flutter_quit_addiction_app/providers/addictions.dart';
 import 'package:flutter_quit_addiction_app/widgets/create_personal_note.dart';
@@ -17,6 +19,7 @@ class PersonalNotesView extends StatefulWidget {
 class _PersonalNotesViewState extends State<PersonalNotesView> {
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context);
     return Column(
       children: [
         Flexible(
@@ -48,7 +51,7 @@ class _PersonalNotesViewState extends State<PersonalNotesView> {
                       color: Colors.white,
                     ),
                     Text(
-                      'New Note',
+                      local.newNote.capitalizeWords(),
                       style: TextStyle(
                         color: Colors.white,
                       ),
@@ -72,7 +75,8 @@ class _PersonalNotesViewState extends State<PersonalNotesView> {
                     )
                   : snapshot.error != null
                       ? Center(
-                          child: Text('An error occured'),
+                          child: Text(local.genericErrorMessage
+                              .capitalizeFirstLetter()),
                         )
                       : Consumer<Addictions>(
                           builder: (_, addictionsData, _child) =>

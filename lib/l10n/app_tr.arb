@@ -1,0 +1,149 @@
+{
+  "helloWorld": "Hello World!",
+  
+  "appName": "QuitAll",
+  "@appName": {},
+
+  "moneySaved": "tasarruf edilen",
+  "@moneySaved": {},
+
+  "hour": "{count,plural, =0{saat}=1{saat}other{saat}}",
+  "@hour": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+
+  "minute": "{count,plural, =0{dakika}=1{dakika}other{dakika}}",
+  "@minute": {
+    "description": "",
+    "placeholders": {
+      "count": {}
+    }
+  },
+
+  "day": "{count,plural, =0{gün}=1{gün}other{gün}}",
+  "@day": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "week": "{count,plural, =0{hafta}=1{hafta}other{hafta}}",
+  "@week": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "month": "{count,plural, =0{ay}=1{ay}other{ay}}",
+  "@month": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "year": "{count,plural, =0{yıl}=1{yıl}other{yıl}}",
+  "@year": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  
+  "times": "{count,plural, =0{kere}=1{kere}other{kere}}",
+  "@times": {
+    "placeholders": {
+    "count": {}
+  }
+  },
+
+  "level": "seviye",
+  "@level": {},
+  
+  "details": "detaylar",
+  "@details": {},
+
+  "more": "daha fazla",
+  "@more": {},
+
+  "startDate": "başlangıç tarihi",
+  "@startDate": {},
+
+  "duration": "süre",
+  "@duration": {},
+
+  "dailyUse": "günlük kullanım",
+  "@dailyUse": {},
+
+  "savedFor": "tasarruf miktarı",
+  "@savedFor": {},
+
+  "notes": "notlar",
+  "@notes": {},
+
+  "note": "not",
+  "@note": {},
+
+  "newNote": "yeni not",
+  "@newNote": {},
+
+  "progressNotification": "ilerleyiş bildirimleri",
+  "@progressNotification": {},
+
+  "progressNotificationDesc": "ilerleyiş bildirimlerini aktif et",
+  "@progressNotificationDesc": {},
+
+  "quoteOfTheDay": "günün sözü",
+  "@quoteOfTheDay": {},
+
+  "quoteOfTheDayDesc": "günün sözü bildirimlerini aktif et",
+  "@quoteOfTheDayDesc": {},
+
+  "currency": "para birimi",
+  "@currency": {},
+
+  "settings": "ayarlar",
+  "@settings": {},
+
+  "addictionName": "kötü alışkanlık adı",
+  "@addictionName": {},
+
+  "date": "tarih",
+  "@date": {},
+
+  "consumptionType": "tüketim türü",
+  "@consumptionType": {},
+
+  "quantity": "quantity",
+  "@quantity": {},
+
+  "dailyConsumption": "günlük kullanım",
+  "@dailyConsumption": {},
+
+  "unitCost": "birim fiyatı",
+  "@unitCost": {},
+
+  "quitAddiction": "bırak!",
+  "@quitAddiction": {},
+  "genericErrorMessage": "bir hata oluştu",
+  "@genericErrorMessage": {
+    "description": ""
+  },
+
+  "pleaseEnterANumber": "lütfen bir sayı girin",
+  "@pleaseEnterANumber": {
+    "description": ""
+  },
+
+  "valueMustBePositive": "girilen değer pozitif olmalıdır",
+  "@valueMustBePositive": {
+    "description": ""
+  },
+
+  "title": "başlık",
+  "@title": {
+    "description": ""
+  },
+
+  "save": "kaydet",
+  "@save": {
+    "description": ""
+  }
+}

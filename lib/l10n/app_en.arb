@@ -1,0 +1,174 @@
+{
+  "helloWorld": "Hello World!",
+  "@helloWorld": {
+    "description": "The conventional newborn programmer greeting"
+  },
+  "appName": "QuitAll",
+  "@appName": {},
+
+  "moneySaved": "money saved",
+  "@moneySaved": {
+    "description": ""
+  },
+  "minute": "{count,plural, =0{minutes}=1{minute}other{minutes}}",
+  "@minute": {
+    "description": "",
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "hour": "{count,plural, =0{hours}=1{hour}other{hours}}",
+  "@hour": {
+    "description": "",
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "day": "{count,plural, =0{days}=1{day}other{days}}",
+  "@day": {
+    "description": "",
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "week": "{count,plural, =0{weeks}=1{week}other{weeks}}",
+  "@week": {
+    "description": "",
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "month": "{count,plural, =0{months}=1{month}other{months}}",
+  "@month": {
+    "description": "",
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "year": "{count,plural, =0{years}=1{year}other{years}}",
+  "@year": {
+    "description": "",
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "times": "{count,plural, =0{times}=1{time}other{times}}",
+  "@times": {
+    "placeholders": {
+      "count": {}
+    },
+    "description": "count of times X not used"
+  },
+  "level": "level",
+  "@level": {
+    "description": ""
+  },
+  "details": "details",
+  "@details": {
+    "description": ""
+  },
+  "more": "more",
+  "@more": {
+    "description": ""
+  },
+  "startDate": "start date",
+  "@startDate": {
+    "description": ""
+  },
+  "duration": "duration",
+  "@duration": {
+    "description": ""
+  },
+  "dailyUse": "daily use",
+  "@dailyUse": {
+    "description": ""
+  },
+  "savedFor": "saved for",
+  "@savedFor": {
+    "description": "title for how many times/hours X is not used"
+  },
+  "note": "note",
+  "@note": {
+    "description": "note input title"
+  },
+  "notes": "notes",
+  "@notes": {
+    "description": ""
+  },
+  "newNote": "new note",
+  "@newNote": {
+    "description": ""
+  },
+  "progressNotification": "progress notification",
+  "@progressNotification": {
+    "description": ""
+  },
+  "progressNotificationDesc": "enable push notifications for milestones",
+  "@progressNotificationDesc": {
+    "description": "enable push notifications for milestones"
+  },
+  "quoteOfTheDay": "quote of the day",
+  "@quoteOfTheDay": {
+    "description": ""
+  },
+  "quoteOfTheDayDesc": "enable push notifications for daily quotes",
+  "@quoteOfTheDayDesc": {
+    "description": "enable push notifications for daily quotes"
+  },
+  "currency": "currency",
+  "@currency": {
+    "description": ""
+  },
+  "settings": "settings",
+  "@settings": {
+    "description": ""
+  },
+  "addictionName": "addiction name",
+  "@addictionName": {
+    "description": ""
+  },
+  "date": "date",
+  "@date": {
+    "description": ""
+  },
+  "consumptionType": "consumption type",
+  "@consumptionType": {
+    "description": ""
+  },
+  "quantity": "quantity",
+  "@quantity": {
+    "description": ""
+  },
+  "dailyConsumption": "daily consumption",
+  "@dailyConsumption": {
+    "description": ""
+  },
+  "unitCost": "unit cost",
+  "@unitCost": {
+    "description": ""
+  },
+  "quitAddiction": "quit addiction!",
+  "@quitAddiction": {
+    "description": ""
+  },
+  "genericErrorMessage": "an error occured",
+  "@genericErrorMessage": {
+    "description": ""
+  },
+  "pleaseEnterANumber": "please enter a number",
+  "@pleaseEnterANumber": {
+    "description": ""
+  },
+  "valueMustBePositive": "the value must be positive",
+  "@valueMustBePositive": {
+    "description": ""
+  },
+  "title": "title",
+  "@title": {
+    "description": ""
+  },
+  "save": "save",
+  "@save": {
+    "description": ""
+  }
+}

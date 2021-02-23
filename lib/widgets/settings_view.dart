@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_quit_addiction_app/extensions/string_extension.dart';
 import 'package:flutter_quit_addiction_app/providers/settings.dart';
 import 'package:flutter_quit_addiction_app/widgets/currency_picker.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +16,7 @@ class _SettingsViewState extends State<SettingsView> {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context);
     final mediaQuery = MediaQuery.of(context);
     final deviceHeight = mediaQuery.size.height;
     final deviceWidth = mediaQuery.size.width;
@@ -32,7 +35,7 @@ class _SettingsViewState extends State<SettingsView> {
                 ),
               ),
               child: Text(
-                'Settings',
+                local.settings.capitalizeWords(),
                 style: TextStyle(
                   fontSize: Theme.of(context).textTheme.headline6.fontSize,
                   fontWeight: FontWeight.bold,
@@ -47,8 +50,9 @@ class _SettingsViewState extends State<SettingsView> {
               runSpacing: 15.0,
               children: [
                 CheckboxListTile(
-                  title: Text('Progress Notifications'),
-                  subtitle: Text('Enable push notifications for milestones'),
+                  title: Text(local.progressNotification.capitalizeWords()),
+                  subtitle: Text(
+                      local.progressNotificationDesc.capitalizeFirstLetter()),
                   value: _progressCheck,
                   onChanged: (value) {
                     setState(() {
@@ -60,8 +64,9 @@ class _SettingsViewState extends State<SettingsView> {
                   thickness: 1,
                 ),
                 CheckboxListTile(
-                  title: Text('Quote of the Day'),
-                  subtitle: Text('Enable push notifications for daily quotes'),
+                  title: Text(local.quoteOfTheDay.capitalizeWords()),
+                  subtitle:
+                      Text(local.quoteOfTheDayDesc.capitalizeFirstLetter()),
                   value: _quoteCheck,
                   onChanged: (value) {
                     setState(() {
@@ -80,7 +85,7 @@ class _SettingsViewState extends State<SettingsView> {
                   isThreeLine: true,
                   contentPadding: EdgeInsets.zero,
                   leading: Icon(Icons.attach_money),
-                  title: Text('Currency'),
+                  title: Text(local.currency.capitalizeWords()),
                   subtitle: Text(Provider.of<Settings>(context).currency),
                 ),
               ],

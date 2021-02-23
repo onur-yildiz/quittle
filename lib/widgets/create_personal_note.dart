@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_quit_addiction_app/extensions/string_extension.dart';
 import 'package:flutter_quit_addiction_app/providers/addictions.dart';
 import 'package:flutter_quit_addiction_app/widgets/custom_text_form_field.dart';
 import 'package:intl/intl.dart';
@@ -68,6 +70,7 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context);
     final deviceWidth = MediaQuery.of(context).size.width;
     // final deviceHeight = MediaQuery.of(context).size.height;
 
@@ -109,8 +112,9 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
             // crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CustomTextFormField(
+                valKey: 'title',
                 data: noteData,
-                inputName: 'Title',
+                inputName: local.title.capitalizeWords(),
                 focusNode: null,
                 inputType: TextInputType.name,
               ),
@@ -125,7 +129,7 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
                       style: BorderStyle.none,
                     ),
                   ),
-                  hintText: 'Note',
+                  hintText: local.note.capitalizeWords(),
                 ),
                 keyboardType: TextInputType.multiline,
                 textInputAction: TextInputAction.newline,
@@ -159,7 +163,7 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
                         children: [
                           Container(
                             child: Text(
-                              'Date',
+                              local.date.capitalizeWords(),
                               style: TextStyle(
                                 fontSize: Theme.of(context)
                                     .textTheme
@@ -220,7 +224,7 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
                           child: Row(
                             children: [
                               Icon(Icons.save),
-                              Text('Save'),
+                              Text(local.save.capitalizeWords()),
                             ],
                           ),
                         ),

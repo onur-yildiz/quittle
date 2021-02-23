@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_quit_addiction_app/extensions/string_extension.dart';
 
 import 'package:flutter/material.dart';
 
@@ -15,13 +17,13 @@ class TargetDurationIndicator extends StatefulWidget {
 }
 
 class _TargetDurationIndicatorState extends State<TargetDurationIndicator> {
-  var updatedDuration;
-  var targetUnit;
-  var targetValue;
-  var counterUnit;
-  var counterValue;
-  var percentage;
-  final refreshInterval = 15;
+  Duration updatedDuration;
+  String targetUnit;
+  int targetValue;
+  String counterUnit;
+  int counterValue;
+  double percentage = 0.0;
+  final int refreshInterval = 15;
 
   // final daysInMonth = DateTimeRange(
   //   start: DateTime(
@@ -34,75 +36,81 @@ class _TargetDurationIndicatorState extends State<TargetDurationIndicator> {
   //   ),
   // ).duration.inDays;
 
-  void setValues(Duration time) {
+  void setValues(Duration time, [AppLocalizations local]) {
     if (time.inHours < 24) {
       if (time.inHours < 1) {
-        targetUnit = 'An Hour';
-        counterUnit = 'Minutes';
+        targetValue = 1;
+        targetUnit = local.hour(1);
         counterValue = time.inMinutes;
+        counterUnit = local.minute(counterValue);
         percentage = counterValue / 60;
       } else {
-        targetUnit = '24 Hours';
-        counterUnit = 'Hours';
+        targetValue = 24;
+        targetUnit = local.hour(targetValue);
         counterValue = time.inHours;
+        counterUnit = local.hour(counterValue);
         percentage = time.inMinutes.remainder(Duration.minutesPerDay) /
             Duration.minutesPerDay;
       }
-      targetValue = null;
     } else if (time.inDays < 30) {
       if (time.inDays < 7) {
-        targetUnit = 'A Week';
-        counterUnit = 'Days';
+        targetValue = 1;
+        targetUnit = local.week(targetValue);
         counterValue = time.inDays % 7;
+        counterUnit = local.day(counterValue);
         percentage = counterValue * 24 / (7 * 24);
       } else {
-        targetUnit = 'A Month';
-        counterUnit = 'Days';
+        targetValue = 1;
+        targetUnit = local.month(targetValue);
         counterValue = time.inDays % 30;
+        counterUnit = local.day(counterValue);
         percentage = counterValue * 24 / (30 * 24);
       }
-      targetValue = null;
     } else if (time.inDays ~/ 30 < 12) {
-      targetUnit = 'Months';
       targetValue = (time.inDays ~/ 30) + 1;
-      counterUnit = 'Months';
-      counterValue = (time.inDays ~/ 30);
+      targetUnit = local.month(targetValue);
+      counterValue = ((time.inDays % 360) ~/ 30);
+      counterUnit = local.month(counterValue);
       percentage = time.inDays / (targetValue * 30);
     } else {
-      if (time.inDays / 365 < 1) {
-        targetUnit = 'Year';
-        counterUnit = 'Months';
+      targetValue = (time.inDays ~/ 360) + 1;
+      if (time.inDays / 360 < 1) {
+        targetUnit = local.year(targetValue);
         counterValue = (time.inDays ~/ 30);
-        percentage = time.inDays / 365;
+        counterUnit = local.month(counterValue);
+        percentage = time.inDays / 360;
       } else {
-        targetUnit = 'Years';
-        counterUnit = 'Years';
-        counterValue = (time.inDays ~/ 365);
+        targetUnit = local.year(targetValue);
+        counterValue = (time.inDays ~/ 360);
+        counterUnit = local.year(counterValue);
       }
-      targetValue = (time.inDays ~/ 365) + 1;
-      percentage = time.inDays / (365 * targetValue);
+      percentage = time.inDays / (360 * targetValue);
     }
-  }
+  } // todo: do better, can be better
 
   @override
   void initState() {
     updatedDuration = widget.duration;
-    setValues(updatedDuration);
-    Timer.periodic(
-      Duration(seconds: refreshInterval),
-      (timer) {
-        if (mounted) {
-          setState(() {
-            updatedDuration =
-                updatedDuration + Duration(seconds: refreshInterval);
-            setValues(updatedDuration);
-          });
-        } else {
-          timer.cancel();
-        }
-      },
-    );
-
+    Future.delayed(Duration.zero, () {
+      final local = AppLocalizations.of(context);
+      setState(() {
+        setValues(updatedDuration, local);
+      });
+      Timer.periodic(
+        Duration(seconds: refreshInterval),
+        (timer) {
+          if (mounted) {
+            setState(() {
+              updatedDuration =
+                  updatedDuration + Duration(seconds: refreshInterval);
+              setValues(updatedDuration, local);
+            });
+          } else {
+            timer.cancel();
+          }
+        },
+      );
+    });
     super.initState();
   }
 
@@ -123,17 +131,29 @@ class _TargetDurationIndicatorState extends State<TargetDurationIndicator> {
             child: Stack(
               fit: StackFit.expand,
               children: [
-                CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    Theme.of(context).accentColor,
-                  ),
-                  value: percentage,
-                  strokeWidth: Theme.of(context).textTheme.headline6.fontSize,
-                  backgroundColor: Theme.of(context).accentColor.withAlpha(50),
-                ),
+                TweenAnimationBuilder(
+                    tween: Tween<double>(
+                      begin: 0,
+                      end: percentage,
+                    ),
+                    duration: Duration(milliseconds: 800),
+                    builder: (_, value, _ch) {
+                      return CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          Theme.of(context).accentColor,
+                        ),
+                        value: value,
+                        strokeWidth:
+                            Theme.of(context).textTheme.headline6.fontSize,
+                        backgroundColor:
+                            Theme.of(context).accentColor.withAlpha(50),
+                      );
+                    }),
                 Center(
                   child: Text(
-                    counterValue.toString() + ' ' + counterUnit,
+                    (counterValue != null && counterUnit != null)
+                        ? counterValue.toString() + ' ' + counterUnit
+                        : '',
                   ),
                 ),
               ],
@@ -141,8 +161,10 @@ class _TargetDurationIndicatorState extends State<TargetDurationIndicator> {
           ),
           Container(
             child: Text(
-                (targetValue != null ? (targetValue.toString() + ' ') : '') +
-                    targetUnit),
+              (targetValue != null && targetUnit != null)
+                  ? (targetValue.toString() + ' ' + targetUnit)
+                  : '',
+            ),
           ),
         ],
       ),

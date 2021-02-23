@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_quit_addiction_app/models/addiction.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_quit_addiction_app/extensions/string_extension.dart';
 
-import 'duration_counter.dart';
+import 'package:flutter_quit_addiction_app/models/addiction.dart';
+import 'package:flutter_quit_addiction_app/widgets/duration_counter.dart';
 
 class AddictionDetails extends StatefulWidget {
   const AddictionDetails({
@@ -19,15 +21,13 @@ class _AddictionDetailsState extends State<AddictionDetails> {
   var formattedStartDate;
   var quitDate;
   var abstinenceTime;
-  var consumptionType;
   var notUsedCount;
+
   @override
   void initState() {
     quitDate = DateTime.parse(widget.addictionData.quitDate);
     abstinenceTime = DateTime.now().difference(quitDate);
     formattedStartDate = DateFormat('dd/MM/yyyy').format(quitDate);
-    consumptionType =
-        (widget.addictionData.consumptionType == 1) ? 'Hours' : 'Times';
     notUsedCount =
         (widget.addictionData.dailyConsumption * (abstinenceTime.inDays));
     super.initState();
@@ -35,6 +35,16 @@ class _AddictionDetailsState extends State<AddictionDetails> {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context);
+    final consumptionType = ((widget.addictionData.consumptionType == 1)
+            ? local.hour(
+                notUsedCount.toInt(),
+              )
+            : local.times(
+                notUsedCount.toInt(),
+              ))
+        .capitalizeWords();
+
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,21 +52,21 @@ class _AddictionDetailsState extends State<AddictionDetails> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Since '),
+              Text(local.startDate.capitalizeWords()),
               Text(formattedStartDate),
             ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('For '),
+              Text(local.duration.capitalizeWords()),
               DurationCounter(duration: abstinenceTime),
             ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Daily Use:'),
+              Text(local.dailyUse.capitalizeWords()),
               Text(
                 (widget.addictionData.dailyConsumption % 1 == 0
                         ? widget.addictionData.dailyConsumption
@@ -70,11 +80,13 @@ class _AddictionDetailsState extends State<AddictionDetails> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Total ' + consumptionType + ' Saved'),
+              Text(local.savedFor.capitalizeWords()),
               Text(
-                notUsedCount % 1 == 0
-                    ? notUsedCount.toStringAsFixed(0)
-                    : notUsedCount.toString(),
+                (notUsedCount % 1 == 0
+                        ? notUsedCount.toStringAsFixed(0)
+                        : notUsedCount.toString()) +
+                    ' ' +
+                    consumptionType,
               ),
             ],
           ),

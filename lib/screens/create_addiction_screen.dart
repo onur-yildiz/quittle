@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_quit_addiction_app/extensions/string_extension.dart';
 import 'package:flutter_quit_addiction_app/models/addiction.dart';
 import 'package:flutter_quit_addiction_app/providers/addictions.dart';
 import 'package:flutter_quit_addiction_app/screens/addictions_screen.dart';
@@ -105,6 +107,7 @@ class _AddictionCardState extends State<AddictionCard> {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context);
     final deviceSize = MediaQuery.of(context).size;
     return Card(
       shape: RoundedRectangleBorder(
@@ -123,8 +126,9 @@ class _AddictionCardState extends State<AddictionCard> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 CustomTextFormField(
+                  valKey: 'name',
                   data: addictionData,
-                  inputName: 'Name',
+                  inputName: local.addictionName.capitalizeWords(),
                   inputType: TextInputType.name,
                   focusNode: focusNode,
                 ),
@@ -150,7 +154,7 @@ class _AddictionCardState extends State<AddictionCard> {
                             Container(
                               // padding: EdgeInsets.only(right: 10),
                               child: Text(
-                                'Date',
+                                local.date.capitalizeWords(),
                                 style: TextStyle(
                                   fontSize: Theme.of(context)
                                       .textTheme
@@ -205,7 +209,7 @@ class _AddictionCardState extends State<AddictionCard> {
                           children: [
                             Container(
                               child: Text(
-                                'Consumption Type',
+                                local.consumptionType.capitalizeWords(),
                                 style: TextStyle(
                                   fontSize: Theme.of(context)
                                       .textTheme
@@ -223,11 +227,11 @@ class _AddictionCardState extends State<AddictionCard> {
                               value: _consumptionType,
                               items: [
                                 DropdownMenuItem(
-                                  child: Text('Quantity'),
+                                  child: Text(local.quantity.capitalizeWords()),
                                   value: ConsumptionType.quantity,
                                 ),
                                 DropdownMenuItem(
-                                  child: Text('Hour'),
+                                  child: Text(local.hour(0).capitalizeWords()),
                                   value: ConsumptionType.hour,
                                 ),
                               ],
@@ -255,29 +259,31 @@ class _AddictionCardState extends State<AddictionCard> {
                   ),
                 ),
                 CustomTextFormField(
+                  valKey: 'daily_consumption',
                   data: addictionData,
-                  inputName: 'Daily Consumption',
+                  inputName: local.dailyConsumption.capitalizeWords(),
                   inputType: TextInputType.number,
                   validator: (value) {
                     if (double.tryParse(value) == null) {
-                      return 'Please enter a number';
+                      return local.pleaseEnterANumber.capitalizeFirstLetter();
                     } else if (double.parse(value) < 0) {
-                      return 'The value must be positive';
+                      return local.valueMustBePositive.capitalizeFirstLetter();
                     } else {
                       return null;
                     }
                   },
                 ),
                 CustomTextFormField(
+                  valKey: 'unit_cost',
                   data: addictionData,
-                  inputName: 'Unit Cost',
+                  inputName: local.unitCost.capitalizeWords(),
                   inputType: TextInputType.number,
                   // onSubmit: () => trySubmit(context),
                   validator: (value) {
                     if (double.tryParse(value) == null) {
-                      return 'Please enter a number';
+                      return local.pleaseEnterANumber.capitalizeFirstLetter();
                     } else if (double.parse(value) < 0) {
-                      return 'The value must be positive';
+                      return local.valueMustBePositive.capitalizeFirstLetter();
                     } else {
                       return null;
                     }
@@ -294,7 +300,7 @@ class _AddictionCardState extends State<AddictionCard> {
                     height: deviceSize.height * .15,
                     alignment: Alignment.center,
                     child: Text(
-                      'Quit Addiction!',
+                      local.quitAddiction.capitalizeWords(),
                       style: TextStyle(
                         color: Theme.of(context).accentTextTheme.button.color,
                         fontSize: 20,

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_quit_addiction_app/extensions/string_extension.dart';
 import 'package:flutter_quit_addiction_app/models/addiction.dart';
 import 'package:flutter_quit_addiction_app/providers/settings.dart';
 import 'package:flutter_quit_addiction_app/widgets/personal_notes_view.dart';
@@ -32,6 +34,7 @@ class _AddictionItemState extends State<AddictionItem> {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context);
     final expansionTileTheme = Theme.of(context).copyWith(
       dividerColor: Colors.transparent,
       accentColor: Theme.of(context).primaryColorDark,
@@ -54,8 +57,9 @@ class _AddictionItemState extends State<AddictionItem> {
     final abstinenceTime = DateTime.now().difference(quitDate);
     final notUsedCount =
         (widget.addictionData.dailyConsumption * (abstinenceTime.inDays));
-    final consumptionType =
-        (widget.addictionData.consumptionType == 1) ? 'Hours' : 'Times';
+    final consumptionType = (widget.addictionData.consumptionType == 1)
+        ? local.hour(notUsedCount.toInt())
+        : local.times(notUsedCount.toInt());
 
     return AnimatedContainer(
       duration: _kExpand,
@@ -120,7 +124,7 @@ class _AddictionItemState extends State<AddictionItem> {
                   children: [
                     Flexible(
                       flex: 1,
-                      child: Text('LEVEL 1'),
+                      child: Text(local.level.capitalizeWords() + '1'),
                     ),
                     Flexible(
                       flex: 3,
@@ -136,11 +140,14 @@ class _AddictionItemState extends State<AddictionItem> {
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text('Total ' + consumptionType + ' Saved'),
                                     Text(
-                                      notUsedCount % 1 == 0
-                                          ? notUsedCount.toStringAsFixed(0)
-                                          : notUsedCount.toString(),
+                                        local.savedFor.capitalizeFirstLetter()),
+                                    Text(
+                                      (notUsedCount % 1 == 0
+                                              ? notUsedCount.toStringAsFixed(0)
+                                              : notUsedCount.toString()) +
+                                          ' ' +
+                                          consumptionType,
                                     ),
                                   ],
                                 ),
@@ -151,14 +158,16 @@ class _AddictionItemState extends State<AddictionItem> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      'Money Saved',
+                                      local.moneySaved.capitalizeWords(),
                                     ),
-                                    Text(
-                                      (widget.addictionData.unitCost *
-                                                  notUsedCount)
-                                              .toString() +
-                                          ' \$',
-                                    )
+                                    Consumer<Settings>(
+                                      builder: (_, settings, _ch) => Text(
+                                        (widget.addictionData.unitCost *
+                                                    notUsedCount)
+                                                .toString() +
+                                            settings.currency,
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
@@ -191,7 +200,7 @@ class _AddictionItemState extends State<AddictionItem> {
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          'More',
+                          local.more.capitalizeWords(),
                           style: TextStyle(
                               fontSize: Theme.of(context)
                                   .textTheme
@@ -216,11 +225,11 @@ class _AddictionItemState extends State<AddictionItem> {
                                   Theme.of(context).primaryColor.withAlpha(150),
                               tabs: [
                                 Text(
-                                  'Details',
+                                  local.details.capitalizeWords(),
                                 ),
                                 InkWell(
                                   child: Text(
-                                    'Notes',
+                                    local.notes.capitalizeWords(),
                                   ),
                                 ),
                               ],

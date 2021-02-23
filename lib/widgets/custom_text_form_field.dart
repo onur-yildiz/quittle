@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class CustomTextFormField extends StatelessWidget {
   const CustomTextFormField({
     Key key,
+    @required this.valKey,
     @required this.data,
     @required this.inputName,
     this.focusNode,
@@ -12,6 +13,7 @@ class CustomTextFormField extends StatelessWidget {
     this.isLast,
   }) : super(key: key);
 
+  final String valKey;
   final Map<String, Object> data;
   final String inputName;
   final TextInputType inputType;
@@ -22,7 +24,6 @@ class CustomTextFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final valKey = inputName.toLowerCase().split(' ').join('_');
     return TextFormField(
       focusNode: focusNode,
       key: ValueKey(valKey),

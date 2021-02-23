@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_quit_addiction_app/extensions/string_extension.dart';
 import 'package:flutter_quit_addiction_app/providers/addictions.dart';
 import 'package:flutter_quit_addiction_app/screens/create_addiction_screen.dart';
 import 'package:flutter_quit_addiction_app/widgets/addiction_item.dart';
@@ -19,10 +21,11 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context);
     // final deviceSize = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text('QuitAll'),
+        title: Text(local.appName),
         backgroundColor: Theme.of(context).primaryColor,
         actions: [
           IconButton(
@@ -46,7 +49,7 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
           } else {
             if (snapshot.error != null) {
               return Center(
-                child: Text('An error occured'),
+                child: Text(local.genericErrorMessage.capitalizeFirstLetter()),
               );
             }
             return Consumer<Addictions>(
