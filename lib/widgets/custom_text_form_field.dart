@@ -33,19 +33,19 @@ class CustomTextFormField extends StatelessWidget {
         filled: true,
         fillColor: backgroundColor != null
             ? backgroundColor
-            : Theme.of(context).cardColor,
+            : Theme.of(context).canvasColor,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(5),
           borderSide: BorderSide(
             width: 0,
             style: BorderStyle.none,
           ),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(5),
           borderSide: BorderSide(
-            width: 1,
-            color: Theme.of(context).primaryColorLight,
+            width: 0,
+            color: Theme.of(context).primaryColorDark,
             style: BorderStyle.solid,
           ),
         ),

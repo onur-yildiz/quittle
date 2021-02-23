@@ -36,10 +36,10 @@ class _AddictionItemState extends State<AddictionItem> {
   Widget build(BuildContext context) {
     final local = AppLocalizations.of(context);
     final expansionTileTheme = Theme.of(context).copyWith(
-      buttonColor: Theme.of(context).accentColor,
       textTheme: TextTheme(
         bodyText2: TextStyle(
           color: Theme.of(context).primaryColorLight,
+          fontWeight: FontWeight.w500,
         ),
       ),
     );
@@ -91,7 +91,7 @@ class _AddictionItemState extends State<AddictionItem> {
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: Theme.of(context).textTheme.headline5.fontSize,
-                color: Theme.of(context).primaryColorDark,
+                color: Theme.of(context).primaryColorLight,
               ),
             ),
           ),
@@ -159,6 +159,7 @@ class _AddictionItemState extends State<AddictionItem> {
                                         (widget.addictionData.unitCost *
                                                     notUsedCount)
                                                 .toStringAsFixed(2) +
+                                            ' ' +
                                             settings.currency,
                                       ),
                                     ),
@@ -172,88 +173,89 @@ class _AddictionItemState extends State<AddictionItem> {
               ],
             ),
           ),
-          DefaultTabController(
-            length: 2,
-            initialIndex: 0,
-            child: Theme(
-              data: expansionTileTheme,
-              child: ExpansionPanelList(
-                animationDuration: _kExpand,
-                expandedHeaderPadding: EdgeInsets.zero,
-                elevation: 0,
-                expansionCallback: (panelIndex, isExpanded) {
-                  setState(() {
-                    _isPanelExpanded = !isExpanded;
-                  });
-                },
-                children: [
-                  ExpansionPanel(
-                    headerBuilder: (context, isExpanded) {
-                      return Container(
-                        height: deviceHeight * .1,
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          local.more.capitalizeWords(),
-                          style: TextStyle(
-                            fontSize:
-                                Theme.of(context).textTheme.headline6.fontSize,
-                          ),
-                        ),
-                      );
-                    },
-                    canTapOnHeader: true,
-                    isExpanded: _isPanelExpanded,
-                    body: SizedBox(
-                      height: expansionHeight,
-                      child: Column(
-                        children: [
-                          Flexible(
-                            flex: 0,
-                            child: TabBar(
-                              labelPadding: const EdgeInsets.all(8.0),
-                              labelColor: Theme.of(context).primaryColorLight,
-                              indicatorWeight: 3,
-                              indicatorColor:
-                                  Theme.of(context).primaryColor.withAlpha(150),
-                              tabs: [
-                                Text(
-                                  local.details.capitalizeWords(),
-                                ),
-                                InkWell(
-                                  child: Text(
-                                    local.notes.capitalizeWords(),
-                                  ),
-                                ),
-                              ],
+          ClipRRect(
+            borderRadius: BorderRadius.circular(5),
+            child: DefaultTabController(
+              length: 2,
+              initialIndex: 0,
+              child: Theme(
+                data: expansionTileTheme,
+                child: ExpansionPanelList(
+                  animationDuration: _kExpand,
+                  expandedHeaderPadding: EdgeInsets.zero,
+                  elevation: 0,
+                  expansionCallback: (panelIndex, isExpanded) {
+                    setState(() {
+                      _isPanelExpanded = !isExpanded;
+                    });
+                  },
+                  children: [
+                    ExpansionPanel(
+                      headerBuilder: (context, isExpanded) {
+                        return Container(
+                          height: deviceHeight * .1,
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            local.more.capitalizeWords(),
+                            style: TextStyle(
+                              fontSize: Theme.of(context)
+                                  .textTheme
+                                  .headline6
+                                  .fontSize,
                             ),
                           ),
-                          Flexible(
-                            flex: 1,
-                            child: Container(
-                              child: TabBarView(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: AddictionDetails(
-                                      addictionData: widget.addictionData,
+                        );
+                      },
+                      canTapOnHeader: true,
+                      isExpanded: _isPanelExpanded,
+                      body: SizedBox(
+                        height: expansionHeight,
+                        child: Column(
+                          children: [
+                            Flexible(
+                              flex: 0,
+                              child: TabBar(
+                                labelPadding: const EdgeInsets.all(8.0),
+                                labelColor: Theme.of(context).primaryColorDark,
+                                labelStyle: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                indicatorWeight: 3,
+                                indicatorColor: Theme.of(context).primaryColor,
+                                tabs: [
+                                  Text(
+                                    local.details.capitalizeWords(),
+                                  ),
+                                  InkWell(
+                                    child: Text(
+                                      local.notes.capitalizeWords(),
                                     ),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(0),
-                                    child: PersonalNotesView(
-                                      addictionData: widget.addictionData,
-                                    ),
-                                  )
                                 ],
                               ),
                             ),
-                          ),
-                        ],
+                            Flexible(
+                              flex: 1,
+                              child: Container(
+                                child: TabBarView(
+                                  children: [
+                                    AddictionDetails(
+                                      addictionData: widget.addictionData,
+                                    ),
+                                    PersonalNotesView(
+                                      addictionData: widget.addictionData,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

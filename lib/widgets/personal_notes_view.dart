@@ -30,8 +30,7 @@ class _PersonalNotesViewState extends State<PersonalNotesView> {
             buttonHeight: double.maxFinite,
             children: [
               FlatButton(
-                color: Theme.of(context).buttonColor.withAlpha(200),
-                splashColor: Theme.of(context).highlightColor,
+                color: Theme.of(context).primaryColorLight,
                 onPressed: () {
                   showModalBottomSheet(
                     isScrollControlled: true,

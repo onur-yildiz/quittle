@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Settings with ChangeNotifier {
-  String _currency = '\$'; //todo initial val on first load
+  String _currency = 'USD'; //todo initial val on first load
 
   String get currency {
     return _currency;

@@ -39,15 +39,14 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           fontFamily: 'Lato',
           // https://coolors.co/3f2333-f7f4f3-564d4a-f24333-ba1b1d
-          primaryColorLight: Color.fromRGBO(134, 70, 102, 1),
-          primaryColor: Color.fromRGBO(91, 35, 51, 1),
-          primaryColorDark: Color.fromRGBO(82, 35, 51, 1),
+          primaryColorLight: Color.fromRGBO(230, 86, 81, .8),
+          primaryColor: Color.fromRGBO(230, 86, 81, 1),
+          primaryColorDark: Color.fromRGBO(230, 58, 81, 1),
           primarySwatch: Colors.red,
-          accentColor: Color.fromRGBO(200, 143, 145, 1),
+          accentColor: Color.fromRGBO(147, 181, 198, 1),
           buttonColor: Color.fromRGBO(247, 244, 243, 1),
-          // dialogBackgroundColor: Color.fromRGBO(247, 244, 243, .4),
           canvasColor: Color.fromRGBO(247, 244, 243, 1),
-          cardColor: Color.fromRGBO(238, 230, 230, 1),
+          cardColor: Color.fromRGBO(230, 230, 230, 1),
           hintColor: Colors.grey[750],
           visualDensity: VisualDensity.adaptivePlatformDensity,
           textTheme: TextTheme(

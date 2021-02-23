@@ -26,7 +26,7 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(local.appName),
-        backgroundColor: Theme.of(context).primaryColor,
+        shadowColor: Theme.of(context).accentColor,
         actions: [
           IconButton(
             icon: Icon(Icons.add),

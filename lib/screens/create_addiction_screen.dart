@@ -18,26 +18,7 @@ class CreateAddictionScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
       ),
-      body: Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Theme.of(context).primaryColorLight,
-                  Theme.of(context).accentColor,
-                  Theme.of(context).accentColor,
-                  Theme.of(context).primaryColorLight,
-                ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomRight,
-                stops: [0, .3, .8, 1],
-              ),
-            ),
-          ),
-          AddictionCard(statusBarHeight),
-        ],
-      ),
+      body: AddictionCard(statusBarHeight),
     );
   }
 }
@@ -114,7 +95,7 @@ class _AddictionCardState extends State<AddictionCard> {
         borderRadius: BorderRadius.circular(0),
       ),
       margin: EdgeInsets.all(0),
-      color: Theme.of(context).cardColor.withAlpha(110),
+      color: Theme.of(context).cardColor,
       child: Form(
         key: _formKey,
         child: SingleChildScrollView(
@@ -138,10 +119,10 @@ class _AddictionCardState extends State<AddictionCard> {
                   children: [
                     Material(
                       type: MaterialType.button,
-                      color: Theme.of(context).cardColor,
-                      borderRadius: BorderRadius.circular(10),
+                      color: Theme.of(context).canvasColor,
+                      borderRadius: BorderRadius.circular(5),
                       child: InkWell(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(5),
                         splashColor: Theme.of(context).highlightColor,
                         onTap: () {
                           setState(() {
@@ -185,8 +166,8 @@ class _AddictionCardState extends State<AddictionCard> {
                       height: Theme.of(context).buttonTheme.height * 2,
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Theme.of(context).cardColor,
+                        borderRadius: BorderRadius.circular(5),
+                        color: Theme.of(context).canvasColor,
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -207,7 +188,7 @@ class _AddictionCardState extends State<AddictionCard> {
                           ),
                           DropdownButtonHideUnderline(
                             child: DropdownButton(
-                              dropdownColor: Theme.of(context).cardColor,
+                              dropdownColor: Theme.of(context).canvasColor,
                               isDense: true,
                               value: _consumptionType,
                               items: [
@@ -287,7 +268,7 @@ class _AddictionCardState extends State<AddictionCard> {
                 ),
                 RaisedButton(
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(5),
                   ),
                   onPressed: () => trySubmit(context),
                   child: Container(
@@ -297,8 +278,8 @@ class _AddictionCardState extends State<AddictionCard> {
                     child: Text(
                       local.quitAddiction.capitalizeWords(),
                       style: TextStyle(
-                        color: Theme.of(context).accentTextTheme.button.color,
-                        fontSize: 20,
+                        fontSize:
+                            Theme.of(context).textTheme.headline6.fontSize,
                       ),
                     ),
                   ),

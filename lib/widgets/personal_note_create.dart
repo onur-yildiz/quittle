@@ -116,16 +116,16 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
                   filled: true,
                   fillColor: inputBackgroundColor,
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(5),
                     borderSide: BorderSide(
                       width: 0,
                       style: BorderStyle.none,
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(5),
                     borderSide: BorderSide(
-                      width: 1,
+                      width: 0,
                       color: Theme.of(context).primaryColorLight,
                       style: BorderStyle.solid,
                     ),
@@ -151,7 +151,7 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
                     Material(
                       type: MaterialType.button,
                       color: inputBackgroundColor,
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(5),
                       child: InkWell(
                         onTap: () {
                           setState(
@@ -161,7 +161,7 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
                           );
                         },
                         splashColor: Theme.of(context).primaryColor,
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(5),
                         child: Container(
                           padding: const EdgeInsets.all(10),
                           alignment: Alignment.center,
@@ -198,7 +198,7 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
                       child: FlatButton(
                         color: inputBackgroundColor,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
+                          borderRadius: BorderRadius.circular(5.0),
                         ),
                         onPressed: () {
                           trySubmit(context);
