@@ -111,7 +111,7 @@
   "consumptionType": "tüketim türü",
   "@consumptionType": {},
 
-  "quantity": "quantity",
+  "quantity": "adet",
   "@quantity": {},
 
   "dailyConsumption": "günlük kullanım",

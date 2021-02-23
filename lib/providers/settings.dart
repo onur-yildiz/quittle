@@ -7,9 +7,8 @@ class Settings with ChangeNotifier {
     return _currency;
   }
 
-  String updateCurrency(String newCurrency) {
+  void updateCurrency(String newCurrency) {
     _currency = newCurrency;
     notifyListeners();
-    return currency;
   }
 }

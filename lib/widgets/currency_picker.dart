@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_quit_addiction_app/providers/settings.dart';
 import 'dart:convert' show json;
+
+import 'package:provider/provider.dart';
 
 class CurrencyPicker extends StatefulWidget {
   @override
@@ -43,7 +46,13 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
                 padding: const EdgeInsets.all(16.0),
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 color: Theme.of(context).canvasColor,
-                onPressed: () {},
+                onPressed: () {
+                  setState(() {
+                    Provider.of<Settings>(context, listen: false)
+                        .updateCurrency(_currencies[index]['code']);
+                    Navigator.of(context).pop();
+                  });
+                },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

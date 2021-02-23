@@ -65,7 +65,7 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
-        home: AddictionsScreen(),
+        home: AddictionsScreen(), // todo startup page logic
         routes: {
           CreateAddictionScreen.routeName: (ctx) => CreateAddictionScreen(),
           AddictionsScreen.routeName: (ctx) => AddictionsScreen(),
