@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_quit_addiction_app/extensions/string_extension.dart';
@@ -72,44 +73,34 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
   Widget build(BuildContext context) {
     final local = AppLocalizations.of(context);
     final deviceWidth = MediaQuery.of(context).size.width;
+    final inputBackgroundColor = Theme.of(context).canvasColor;
     // final deviceHeight = MediaQuery.of(context).size.height;
 
     return DefaultTextStyle(
       style: TextStyle(
-        color: Colors.blueGrey[800],
+        color: Colors.blueGrey[900],
         fontWeight: FontWeight.bold,
       ),
       child: Form(
         key: _formKey,
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.transparent,
-            boxShadow: [
-              BoxShadow(
-                color: Theme.of(context).accentColor.withAlpha(100),
-                offset: Offset(0, -3),
-                spreadRadius: 3,
-                blurRadius: 3,
-              )
-            ],
+            color: Theme.of(context).highlightColor,
             border: Border(
               top: BorderSide(
                 width: 1,
-                color: Theme.of(context).accentColor,
+                color: Theme.of(context).primaryColor,
               ),
             ),
           ),
-          // height: deviceHeight * .5,
           padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom + 10,
-            top: 10,
+            top: 20,
             left: 8,
             right: 8,
           ),
           child: Wrap(
             runSpacing: 20,
-            // mainAxisSize: MainAxisSize.min,
-            // crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CustomTextFormField(
                 valKey: 'title',
@@ -117,11 +108,13 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
                 inputName: local.title.capitalizeWords(),
                 focusNode: null,
                 inputType: TextInputType.name,
+                backgroundColor: inputBackgroundColor,
               ),
               TextFormField(
+                cursorColor: Theme.of(context).primaryColor,
                 decoration: InputDecoration(
                   filled: true,
-                  fillColor: Theme.of(context).cardColor.withAlpha(150),
+                  fillColor: inputBackgroundColor,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                     borderSide: BorderSide(
@@ -129,7 +122,18 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
                       style: BorderStyle.none,
                     ),
                   ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(
+                      width: 1,
+                      color: Theme.of(context).primaryColorLight,
+                      style: BorderStyle.solid,
+                    ),
+                  ),
                   hintText: local.note.capitalizeWords(),
+                ),
+                style: TextStyle(
+                  color: Colors.blueGrey[900],
                 ),
                 keyboardType: TextInputType.multiline,
                 textInputAction: TextInputAction.newline,
@@ -138,81 +142,64 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
                 maxLengthEnforced: true,
                 onSaved: (newValue) => noteData['text'] = newValue.trim(),
               ),
-              // CustomTextFormField(
-              //   data: noteData,
-              //   inputName: 'Note',
-              //   focusNode: null,
-              //   inputType: TextInputType.text,
-              // ),
               SizedBox(
                 height: Theme.of(context).buttonTheme.height * 2,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   // crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Container(
-                      decoration: BoxDecoration(
+                    Material(
+                      type: MaterialType.button,
+                      color: inputBackgroundColor,
+                      borderRadius: BorderRadius.circular(10),
+                      child: InkWell(
+                        onTap: () {
+                          setState(
+                            () {
+                              _selectDate(context);
+                            },
+                          );
+                        },
+                        splashColor: Theme.of(context).primaryColor,
                         borderRadius: BorderRadius.circular(10),
-                        color: Theme.of(context).cardColor.withAlpha(150),
-                      ),
-                      padding: const EdgeInsets.all(10),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            child: Text(
-                              local.date.capitalizeWords(),
-                              style: TextStyle(
-                                fontSize: Theme.of(context)
-                                    .textTheme
-                                    .subtitle2
-                                    .fontSize,
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context).hintColor,
-                              ),
-                            ),
-                          ),
-                          Row(
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          alignment: Alignment.center,
+                          child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Container(
-                                child: Text(
-                                  DateFormat('dd/MM/yyyy').format(
-                                    DateTime.parse(noteData['date']),
-                                  ),
+                              Text(
+                                DateFormat('dd/MM/yyyy').format(
+                                  DateTime.parse(noteData['date']),
+                                ),
+                                style: TextStyle(
+                                  color: Colors.blueGrey[900],
                                 ),
                               ),
-                              Container(
+                              SizedBox(
                                 width: deviceWidth * .1,
                                 child: FlatButton(
                                   materialTapTargetSize:
                                       MaterialTapTargetSize.shrinkWrap,
                                   visualDensity: VisualDensity.compact,
                                   child: Icon(Icons.date_range),
-                                  onPressed: () {
-                                    setState(
-                                      () {
-                                        _selectDate(context);
-                                      },
-                                    );
-                                  },
+                                  onPressed: null,
+                                  disabledTextColor:
+                                      Theme.of(context).primaryColor,
                                 ),
                               ),
                             ],
                           ),
-                        ],
+                        ),
                       ),
                     ),
                     SizedBox(
                       height: double.maxFinite,
                       child: FlatButton(
-                        color: Theme.of(context).cardColor,
+                        color: inputBackgroundColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
                         ),
-                        splashColor: Theme.of(context).primaryColorLight,
                         onPressed: () {
                           trySubmit(context);
                         },
@@ -223,8 +210,17 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
                           ),
                           child: Row(
                             children: [
-                              Icon(Icons.save),
-                              Text(local.save.capitalizeWords()),
+                              Icon(
+                                Icons.save,
+                                color: Theme.of(context).primaryColorLight,
+                              ),
+                              Text(
+                                local.save.capitalizeWords(),
+                                style: TextStyle(
+                                  color: Theme.of(context).primaryColorLight,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              ),
                             ],
                           ),
                         ),

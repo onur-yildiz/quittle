@@ -11,6 +11,7 @@ class CustomTextFormField extends StatelessWidget {
     this.validator,
     // this.onSubmit,
     this.isLast,
+    this.backgroundColor,
   }) : super(key: key);
 
   final String valKey;
@@ -21,6 +22,7 @@ class CustomTextFormField extends StatelessWidget {
   // final Function onSubmit;
   final FocusNode focusNode;
   final bool isLast;
+  final Color backgroundColor;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,9 @@ class CustomTextFormField extends StatelessWidget {
       key: ValueKey(valKey),
       decoration: InputDecoration(
         filled: true,
-        fillColor: Theme.of(context).cardColor.withAlpha(150),
+        fillColor: backgroundColor != null
+            ? backgroundColor
+            : Theme.of(context).cardColor,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide(
@@ -37,11 +41,23 @@ class CustomTextFormField extends StatelessWidget {
             style: BorderStyle.none,
           ),
         ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(
+            width: 1,
+            color: Theme.of(context).primaryColorLight,
+            style: BorderStyle.solid,
+          ),
+        ),
         labelText: inputName,
         labelStyle: TextStyle(
           fontWeight: FontWeight.bold,
         ),
       ),
+      style: TextStyle(
+        color: Colors.blueGrey[900],
+      ),
+      cursorColor: Theme.of(context).primaryColor,
       keyboardType: inputType,
       validator: validator,
       textInputAction:

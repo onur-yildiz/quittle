@@ -3,7 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_quit_addiction_app/extensions/string_extension.dart';
 import 'package:flutter_quit_addiction_app/models/addiction.dart';
 import 'package:flutter_quit_addiction_app/providers/addictions.dart';
-import 'package:flutter_quit_addiction_app/widgets/create_personal_note.dart';
+import 'package:flutter_quit_addiction_app/widgets/personal_note_create.dart';
 import 'package:flutter_quit_addiction_app/widgets/note.dart';
 import 'package:provider/provider.dart';
 

@@ -36,13 +36,10 @@ class _AddictionItemState extends State<AddictionItem> {
   Widget build(BuildContext context) {
     final local = AppLocalizations.of(context);
     final expansionTileTheme = Theme.of(context).copyWith(
-      dividerColor: Colors.transparent,
-      accentColor: Theme.of(context).primaryColorDark,
       buttonColor: Theme.of(context).accentColor,
       textTheme: TextTheme(
         bodyText2: TextStyle(
           color: Theme.of(context).primaryColorLight,
-          fontWeight: FontWeight.w800,
         ),
       ),
     );
@@ -117,7 +114,6 @@ class _AddictionItemState extends State<AddictionItem> {
                     ],
                   ),
                 ),
-                // Todo column
                 Flex(
                   direction: Axis.vertical,
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -200,10 +196,9 @@ class _AddictionItemState extends State<AddictionItem> {
                         child: Text(
                           local.more.capitalizeWords(),
                           style: TextStyle(
-                              fontSize: Theme.of(context)
-                                  .textTheme
-                                  .headline6
-                                  .fontSize),
+                            fontSize:
+                                Theme.of(context).textTheme.headline6.fontSize,
+                          ),
                         ),
                       );
                     },
@@ -217,7 +212,7 @@ class _AddictionItemState extends State<AddictionItem> {
                             flex: 0,
                             child: TabBar(
                               labelPadding: const EdgeInsets.all(8.0),
-                              labelColor: Theme.of(context).primaryColorDark,
+                              labelColor: Theme.of(context).primaryColorLight,
                               indicatorWeight: 3,
                               indicatorColor:
                                   Theme.of(context).primaryColor.withAlpha(150),

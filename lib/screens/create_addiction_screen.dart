@@ -132,106 +132,101 @@ class _AddictionCardState extends State<AddictionCard> {
                   inputType: TextInputType.name,
                   focusNode: focusNode,
                 ),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    // color: Color.fromRGBO(255, 255, 255, 0.4),
-                  ),
-                  width: deviceSize.width,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: Theme.of(context).cardColor.withAlpha(150),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              // padding: EdgeInsets.only(right: 10),
-                              child: Text(
-                                local.date.capitalizeWords(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Material(
+                      type: MaterialType.button,
+                      color: Theme.of(context).cardColor,
+                      borderRadius: BorderRadius.circular(10),
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(10),
+                        splashColor: Theme.of(context).highlightColor,
+                        onTap: () {
+                          setState(() {
+                            _selectDate(context);
+                          });
+                        },
+                        child: Container(
+                          height: Theme.of(context).buttonTheme.height * 2,
+                          padding: const EdgeInsets.all(10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                DateFormat('dd/MM/yyyy').format(
+                                  DateTime.parse(addictionData['quit_date']),
+                                ),
                                 style: TextStyle(
-                                  fontSize: Theme.of(context)
-                                      .textTheme
-                                      .subtitle2
-                                      .fontSize,
-                                  fontWeight: FontWeight.bold,
-                                  color: Theme.of(context).hintColor,
+                                  color: Colors.blueGrey[900],
                                 ),
                               ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Container(
-                                  child: Text(
-                                    DateFormat('dd/MM/yyyy').format(
-                                      DateTime.parse(
-                                          addictionData['quit_date']),
-                                    ),
+                              SizedBox(
+                                width: deviceSize.width * .1,
+                                child: FlatButton(
+                                  materialTapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap,
+                                  visualDensity: VisualDensity.compact,
+                                  child: Icon(
+                                    Icons.date_range,
+                                    color: Colors.blueGrey[900],
                                   ),
+                                  onPressed: null,
+                                  disabledTextColor: Colors.blueGrey[900],
                                 ),
-                                Container(
-                                  width: deviceSize.width * .1,
-                                  child: FlatButton(
-                                    materialTapTargetSize:
-                                        MaterialTapTargetSize.shrinkWrap,
-                                    visualDensity: VisualDensity.compact,
-                                    child: Icon(Icons.date_range),
-                                    onPressed: () {
-                                      setState(
-                                        () {
-                                          _selectDate(context);
-                                        },
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                      Container(
-                        // for some reason, it needs 2 higher padding than the other container to be at the same height
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: Theme.of(context).cardColor.withAlpha(150),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              child: Text(
-                                local.consumptionType.capitalizeWords(),
-                                style: TextStyle(
-                                  fontSize: Theme.of(context)
-                                      .textTheme
-                                      .subtitle2
-                                      .fontSize,
-                                  fontWeight: FontWeight.bold,
-                                  color: Theme.of(context).hintColor,
-                                ),
+                    ),
+                    Container(
+                      height: Theme.of(context).buttonTheme.height * 2,
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Theme.of(context).cardColor,
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            child: Text(
+                              local.consumptionType.capitalizeWords(),
+                              style: TextStyle(
+                                fontSize: Theme.of(context)
+                                    .textTheme
+                                    .subtitle2
+                                    .fontSize,
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context).hintColor,
                               ),
                             ),
-                            DropdownButton(
+                          ),
+                          DropdownButtonHideUnderline(
+                            child: DropdownButton(
                               dropdownColor: Theme.of(context).cardColor,
                               isDense: true,
-                              underline: Container(),
                               value: _consumptionType,
                               items: [
                                 DropdownMenuItem(
-                                  child: Text(local.quantity.capitalizeWords()),
+                                  child: Text(
+                                    local.quantity.capitalizeWords(),
+                                    style: TextStyle(
+                                      color: Colors.blueGrey[900],
+                                    ),
+                                  ),
                                   value: ConsumptionType.quantity,
                                 ),
                                 DropdownMenuItem(
-                                  child: Text(local.hour(0).capitalizeWords()),
+                                  child: Text(
+                                    local.hour(0).capitalizeWords(),
+                                    style: TextStyle(
+                                      color: Colors.blueGrey[900],
+                                    ),
+                                  ),
                                   value: ConsumptionType.hour,
                                 ),
                               ],
@@ -252,11 +247,11 @@ class _AddictionCardState extends State<AddictionCard> {
                                 );
                               },
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
                 CustomTextFormField(
                   valKey: 'daily_consumption',
@@ -297,7 +292,7 @@ class _AddictionCardState extends State<AddictionCard> {
                   onPressed: () => trySubmit(context),
                   child: Container(
                     width: deviceSize.width,
-                    height: deviceSize.height * .15,
+                    height: deviceSize.height * .1,
                     alignment: Alignment.center,
                     child: Text(
                       local.quitAddiction.capitalizeWords(),

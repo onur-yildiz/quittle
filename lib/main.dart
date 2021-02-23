@@ -56,7 +56,7 @@ class MyApp extends StatelessWidget {
               fontSize: Theme.of(context).textTheme.headline6.fontSize * .9,
             ),
             bodyText2: TextStyle(
-              color: Colors.blueGrey[800],
+              color: Colors.blueGrey[900],
             ),
           ),
           accentTextTheme: TextTheme(
