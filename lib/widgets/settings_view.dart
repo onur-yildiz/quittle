@@ -19,7 +19,7 @@ class _SettingsViewState extends State<SettingsView> {
     final local = AppLocalizations.of(context);
     final mediaQuery = MediaQuery.of(context);
     final deviceHeight = mediaQuery.size.height;
-    final deviceWidth = mediaQuery.size.width;
+    // final deviceWidth = mediaQuery.size.width;
     return Drawer(
       child: ListView(
         children: [
@@ -44,52 +44,59 @@ class _SettingsViewState extends State<SettingsView> {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Wrap(
-              runSpacing: 15.0,
-              children: [
-                CheckboxListTile(
-                  title: Text(local.progressNotification.capitalizeWords()),
-                  subtitle: Text(
-                      local.progressNotificationDesc.capitalizeFirstLetter()),
-                  value: _progressCheck,
-                  onChanged: (value) {
-                    setState(() {
-                      _progressCheck = value;
-                    });
-                  },
+          Wrap(
+            children: [
+              CheckboxListTile(
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 24, horizontal: 8),
+                title: Text(local.progressNotification.capitalizeWords()),
+                subtitle: Text(
+                    local.progressNotificationDesc.capitalizeFirstLetter()),
+                value: _progressCheck,
+                onChanged: (value) {
+                  setState(() {
+                    _progressCheck = value;
+                  });
+                },
+              ),
+              Divider(
+                height: 0,
+                thickness: 1,
+              ),
+              CheckboxListTile(
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 24, horizontal: 8),
+                title: Text(local.quoteOfTheDay.capitalizeWords()),
+                subtitle: Text(local.quoteOfTheDayDesc.capitalizeFirstLetter()),
+                value: _quoteCheck,
+                onChanged: (value) {
+                  setState(() {
+                    _quoteCheck = value;
+                  });
+                },
+              ),
+              Divider(
+                height: 0,
+                thickness: 1,
+              ),
+              ListTile(
+                dense: true,
+                onTap: () => showDialog(
+                  context: context,
+                  builder: (context) => CurrencyPicker(),
                 ),
-                Divider(
-                  thickness: 1,
-                ),
-                CheckboxListTile(
-                  title: Text(local.quoteOfTheDay.capitalizeWords()),
-                  subtitle:
-                      Text(local.quoteOfTheDayDesc.capitalizeFirstLetter()),
-                  value: _quoteCheck,
-                  onChanged: (value) {
-                    setState(() {
-                      _quoteCheck = value;
-                    });
-                  },
-                ),
-                Divider(
-                  thickness: 1,
-                ),
-                ListTile(
-                  onTap: () => showDialog(
-                    context: context,
-                    builder: (context) => CurrencyPicker(),
-                  ),
-                  isThreeLine: true,
-                  contentPadding: EdgeInsets.zero,
-                  leading: Icon(Icons.attach_money),
-                  title: Text(local.currency.capitalizeWords()),
-                  subtitle: Text(Provider.of<Settings>(context).currency),
-                ),
-              ],
-            ),
+                // isThreeLine: true,
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                leading: Icon(Icons.account_balance_wallet_outlined),
+                title: Text(local.currency.capitalizeWords()),
+                subtitle: Text(Provider.of<Settings>(context).currency),
+              ),
+              Divider(
+                height: 0,
+                thickness: 1,
+              ),
+            ],
           ),
         ],
       ),
