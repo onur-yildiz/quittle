@@ -143,9 +143,7 @@ class _AddictionItemState extends State<AddictionItem> {
                                     Text(
                                         local.savedFor.capitalizeFirstLetter()),
                                     Text(
-                                      (notUsedCount % 1 == 0
-                                              ? notUsedCount.toStringAsFixed(0)
-                                              : notUsedCount.toString()) +
+                                      notUsedCount.toStringAsFixed(0) +
                                           ' ' +
                                           consumptionType,
                                     ),
@@ -164,7 +162,7 @@ class _AddictionItemState extends State<AddictionItem> {
                                       builder: (_, settings, _ch) => Text(
                                         (widget.addictionData.unitCost *
                                                     notUsedCount)
-                                                .toString() +
+                                                .toStringAsFixed(2) +
                                             settings.currency,
                                       ),
                                     ),
