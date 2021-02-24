@@ -24,6 +24,16 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
     final local = AppLocalizations.of(context);
     // final deviceSize = MediaQuery.of(context).size;
     return Scaffold(
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            IconButton(icon: Icon(Icons.menu), onPressed: () {}),
+            IconButton(icon: Icon(Icons.add), onPressed: () {}),
+            IconButton(icon: Icon(Icons.more_vert), onPressed: () {}),
+          ],
+        ),
+      ),
       appBar: AppBar(
         title: Text(local.appName),
         shadowColor: Theme.of(context).accentColor,

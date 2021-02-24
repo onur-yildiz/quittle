@@ -45,53 +45,61 @@ class _AddictionDetailsState extends State<AddictionDetails> {
               ))
         .capitalizeWords();
 
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(local.startDate.capitalizeWords()),
-              Text(formattedStartDate),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(local.duration.capitalizeWords()),
-              DurationCounter(duration: abstinenceTime),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(local.dailyUse.capitalizeWords()),
-              Text(
-                (widget.addictionData.dailyConsumption % 1 == 0
-                        ? widget.addictionData.dailyConsumption
-                            .toStringAsFixed(0)
-                        : widget.addictionData.dailyConsumption.toString()) +
-                    ' ' +
-                    consumptionType,
-              ),
-            ],
-          ),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //   children: [
-          //     Text(local.savedFor.capitalizeWords()),
-          //     Text(
-          //       (notUsedCount % 1 == 0
-          //               ? notUsedCount.toStringAsFixed(0)
-          //               : notUsedCount.toString()) +
-          //           ' ' +
-          //           consumptionType,
-          //     ),
-          //   ],
-          // ),
-        ],
+    return DefaultTextStyle(
+      style: TextStyle(
+        color: Theme.of(context).hintColor,
+        fontWeight: FontWeight.bold,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Wrap(
+          direction: Axis.horizontal,
+          alignment: WrapAlignment.spaceBetween,
+          runSpacing: 8.0,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(local.startDate.capitalizeWords()),
+                Text(formattedStartDate),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(local.duration.capitalizeWords()),
+                DurationCounter(duration: abstinenceTime),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(local.dailyUse.capitalizeWords()),
+                Text(
+                  (widget.addictionData.dailyConsumption % 1 == 0
+                          ? widget.addictionData.dailyConsumption
+                              .toStringAsFixed(0)
+                          : widget.addictionData.dailyConsumption.toString()) +
+                      ' ' +
+                      consumptionType,
+                ),
+              ],
+            ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //   children: [
+            //     Text(local.savedFor.capitalizeWords()),
+            //     Text(
+            //       (notUsedCount % 1 == 0
+            //               ? notUsedCount.toStringAsFixed(0)
+            //               : notUsedCount.toString()) +
+            //           ' ' +
+            //           consumptionType,
+            //     ),
+            //   ],
+            // ),
+          ],
+        ),
       ),
     );
   }

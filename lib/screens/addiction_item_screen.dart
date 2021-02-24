@@ -60,9 +60,9 @@ class _AddictionItemState extends State<AddictionItemScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: const EdgeInsets.only(top: 8.0),
+                margin: const EdgeInsets.only(top: 24.0),
                 height: titleHeight,
-                width: deviceWidth * .5,
+                width: deviceWidth,
                 alignment: Alignment.center,
                 child: Text(
                   args.data.name.toUpperCase(),
@@ -74,6 +74,7 @@ class _AddictionItemState extends State<AddictionItemScreen> {
                   ),
                 ),
               ),
+              Divider(),
               Container(
                 height: infoHeight,
                 child: Row(
