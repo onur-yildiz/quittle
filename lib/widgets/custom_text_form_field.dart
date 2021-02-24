@@ -55,7 +55,7 @@ class CustomTextFormField extends StatelessWidget {
         ),
       ),
       style: TextStyle(
-        color: Colors.blueGrey[900],
+        color: Theme.of(context).hintColor,
       ),
       cursorColor: Theme.of(context).primaryColor,
       keyboardType: inputType,

@@ -78,7 +78,7 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
 
     return DefaultTextStyle(
       style: TextStyle(
-        color: Colors.blueGrey[900],
+        color: Theme.of(context).hintColor,
         fontWeight: FontWeight.bold,
       ),
       child: Form(
@@ -89,7 +89,7 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
             border: Border(
               top: BorderSide(
                 width: 1,
-                color: Theme.of(context).primaryColor,
+                color: Theme.of(context).accentColor,
               ),
             ),
           ),
@@ -133,7 +133,7 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
                   hintText: local.note.capitalizeWords(),
                 ),
                 style: TextStyle(
-                  color: Colors.blueGrey[900],
+                  color: Theme.of(context).hintColor,
                 ),
                 keyboardType: TextInputType.multiline,
                 textInputAction: TextInputAction.newline,
@@ -173,8 +173,8 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
                                   DateTime.parse(noteData['date']),
                                 ),
                                 style: TextStyle(
-                                  color: Colors.blueGrey[900],
-                                ),
+                                    color: Theme.of(context).hintColor,
+                                    fontWeight: FontWeight.bold),
                               ),
                               SizedBox(
                                 width: deviceWidth * .1,
@@ -218,7 +218,7 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
                                 local.save.capitalizeWords(),
                                 style: TextStyle(
                                   color: Theme.of(context).primaryColorLight,
-                                  fontWeight: FontWeight.w900,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ],

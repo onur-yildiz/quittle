@@ -46,7 +46,7 @@ class _AddictionDetailsState extends State<AddictionDetails> {
         .capitalizeWords();
 
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

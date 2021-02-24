@@ -16,11 +16,11 @@ class Note extends StatelessWidget {
         DateFormat('dd/MM/yyyy').format(DateTime.parse(data.date));
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).canvasColor,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(5.0),
         border: Border.all(
-          color: Theme.of(context).primaryColor,
-          width: 0,
+          color: Theme.of(context).highlightColor,
+          width: 1,
         ),
       ),
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),

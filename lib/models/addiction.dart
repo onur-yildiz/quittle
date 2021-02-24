@@ -20,6 +20,14 @@ class Addiction {
     this.unitCost = 0.0,
     this.personalNotes,
   });
+
+  List<PersonalNote> get personalNotesDateSorted {
+    List<PersonalNote> list = [...personalNotes];
+    list.sort((a, b) {
+      return DateTime.parse(b.date).compareTo(DateTime.parse(a.date));
+    });
+    return list;
+  }
 }
 
 class PersonalNote {

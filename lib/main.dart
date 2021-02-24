@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_quit_addiction_app/screens/addiction_item_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'package:flutter_quit_addiction_app/providers/addictions.dart';
@@ -48,7 +49,7 @@ class MyApp extends StatelessWidget {
           buttonColor: Color.fromRGBO(247, 244, 243, 1),
           canvasColor: Color.fromRGBO(247, 244, 243, 1),
           cardColor: Color.fromRGBO(230, 230, 230, 1),
-          hintColor: Colors.grey[750],
+          hintColor: Colors.blueGrey[700],
           visualDensity: VisualDensity.adaptivePlatformDensity,
           textTheme: TextTheme(
             headline6: TextStyle(
@@ -56,12 +57,12 @@ class MyApp extends StatelessWidget {
               fontSize: Theme.of(context).textTheme.headline6.fontSize * .9,
             ),
             bodyText2: TextStyle(
-              color: Colors.blueGrey[900],
+              color: Theme.of(context).hintColor,
             ),
           ),
           accentTextTheme: TextTheme(
             button: TextStyle(
-              color: Colors.blueGrey[900],
+              color: Theme.of(context).hintColor,
             ),
           ),
         ),
@@ -69,7 +70,7 @@ class MyApp extends StatelessWidget {
         routes: {
           CreateAddictionScreen.routeName: (ctx) => CreateAddictionScreen(),
           AddictionsScreen.routeName: (ctx) => AddictionsScreen(),
-          // SettingsScreen.routeName: (ctx) => SetttingsScreen(),
+          AddictionItemScreen.routeName: (ctx) => AddictionItemScreen(),
         },
       ),
     );

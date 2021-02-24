@@ -140,7 +140,7 @@ class _AddictionCardState extends State<AddictionCard> {
                                   DateTime.parse(addictionData['quit_date']),
                                 ),
                                 style: TextStyle(
-                                  color: Colors.blueGrey[900],
+                                  color: Theme.of(context).hintColor,
                                 ),
                               ),
                               SizedBox(
@@ -151,10 +151,11 @@ class _AddictionCardState extends State<AddictionCard> {
                                   visualDensity: VisualDensity.compact,
                                   child: Icon(
                                     Icons.date_range,
-                                    color: Colors.blueGrey[900],
+                                    color: Theme.of(context).hintColor,
                                   ),
                                   onPressed: null,
-                                  disabledTextColor: Colors.blueGrey[900],
+                                  disabledTextColor:
+                                      Theme.of(context).hintColor,
                                 ),
                               ),
                             ],
@@ -196,7 +197,7 @@ class _AddictionCardState extends State<AddictionCard> {
                                   child: Text(
                                     local.quantity.capitalizeWords(),
                                     style: TextStyle(
-                                      color: Colors.blueGrey[900],
+                                      color: Theme.of(context).hintColor,
                                     ),
                                   ),
                                   value: ConsumptionType.quantity,
@@ -205,7 +206,7 @@ class _AddictionCardState extends State<AddictionCard> {
                                   child: Text(
                                     local.hour(0).capitalizeWords(),
                                     style: TextStyle(
-                                      color: Colors.blueGrey[900],
+                                      color: Theme.of(context).hintColor,
                                     ),
                                   ),
                                   value: ConsumptionType.hour,
