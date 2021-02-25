@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_quit_addiction_app/extensions/string_extension.dart';
 import 'package:flutter_quit_addiction_app/models/addiction.dart';
-import 'package:flutter_quit_addiction_app/providers/addictions.dart';
+import 'package:flutter_quit_addiction_app/providers/addictions_provider.dart';
 import 'package:flutter_quit_addiction_app/widgets/personal_note_create.dart';
 import 'package:flutter_quit_addiction_app/widgets/note.dart';
 import 'package:provider/provider.dart';
@@ -26,7 +26,8 @@ class _PersonalNotesViewState extends State<PersonalNotesView> {
         Padding(
           padding: const EdgeInsets.only(top: 24.0),
           child: FutureBuilder(
-            future: Provider.of<Addictions>(context, listen: false).fetchNotes(
+            future: Provider.of<AddictionsProvider>(context, listen: false)
+                .fetchNotes(
               widget.addictionData.id,
             ),
             builder: (_, snapshot) {
@@ -39,7 +40,7 @@ class _PersonalNotesViewState extends State<PersonalNotesView> {
                           child: Text(local.genericErrorMessage
                               .capitalizeFirstLetter()),
                         )
-                      : Consumer<Addictions>(
+                      : Consumer<AddictionsProvider>(
                           builder: (_, addictionsData, _child) =>
                               ListView.builder(
                             shrinkWrap: true,

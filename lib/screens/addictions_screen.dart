@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_quit_addiction_app/extensions/string_extension.dart';
-import 'package:flutter_quit_addiction_app/providers/addictions.dart';
+import 'package:flutter_quit_addiction_app/providers/addictions_provider.dart';
 import 'package:flutter_quit_addiction_app/screens/create_addiction_screen.dart';
 import 'package:flutter_quit_addiction_app/widgets/addiction_item_card.dart';
 import 'package:flutter_quit_addiction_app/widgets/settings_view.dart';
@@ -16,7 +16,8 @@ class AddictionsScreen extends StatefulWidget {
 
 class _AddictionsScreenState extends State<AddictionsScreen> {
   Future<void> _fetchAddictions() async {
-    await Provider.of<Addictions>(context, listen: false).fetchAddictions();
+    await Provider.of<AddictionsProvider>(context, listen: false)
+        .fetchAddictions();
   }
 
   @override
@@ -62,7 +63,7 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
                 child: Text(local.genericErrorMessage.capitalizeFirstLetter()),
               );
             }
-            return Consumer<Addictions>(
+            return Consumer<AddictionsProvider>(
               builder: (ctx, addictionsData, child) => RefreshIndicator(
                 onRefresh: () async {
                   await addictionsData.fetchAddictions();

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quit_addiction_app/models/addiction_item_screen_args.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_quit_addiction_app/extensions/string_extension.dart';
-import 'package:flutter_quit_addiction_app/providers/settings.dart';
+import 'package:flutter_quit_addiction_app/providers/settings_provider.dart';
 import 'package:flutter_quit_addiction_app/widgets/addiction_details.dart';
 import 'package:flutter_quit_addiction_app/widgets/personal_notes_view.dart';
 import 'package:flutter_quit_addiction_app/widgets/target_duration_indicator.dart';
@@ -10,8 +10,8 @@ import 'package:provider/provider.dart';
 
 const Duration _kExpand = Duration(milliseconds: 200);
 
-class AddictionItemMainScreen extends StatelessWidget {
-  const AddictionItemMainScreen({
+class AddictionItem extends StatelessWidget {
+  const AddictionItem({
     @required this.args,
   });
 
@@ -108,7 +108,7 @@ class AddictionItemMainScreen extends StatelessWidget {
                                       Text(
                                         local.moneySaved.capitalizeWords(),
                                       ),
-                                      Consumer<Settings>(
+                                      Consumer<SettingsProvider>(
                                         builder: (_, settings, _ch) => Text(
                                           (args.data.unitCost * notUsedCount)
                                                   .toStringAsFixed(2) +

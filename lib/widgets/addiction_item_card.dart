@@ -3,7 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_quit_addiction_app/extensions/string_extension.dart';
 import 'package:flutter_quit_addiction_app/models/addiction.dart';
 import 'package:flutter_quit_addiction_app/models/addiction_item_screen_args.dart';
-import 'package:flutter_quit_addiction_app/providers/settings.dart';
+import 'package:flutter_quit_addiction_app/providers/settings_provider.dart';
 import 'package:flutter_quit_addiction_app/screens/addiction_item_screen.dart';
 import 'package:flutter_quit_addiction_app/widgets/target_duration_indicator.dart';
 import 'package:provider/provider.dart';
@@ -151,7 +151,7 @@ class _AddictionItemState extends State<AddictionItem> {
                                               local.moneySaved
                                                   .capitalizeWords(),
                                             ),
-                                            Consumer<Settings>(
+                                            Consumer<SettingsProvider>(
                                               builder: (_, settings, _ch) =>
                                                   Text(
                                                 (widget.addictionData.unitCost *

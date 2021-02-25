@@ -4,8 +4,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_quit_addiction_app/screens/addiction_item_screen.dart';
 import 'package:provider/provider.dart';
 
-import 'package:flutter_quit_addiction_app/providers/addictions.dart';
-import 'package:flutter_quit_addiction_app/providers/settings.dart';
+import 'package:flutter_quit_addiction_app/providers/addictions_provider.dart';
+import 'package:flutter_quit_addiction_app/providers/settings_provider.dart';
 import 'package:flutter_quit_addiction_app/screens/addictions_screen.dart';
 import 'package:flutter_quit_addiction_app/screens/create_addiction_screen.dart';
 
@@ -19,10 +19,10 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => new Addictions(),
+          create: (_) => new AddictionsProvider(),
         ),
         ChangeNotifierProvider(
-          create: (_) => new Settings(),
+          create: (_) => new SettingsProvider(),
         ),
       ],
       child: MaterialApp(

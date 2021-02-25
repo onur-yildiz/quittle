@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_quit_addiction_app/providers/settings.dart';
+import 'package:flutter_quit_addiction_app/providers/settings_provider.dart';
 import 'dart:convert' show json;
 
 import 'package:provider/provider.dart';
@@ -48,7 +48,7 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
                 color: Theme.of(context).canvasColor,
                 onPressed: () {
                   setState(() {
-                    Provider.of<Settings>(context, listen: false)
+                    Provider.of<SettingsProvider>(context, listen: false)
                         .updateCurrency(_currencies[index]['code']);
                     Navigator.of(context).pop();
                   });
