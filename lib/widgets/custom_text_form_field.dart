@@ -9,8 +9,7 @@ class CustomTextFormField extends StatelessWidget {
     this.focusNode,
     this.inputType,
     this.validator,
-    // this.onSubmit,
-    this.isLast,
+    this.inputAction,
     this.backgroundColor,
   }) : super(key: key);
 
@@ -19,9 +18,8 @@ class CustomTextFormField extends StatelessWidget {
   final String inputName;
   final TextInputType inputType;
   final Function validator;
-  // final Function onSubmit;
   final FocusNode focusNode;
-  final bool isLast;
+  final TextInputAction inputAction;
   final Color backgroundColor;
 
   @override
@@ -60,9 +58,8 @@ class CustomTextFormField extends StatelessWidget {
       cursorColor: Theme.of(context).primaryColor,
       keyboardType: inputType,
       validator: validator,
-      textInputAction:
-          isLast == true ? TextInputAction.done : TextInputAction.next,
-      onEditingComplete: () => isLast == true
+      textInputAction: inputAction,
+      onEditingComplete: () => inputAction == TextInputAction.done
           ? FocusScope.of(context).unfocus()
           : FocusScope.of(context).nextFocus(),
       onSaved: (input) {

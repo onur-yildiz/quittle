@@ -14,11 +14,15 @@ class CreateAddictionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final statusBarHeight = MediaQuery.of(context).padding.top;
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
+    return Hero(
+      tag: 'newAddiction',
+      transitionOnUserGestures: true,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).primaryColor,
+        ),
+        body: AddictionCard(statusBarHeight),
       ),
-      body: AddictionCard(statusBarHeight),
     );
   }
 }
@@ -35,8 +39,8 @@ class AddictionCard extends StatefulWidget {
 
 class _AddictionCardState extends State<AddictionCard> {
   final GlobalKey<FormState> _formKey = GlobalKey();
+  String _consumptionType;
   FocusNode focusNode;
-  var _consumptionType = ConsumptionType.quantity;
   var addictionData = {
     'name': '',
     'quit_date': DateTime.now().toString(),
@@ -76,7 +80,6 @@ class _AddictionCardState extends State<AddictionCard> {
   @override
   void initState() {
     focusNode = new FocusNode();
-    focusNode.requestFocus();
     super.initState();
   }
 
@@ -90,11 +93,11 @@ class _AddictionCardState extends State<AddictionCard> {
   Widget build(BuildContext context) {
     final local = AppLocalizations.of(context);
     final deviceSize = MediaQuery.of(context).size;
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(0),
-      ),
-      margin: EdgeInsets.all(0),
+
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 20000),
+      curve: Curves.fastOutSlowIn,
+      margin: EdgeInsets.zero,
       color: Theme.of(context).cardColor,
       child: Form(
         key: _formKey,
@@ -112,128 +115,159 @@ class _AddictionCardState extends State<AddictionCard> {
                   inputName: local.addictionName.capitalizeWords(),
                   inputType: TextInputType.name,
                   focusNode: focusNode,
+                  inputAction: TextInputAction.done,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Material(
-                      type: MaterialType.button,
-                      color: Theme.of(context).canvasColor,
-                      borderRadius: BorderRadius.circular(5),
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(5),
-                        splashColor: Theme.of(context).highlightColor,
-                        onTap: () {
-                          setState(() {
-                            _selectDate(context);
-                          });
-                        },
-                        child: Container(
-                          height: Theme.of(context).buttonTheme.height * 2,
-                          padding: const EdgeInsets.all(10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                DateFormat('dd/MM/yyyy').format(
-                                  DateTime.parse(addictionData['quit_date']),
-                                ),
-                                style: TextStyle(
-                                  color: Theme.of(context).hintColor,
-                                ),
-                              ),
-                              SizedBox(
-                                width: deviceSize.width * .1,
-                                child: FlatButton(
-                                  materialTapTargetSize:
-                                      MaterialTapTargetSize.shrinkWrap,
-                                  visualDensity: VisualDensity.compact,
-                                  child: Icon(
-                                    Icons.date_range,
-                                    color: Theme.of(context).hintColor,
+                SizedBox(
+                  width: deviceSize.width,
+                  child: FittedBox(
+                    fit: BoxFit.fitWidth,
+                    child: Wrap(
+                      direction: Axis.horizontal,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      spacing: 24.0,
+                      children: [
+                        Material(
+                          type: MaterialType.button,
+                          color: Theme.of(context).canvasColor,
+                          borderRadius: BorderRadius.circular(5),
+                          child: InkWell(
+                            focusNode: focusNode,
+                            borderRadius: BorderRadius.circular(5),
+                            splashColor: Theme.of(context).highlightColor,
+                            onTap: () {
+                              setState(() {
+                                _selectDate(context);
+                              });
+                            },
+                            child: Container(
+                              height: Theme.of(context).buttonTheme.height * 2,
+                              padding: const EdgeInsets.all(10),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Text(
+                                    local.date.capitalizeWords(),
+                                    style: TextStyle(
+                                      fontSize: Theme.of(context)
+                                          .textTheme
+                                          .subtitle2
+                                          .fontSize,
+                                      fontWeight: FontWeight.bold,
+                                      color: Theme.of(context).hintColor,
+                                    ),
                                   ),
-                                  onPressed: null,
-                                  disabledTextColor:
-                                      Theme.of(context).hintColor,
-                                ),
+                                  Wrap(
+                                    direction: Axis.horizontal,
+                                    crossAxisAlignment:
+                                        WrapCrossAlignment.center,
+                                    spacing: 8.0,
+                                    children: [
+                                      Text(
+                                        DateFormat('dd/MM/yyyy').format(
+                                          DateTime.parse(
+                                              addictionData['quit_date']),
+                                        ),
+                                        style: TextStyle(
+                                          color: Theme.of(context).hintColor,
+                                        ),
+                                      ),
+                                      Icon(
+                                        Icons.date_range,
+                                        color: Theme.of(context).hintColor,
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                    Container(
-                      height: Theme.of(context).buttonTheme.height * 2,
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        color: Theme.of(context).canvasColor,
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            child: Text(
-                              local.consumptionType.capitalizeWords(),
-                              style: TextStyle(
-                                fontSize: Theme.of(context)
-                                    .textTheme
-                                    .subtitle2
-                                    .fontSize,
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context).hintColor,
+                        Material(
+                          type: MaterialType.button,
+                          color: Theme.of(context).canvasColor,
+                          borderRadius: BorderRadius.circular(5),
+                          child: InkWell(
+                            focusNode: focusNode,
+                            borderRadius: BorderRadius.circular(5),
+                            splashColor: Theme.of(context).highlightColor,
+                            onTap: () {
+                              setState(() {
+                                showModalBottomSheet(
+                                  context: context,
+                                  builder: (context) => Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      FlatButton(
+                                        padding: const EdgeInsets.all(24.0),
+                                        onPressed: () {
+                                          setState(() {
+                                            addictionData['consumption_type'] =
+                                                0;
+                                            _consumptionType = local.quantity;
+                                            Navigator.of(context).pop();
+                                          });
+                                        },
+                                        child: Text(
+                                          local.quantity.capitalizeWords(),
+                                        ),
+                                      ),
+                                      FlatButton(
+                                        padding: const EdgeInsets.all(24.0),
+                                        onPressed: () {
+                                          setState(() {
+                                            addictionData['consumption_type'] =
+                                                1;
+                                            _consumptionType = local.hour(0);
+                                            Navigator.of(context).pop();
+                                          });
+                                        },
+                                        child: Text(
+                                          local.hour(0).capitalizeWords(),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              });
+                            },
+                            child: Container(
+                              height: Theme.of(context).buttonTheme.height * 2,
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: Theme.of(context).canvasColor,
+                              ),
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    local.consumptionType.capitalizeWords(),
+                                    style: TextStyle(
+                                      fontSize: Theme.of(context)
+                                          .textTheme
+                                          .subtitle2
+                                          .fontSize,
+                                      fontWeight: FontWeight.bold,
+                                      color: Theme.of(context).hintColor,
+                                    ),
+                                  ),
+                                  Text(
+                                    _consumptionType != null
+                                        ? _consumptionType.capitalizeWords()
+                                        : local.quantity.capitalizeWords(),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
-                          DropdownButtonHideUnderline(
-                            child: DropdownButton(
-                              dropdownColor: Theme.of(context).canvasColor,
-                              isDense: true,
-                              value: _consumptionType,
-                              items: [
-                                DropdownMenuItem(
-                                  child: Text(
-                                    local.quantity.capitalizeWords(),
-                                    style: TextStyle(
-                                      color: Theme.of(context).hintColor,
-                                    ),
-                                  ),
-                                  value: ConsumptionType.quantity,
-                                ),
-                                DropdownMenuItem(
-                                  child: Text(
-                                    local.hour(0).capitalizeWords(),
-                                    style: TextStyle(
-                                      color: Theme.of(context).hintColor,
-                                    ),
-                                  ),
-                                  value: ConsumptionType.hour,
-                                ),
-                              ],
-                              onChanged: (value) {
-                                setState(
-                                  () {
-                                    _consumptionType = value;
-                                    switch (value) {
-                                      case ConsumptionType.quantity:
-                                        addictionData['consumption_type'] = 0;
-                                        break;
-                                      case ConsumptionType.hour:
-                                        addictionData['consumption_type'] = 1;
-                                        break;
-                                      default:
-                                    }
-                                  },
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
                 CustomTextFormField(
                   valKey: 'daily_consumption',
@@ -249,6 +283,7 @@ class _AddictionCardState extends State<AddictionCard> {
                       return null;
                     }
                   },
+                  inputAction: TextInputAction.next,
                 ),
                 CustomTextFormField(
                   valKey: 'unit_cost',
@@ -265,7 +300,7 @@ class _AddictionCardState extends State<AddictionCard> {
                       return null;
                     }
                   },
-                  isLast: true,
+                  inputAction: TextInputAction.done,
                 ),
                 RaisedButton(
                   shape: RoundedRectangleBorder(

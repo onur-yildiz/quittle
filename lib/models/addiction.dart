@@ -35,7 +35,11 @@ class Addiction {
   }
 
   double get notUsedCount {
-    return (dailyConsumption / Duration.hoursPerDay) * abstinenceTime.inHours;
+    if (consumptionType == 0) {
+      return (dailyConsumption / Duration.hoursPerDay) * abstinenceTime.inHours;
+    }
+    return ((dailyConsumption / Duration.hoursPerDay) * abstinenceTime.inHours)
+        .roundToDouble();
   }
 
   List<PersonalNote> get personalNotesDateSorted {

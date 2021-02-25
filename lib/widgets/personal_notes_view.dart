@@ -24,7 +24,7 @@ class _PersonalNotesViewState extends State<PersonalNotesView> {
       alignment: Alignment.topCenter,
       children: [
         Padding(
-          padding: const EdgeInsets.only(top: 24.0),
+          padding: const EdgeInsets.only(top: 16.0),
           child: FutureBuilder(
             future: Provider.of<AddictionsProvider>(context, listen: false)
                 .fetchNotes(
@@ -42,22 +42,31 @@ class _PersonalNotesViewState extends State<PersonalNotesView> {
                         )
                       : Consumer<AddictionsProvider>(
                           builder: (_, addictionsData, _child) =>
-                              ListView.builder(
-                            shrinkWrap: true,
-                            physics: BouncingScrollPhysics(),
-                            itemCount:
-                                widget.addictionData.personalNotes.length,
-                            itemBuilder: (_, index) {
-                              return Padding(
-                                padding: const EdgeInsets.only(top: 8.0),
-                                child: Note(
-                                  data: widget.addictionData
-                                          .personalNotesDateSorted[
-                                      index], // todo date sort ascend descend button
-                                ),
-                              );
-                            },
-                          ),
+                              widget.addictionData.personalNotes.length == 0
+                                  ? Padding(
+                                      padding: const EdgeInsets.only(top: 16.0),
+                                      child: Divider(
+                                        thickness: 1,
+                                        height: 0,
+                                      ),
+                                    )
+                                  : ListView.builder(
+                                      shrinkWrap: true,
+                                      physics: BouncingScrollPhysics(),
+                                      itemCount: widget
+                                          .addictionData.personalNotes.length,
+                                      itemBuilder: (_, index) {
+                                        return Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 8.0),
+                                          child: Note(
+                                            data: widget.addictionData
+                                                    .personalNotesDateSorted[
+                                                index], // todo date sort ascend descend button
+                                          ),
+                                        );
+                                      },
+                                    ),
                         );
             },
           ),

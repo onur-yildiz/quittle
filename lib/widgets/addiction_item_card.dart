@@ -26,16 +26,6 @@ class AddictionItem extends StatefulWidget {
 class _AddictionItemState extends State<AddictionItem> {
   @override
   Widget build(BuildContext context) {
-    final local = AppLocalizations.of(context);
-    final quitDate = DateTime.parse(widget.addictionData.quitDate);
-    final abstinenceTime = DateTime.now().difference(quitDate);
-    final notUsedCount =
-        ((widget.addictionData.dailyConsumption / Duration.hoursPerDay) *
-            (abstinenceTime.inHours));
-    final consumptionType = (widget.addictionData.consumptionType == 1)
-        ? local.hour(notUsedCount.toInt())
-        : local.times(notUsedCount.toInt());
-
     return Padding(
       padding: const EdgeInsets.all(12.0),
       child: Material(
@@ -55,10 +45,8 @@ class _AddictionItemState extends State<AddictionItem> {
               arguments: AddictionItemScreenArgs(widget.addictionData),
             );
           },
-          child: AnimatedContainer(
-            duration: _kExpand,
-            curve: Curves.fastOutSlowIn,
-            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -73,11 +61,7 @@ class _AddictionItemState extends State<AddictionItem> {
                   ),
                 ),
                 AddictionProgress(
-                  local: local,
-                  unitCost: widget.addictionData.unitCost,
-                  notUsedCount: notUsedCount,
-                  consumptionType: consumptionType,
-                  abstinenceTime: abstinenceTime,
+                  addictionData: widget.addictionData,
                 )
               ],
             ),

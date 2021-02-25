@@ -15,9 +15,16 @@ class AddictionsScreen extends StatefulWidget {
 }
 
 class _AddictionsScreenState extends State<AddictionsScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+
   Future<void> _fetchAddictions() async {
     await Provider.of<AddictionsProvider>(context, listen: false)
         .fetchAddictions();
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -25,13 +32,32 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
     final local = AppLocalizations.of(context);
     // final deviceSize = MediaQuery.of(context).size;
     return Scaffold(
-      bottomNavigationBar: BottomAppBar(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            IconButton(icon: Icon(Icons.menu), onPressed: () {}),
-            IconButton(icon: Icon(Icons.add), onPressed: () {}),
-          ],
+      key: _scaffoldKey,
+      floatingActionButton: FloatingActionButton(
+        heroTag: 'newAddiction',
+        onPressed: () {
+          Navigator.of(context).pushNamed(CreateAddictionScreen.routeName);
+        },
+        backgroundColor: Theme.of(context).primaryColor,
+        tooltip: 'New',
+        child: Icon(Icons.add),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: Builder(
+        builder: (context) => BottomAppBar(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              IconButton(
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+                color: Theme.of(context).primaryColor,
+                tooltip: 'Menu',
+                icon: Icon(Icons.menu),
+              ),
+            ],
+          ),
         ),
       ),
       drawer: SettingsView(),

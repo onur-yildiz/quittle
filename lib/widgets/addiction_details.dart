@@ -4,27 +4,30 @@ import 'package:flutter_quit_addiction_app/extensions/string_extension.dart';
 
 import 'package:flutter_quit_addiction_app/models/addiction.dart';
 import 'package:flutter_quit_addiction_app/widgets/duration_counter.dart';
+import 'package:intl/intl.dart';
 
 class AddictionDetails extends StatefulWidget {
   const AddictionDetails({
     @required this.addictionData,
-    @required this.notUsedCount,
-    @required this.abstinenceTime,
-    @required this.quitDateFormatted,
   });
 
   final Addiction addictionData;
-  final double notUsedCount;
-  final Duration abstinenceTime;
-  final String quitDateFormatted;
 
   @override
   _AddictionDetailsState createState() => _AddictionDetailsState();
 }
 
 class _AddictionDetailsState extends State<AddictionDetails> {
+  double notUsedCount;
+  Duration abstinenceTime;
+  String quitDateFormatted;
+
   @override
   void initState() {
+    notUsedCount = widget.addictionData.notUsedCount;
+    abstinenceTime = widget.addictionData.abstinenceTime;
+    quitDateFormatted =
+        DateFormat('dd/MM/yyyy').format(widget.addictionData.quitDateTime);
     super.initState();
   }
 
@@ -33,10 +36,10 @@ class _AddictionDetailsState extends State<AddictionDetails> {
     final local = AppLocalizations.of(context);
     final consumptionType = ((widget.addictionData.consumptionType == 1)
             ? local.hour(
-                widget.notUsedCount.toInt(),
+                notUsedCount.toInt(),
               )
             : local.times(
-                widget.notUsedCount.toInt(),
+                notUsedCount.toInt(),
               ))
         .capitalizeWords();
 
@@ -56,14 +59,14 @@ class _AddictionDetailsState extends State<AddictionDetails> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(local.startDate.capitalizeWords()),
-                Text(widget.quitDateFormatted),
+                Text(quitDateFormatted),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(local.duration.capitalizeWords()),
-                DurationCounter(duration: widget.abstinenceTime),
+                DurationCounter(duration: abstinenceTime),
               ],
             ),
             Row(
