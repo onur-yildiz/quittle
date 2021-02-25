@@ -1,19 +1,15 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_quit_addiction_app/extensions/string_extension.dart';
-import 'package:flutter_quit_addiction_app/models/addiction.dart';
+import 'package:flutter_quit_addiction_app/models/addiction_item_screen_args.dart';
 import 'package:flutter_quit_addiction_app/providers/settings.dart';
 import 'package:flutter_quit_addiction_app/widgets/addiction_details.dart';
+import 'package:flutter_quit_addiction_app/widgets/addiction_item_view.dart';
 import 'package:flutter_quit_addiction_app/widgets/personal_notes_view.dart';
 import 'package:flutter_quit_addiction_app/widgets/target_duration_indicator.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 
 const Duration _kExpand = Duration(milliseconds: 200);
-
-class AddictionItemScreenArgs {
-  final Addiction data;
-  AddictionItemScreenArgs(this.data);
-}
 
 class AddictionItemScreen extends StatefulWidget {
   static const routeName = '/addiction-item';
@@ -28,142 +24,70 @@ class _AddictionItemState extends State<AddictionItemScreen> {
     final AddictionItemScreenArgs args =
         ModalRoute.of(context).settings.arguments;
 
-    final local = AppLocalizations.of(context);
+    List<Widget> _buildScreens() {
+      return [
+        AddictionItemMainScreen(args: args),
+        AddictionItemMainScreen(args: args)
+      ];
+    }
 
-    final deviceSize = MediaQuery.of(context).size;
-    final deviceWidth = deviceSize.width;
-    final deviceHeight = deviceSize.height -
-        (kToolbarHeight + MediaQuery.of(context).padding.top);
+    List<PersistentBottomNavBarItem> _navBarsItems() {
+      return [
+        PersistentBottomNavBarItem(
+          icon: Icon(CupertinoIcons.home),
+          title: ("Home"),
+          activeColor: CupertinoColors.activeBlue,
+          inactiveColor: CupertinoColors.systemGrey,
+        ),
+        PersistentBottomNavBarItem(
+          icon: Icon(CupertinoIcons.settings),
+          title: ("Settings"),
+          activeColor: CupertinoColors.activeBlue,
+          inactiveColor: CupertinoColors.systemGrey,
+        ),
+      ];
+    }
 
-    final titleHeight = deviceHeight * .05;
-    final infoHeight = deviceHeight * .25;
+    PersistentTabController _controller;
 
-    final quitDate = DateTime.parse(args.data.quitDate);
-    final abstinenceTime = DateTime.now().difference(quitDate);
-    final notUsedCount = (args.data.dailyConsumption * (abstinenceTime.inDays));
-    final consumptionType = (args.data.consumptionType == 1)
-        ? local.hour(notUsedCount.toInt())
-        : local.times(notUsedCount.toInt());
+    _controller = PersistentTabController(initialIndex: 0);
 
     return Scaffold(
       appBar: AppBar(
         title: Text('QuitAll'),
       ),
-      body: SingleChildScrollView(
-        child: AnimatedContainer(
-          duration: _kExpand,
-          curve: Curves.fastOutSlowIn,
-          color: Theme.of(context).canvasColor,
-          // margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                margin: const EdgeInsets.only(top: 24.0),
-                height: titleHeight,
-                width: deviceWidth,
-                alignment: Alignment.center,
-                child: Text(
-                  args.data.name.toUpperCase(),
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: Theme.of(context).textTheme.headline5.fontSize,
-                    color: Theme.of(context).hintColor,
-                  ),
-                ),
-              ),
-              Divider(),
-              Container(
-                height: infoHeight,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                      width: deviceWidth * .5,
-                      child: Flex(
-                        direction: Axis.vertical,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Flexible(
-                            flex: 1,
-                            child: Text(local.level.capitalizeWords() + '1'),
-                          ),
-                          Flexible(
-                            flex: 3,
-                            child: DefaultTextStyle(
-                              style: TextStyle(
-                                fontSize: Theme.of(context)
-                                    .textTheme
-                                    .headline6
-                                    .fontSize,
-                                color: Theme.of(context).hintColor,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              child: args.data.unitCost == 0
-                                  ? Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(local.savedFor
-                                            .capitalizeFirstLetter()),
-                                        Text(
-                                          notUsedCount.toStringAsFixed(0) +
-                                              ' ' +
-                                              consumptionType,
-                                        ),
-                                      ],
-                                    )
-                                  : Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          local.moneySaved.capitalizeWords(),
-                                        ),
-                                        Consumer<Settings>(
-                                          builder: (_, settings, _ch) => Text(
-                                            (args.data.unitCost * notUsedCount)
-                                                    .toStringAsFixed(2) +
-                                                ' ' +
-                                                settings.currency,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      width: deviceWidth * .5,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Flexible(
-                            flex: 3,
-                            child: TargetDurationIndicator(
-                                duration: abstinenceTime),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              AddictionDetails(
-                addictionData: args.data,
-              ),
-              PersonalNotesView(
-                addictionData: args.data,
-              ),
-            ],
-          ),
+      body: PersistentTabView(
+        context,
+        controller: _controller,
+        screens: _buildScreens(),
+        items: _navBarsItems(),
+        confineInSafeArea: true,
+        backgroundColor: Colors.white,
+        handleAndroidBackButtonPress: true,
+        resizeToAvoidBottomInset:
+            true, // This needs to be true if you want to move up the screen when keyboard appears.
+        stateManagement: true,
+        hideNavigationBarWhenKeyboardShows:
+            true, // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument.
+        decoration: NavBarDecoration(
+          borderRadius: BorderRadius.circular(10.0),
+          colorBehindNavBar: Colors.white,
         ),
+        popAllScreensOnTapOfSelectedTab: true,
+        popActionScreens: PopActionScreensType.all,
+        itemAnimationProperties: ItemAnimationProperties(
+          // Navigation Bar's items animation properties.
+          duration: Duration(milliseconds: 200),
+          curve: Curves.ease,
+        ),
+        screenTransitionAnimation: ScreenTransitionAnimation(
+          // Screen transition animation on change of selected tab.
+          animateTabTransition: true,
+          curve: Curves.ease,
+          duration: Duration(milliseconds: 200),
+        ),
+        navBarStyle:
+            NavBarStyle.style4, // Choose the nav bar style with this property.
       ),
     );
   }

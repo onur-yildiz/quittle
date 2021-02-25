@@ -35,7 +35,7 @@ class Note extends StatelessWidget {
               Text(
                 data.title,
                 style: TextStyle(
-                  color: Theme.of(context).accentColor,
+                  color: Theme.of(context).hintColor,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -43,7 +43,7 @@ class Note extends StatelessWidget {
                 formattedStartDate,
                 style: TextStyle(
                   color: Theme.of(context).hintColor,
-                  fontWeight: FontWeight.w900,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ],

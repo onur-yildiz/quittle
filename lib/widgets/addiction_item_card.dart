@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_quit_addiction_app/extensions/string_extension.dart';
 import 'package:flutter_quit_addiction_app/models/addiction.dart';
+import 'package:flutter_quit_addiction_app/models/addiction_item_screen_args.dart';
 import 'package:flutter_quit_addiction_app/providers/settings.dart';
 import 'package:flutter_quit_addiction_app/screens/addiction_item_screen.dart';
-import 'package:flutter_quit_addiction_app/widgets/personal_notes_view.dart';
 import 'package:flutter_quit_addiction_app/widgets/target_duration_indicator.dart';
 import 'package:provider/provider.dart';
-
-import 'addiction_details.dart';
 
 const Duration _kExpand = Duration(milliseconds: 200);
 
@@ -43,7 +41,7 @@ class _AddictionItemState extends State<AddictionItem> {
         : local.times(notUsedCount.toInt());
 
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(12.0),
       child: Material(
         type: MaterialType.card,
         shape: RoundedRectangleBorder(

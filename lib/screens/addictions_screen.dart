@@ -3,7 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_quit_addiction_app/extensions/string_extension.dart';
 import 'package:flutter_quit_addiction_app/providers/addictions.dart';
 import 'package:flutter_quit_addiction_app/screens/create_addiction_screen.dart';
-import 'package:flutter_quit_addiction_app/widgets/addiction_item.dart';
+import 'package:flutter_quit_addiction_app/widgets/addiction_item_card.dart';
 import 'package:flutter_quit_addiction_app/widgets/settings_view.dart';
 import 'package:provider/provider.dart';
 

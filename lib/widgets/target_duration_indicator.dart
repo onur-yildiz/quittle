@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_quit_addiction_app/extensions/string_extension.dart';
 
 import 'package:flutter/material.dart';
 
@@ -147,7 +145,7 @@ class _TargetDurationIndicatorState extends State<TargetDurationIndicator> {
                         strokeWidth:
                             Theme.of(context).textTheme.bodyText1.fontSize,
                         backgroundColor:
-                            Theme.of(context).accentColor.withAlpha(50),
+                            Theme.of(context).accentColor.withAlpha(100),
                       );
                     }),
                 Center(
@@ -167,8 +165,9 @@ class _TargetDurationIndicatorState extends State<TargetDurationIndicator> {
                       Text(
                         '%',
                         style: TextStyle(
-                            color: Theme.of(context).primaryColorLight,
-                            fontWeight: FontWeight.bold),
+                          color: Theme.of(context).primaryColorLight,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ],
                   ),
@@ -181,6 +180,9 @@ class _TargetDurationIndicatorState extends State<TargetDurationIndicator> {
               (targetValue != null && targetUnit != null)
                   ? (targetValue.toString() + ' ' + targetUnit)
                   : '',
+              style: TextStyle(
+                color: Theme.of(context).hintColor,
+              ),
             ),
           ),
         ],
