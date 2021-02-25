@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_quit_addiction_app/extensions/string_extension.dart';
 
@@ -9,27 +8,23 @@ import 'package:flutter_quit_addiction_app/widgets/duration_counter.dart';
 class AddictionDetails extends StatefulWidget {
   const AddictionDetails({
     @required this.addictionData,
+    @required this.notUsedCount,
+    @required this.abstinenceTime,
+    @required this.quitDateFormatted,
   });
 
   final Addiction addictionData;
+  final double notUsedCount;
+  final Duration abstinenceTime;
+  final String quitDateFormatted;
 
   @override
   _AddictionDetailsState createState() => _AddictionDetailsState();
 }
 
 class _AddictionDetailsState extends State<AddictionDetails> {
-  var formattedStartDate;
-  var quitDate;
-  var abstinenceTime;
-  var notUsedCount;
-
   @override
   void initState() {
-    quitDate = DateTime.parse(widget.addictionData.quitDate);
-    abstinenceTime = DateTime.now().difference(quitDate);
-    formattedStartDate = DateFormat('dd/MM/yyyy').format(quitDate);
-    notUsedCount =
-        (widget.addictionData.dailyConsumption * (abstinenceTime.inDays));
     super.initState();
   }
 
@@ -38,10 +33,10 @@ class _AddictionDetailsState extends State<AddictionDetails> {
     final local = AppLocalizations.of(context);
     final consumptionType = ((widget.addictionData.consumptionType == 1)
             ? local.hour(
-                notUsedCount.toInt(),
+                widget.notUsedCount.toInt(),
               )
             : local.times(
-                notUsedCount.toInt(),
+                widget.notUsedCount.toInt(),
               ))
         .capitalizeWords();
 
@@ -61,14 +56,14 @@ class _AddictionDetailsState extends State<AddictionDetails> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(local.startDate.capitalizeWords()),
-                Text(formattedStartDate),
+                Text(widget.quitDateFormatted),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(local.duration.capitalizeWords()),
-                DurationCounter(duration: abstinenceTime),
+                DurationCounter(duration: widget.abstinenceTime),
               ],
             ),
             Row(

@@ -49,7 +49,10 @@ class _AddictionItemState extends State<AddictionItemScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('QuitAll'),
+        title: Text(
+          args.data.name.toUpperCase(),
+          overflow: TextOverflow.ellipsis,
+        ),
       ),
       body: PersistentTabView(
         context,

@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:intl/intl.dart';
 
 enum ConsumptionType { quantity, hour }
 
@@ -20,6 +21,22 @@ class Addiction {
     this.unitCost = 0.0,
     this.personalNotes,
   });
+
+  DateTime get quitDateTime {
+    return DateTime.parse(quitDate);
+  }
+
+  // String get quitDateTimeFormatted {
+  //   return DateFormat('dd/MM/yyyy').format(quitDateTime);
+  // }
+
+  Duration get abstinenceTime {
+    return DateTime.now().difference(quitDateTime);
+  }
+
+  double get notUsedCount {
+    return (dailyConsumption / Duration.hoursPerDay) * abstinenceTime.inHours;
+  }
 
   List<PersonalNote> get personalNotesDateSorted {
     List<PersonalNote> list = [...personalNotes];

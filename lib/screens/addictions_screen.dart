@@ -31,7 +31,6 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
           children: [
             IconButton(icon: Icon(Icons.menu), onPressed: () {}),
             IconButton(icon: Icon(Icons.add), onPressed: () {}),
-            IconButton(icon: Icon(Icons.more_vert), onPressed: () {}),
           ],
         ),
       ),
