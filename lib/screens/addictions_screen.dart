@@ -34,20 +34,6 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
           ],
         ),
       ),
-      appBar: AppBar(
-        title: Text(local.appName),
-        shadowColor: Theme.of(context).accentColor,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () => Navigator.pushNamed(
-              context,
-              CreateAddictionScreen.routeName,
-            ),
-          ),
-        ],
-      ),
-      // ? MAKE DRAWER THE SETTINGS SCREEN MAYBE ??
       drawer: SettingsView(),
       body: FutureBuilder(
         future: _fetchAddictions(),

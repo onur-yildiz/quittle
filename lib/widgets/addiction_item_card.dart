@@ -27,12 +27,6 @@ class _AddictionItemState extends State<AddictionItem> {
   @override
   Widget build(BuildContext context) {
     final local = AppLocalizations.of(context);
-
-    final deviceSize = MediaQuery.of(context).size;
-    final deviceWidth = deviceSize.width;
-    final deviceHeight = deviceSize.height -
-        (kToolbarHeight + MediaQuery.of(context).padding.top);
-
     final quitDate = DateTime.parse(widget.addictionData.quitDate);
     final abstinenceTime = DateTime.now().difference(quitDate);
     final notUsedCount =
@@ -67,21 +61,15 @@ class _AddictionItemState extends State<AddictionItem> {
             margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
-                  margin: const EdgeInsets.only(top: 8.0),
-                  height: deviceHeight * .05,
-                  width: deviceWidth * .4,
-                  alignment: Alignment.center,
-                  child: Text(
-                    widget.addictionData.name.toUpperCase(),
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: Theme.of(context).textTheme.headline5.fontSize,
-                      color: Theme.of(context).hintColor,
-                    ),
+                Text(
+                  widget.addictionData.name.toUpperCase(),
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: Theme.of(context).textTheme.headline5.fontSize,
+                    color: Theme.of(context).hintColor,
                   ),
                 ),
                 AddictionProgress(
