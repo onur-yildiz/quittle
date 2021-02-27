@@ -4,6 +4,7 @@ import 'package:flutter_quit_addiction_app/extensions/string_extension.dart';
 import 'package:flutter_quit_addiction_app/models/addiction.dart';
 import 'package:flutter_quit_addiction_app/providers/settings_provider.dart';
 import 'package:flutter_quit_addiction_app/widgets/target_duration_indicator.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class AddictionProgress extends StatelessWidget {
@@ -68,11 +69,13 @@ class AddictionProgress extends StatelessWidget {
                             ),
                             Consumer<SettingsProvider>(
                               builder: (_, settings, _ch) => Text(
-                                (addictionData.unitCost *
-                                            addictionData.notUsedCount)
-                                        .toStringAsFixed(2) +
-                                    ' ' +
-                                    settings.currency,
+                                NumberFormat.currency(
+                                  name: settings.currency,
+                                  symbol: settings.currency,
+                                ).format(
+                                  addictionData.unitCost *
+                                      addictionData.notUsedCount,
+                                ),
                               ),
                             ),
                           ],

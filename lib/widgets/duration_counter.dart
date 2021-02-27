@@ -1,6 +1,9 @@
 import 'dart:async';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_quit_addiction_app/extensions/string_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class DurationCounter extends StatefulWidget {
   const DurationCounter({
@@ -14,16 +17,16 @@ class DurationCounter extends StatefulWidget {
 }
 
 class _DurationCounterState extends State<DurationCounter> {
-  var durationAsString;
-  var updatedDuration;
+  String durationAsString = '';
+  Duration updatedDuration;
 
   String printDuration(Duration duration) {
     String twoDigits(int n) => n.toString().padLeft(2, '0');
     String twoDigitHours = twoDigits(duration.inHours.remainder(24));
     String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
     String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
-    return '${duration.inDays}d ${twoDigitHours}h ${twoDigitMinutes}m ${twoDigitSeconds}s';
-  } //todo localization
+    return '${duration.inDays} | $twoDigitHours:$twoDigitMinutes:$twoDigitSeconds';
+  }
 
   @override
   void initState() {

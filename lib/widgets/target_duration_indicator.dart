@@ -17,10 +17,8 @@ class TargetDurationIndicator extends StatefulWidget {
 
 class _TargetDurationIndicatorState extends State<TargetDurationIndicator> {
   Duration updatedDuration;
-  String targetUnit;
-  int targetValue;
-  String counterUnit;
-  int counterValue;
+  String targetUnit = '';
+  int targetValue = 0;
   double percentage = 0.0;
   final int refreshInterval = 15;
 
@@ -40,14 +38,10 @@ class _TargetDurationIndicatorState extends State<TargetDurationIndicator> {
       if (time.inHours < 1) {
         targetValue = 1;
         targetUnit = local.hour(1);
-        counterValue = time.inMinutes;
-        counterUnit = local.minute(counterValue);
-        percentage = counterValue / 60;
+        percentage = time.inMinutes / 60;
       } else {
         targetValue = 24;
         targetUnit = local.hour(targetValue);
-        counterValue = time.inHours;
-        counterUnit = local.hour(counterValue);
         percentage = time.inMinutes.remainder(Duration.minutesPerDay) /
             Duration.minutesPerDay;
       }
@@ -55,35 +49,25 @@ class _TargetDurationIndicatorState extends State<TargetDurationIndicator> {
       if (time.inDays < 7) {
         targetValue = 1;
         targetUnit = local.week(targetValue);
-        counterValue = time.inDays % 7;
-        counterUnit = local.day(counterValue);
-        percentage = counterValue * 24 / (7 * 24);
+        percentage = (time.inDays % 7) * 24 / (7 * 24);
       } else {
         targetValue = 1;
         targetUnit = local.month(targetValue);
-        counterValue = time.inDays % 30;
-        counterUnit = local.day(counterValue);
-        percentage = counterValue * 24 / (30 * 24);
+        percentage = (time.inDays % 30) * 24 / (30 * 24);
       }
     } else if (time.inDays ~/ 30 < 12) {
       targetValue = (time.inDays ~/ 30) + 1;
       targetUnit = local.month(targetValue);
-      counterValue = ((time.inDays % 360) ~/ 30);
-      counterUnit = local.month(counterValue);
       percentage = time.inDays / (targetValue * 30);
     } else {
       targetValue = (time.inDays ~/ 360) + 1;
       if (time.inDays / 360 < 1) {
         targetUnit = local.year(targetValue);
-        counterValue = (time.inDays ~/ 30);
-        counterUnit = local.month(counterValue);
         percentage = time.inDays / 360;
       } else {
         targetUnit = local.year(targetValue);
-        counterValue = (time.inDays ~/ 360);
-        counterUnit = local.year(counterValue);
+        percentage = time.inDays / (360 * targetValue);
       }
-      percentage = time.inDays / (360 * targetValue);
     }
   } // todo: do better, can be better
 
@@ -179,9 +163,7 @@ class _TargetDurationIndicatorState extends State<TargetDurationIndicator> {
           ),
           Container(
             child: Text(
-              (targetValue != null && targetUnit != null)
-                  ? (targetValue.toString() + ' ' + targetUnit)
-                  : '',
+              targetValue.toString() + ' ' + targetUnit,
               style: TextStyle(
                 color: Theme.of(context).hintColor,
               ),

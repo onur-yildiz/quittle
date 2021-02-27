@@ -83,19 +83,6 @@ class _AddictionDetailsState extends State<AddictionDetails> {
                 ),
               ],
             ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //   children: [
-            //     Text(local.savedFor.capitalizeWords()),
-            //     Text(
-            //       (notUsedCount % 1 == 0
-            //               ? notUsedCount.toStringAsFixed(0)
-            //               : notUsedCount.toString()) +
-            //           ' ' +
-            //           consumptionType,
-            //     ),
-            //   ],
-            // ),
           ],
         ),
       ),
