@@ -131,7 +131,24 @@ class GiftCard extends StatelessWidget {
         ),
         elevation: 5,
         child: InkWell(
-          onTap: () {},
+          onTap: () => showDialog(
+            context: context,
+            builder: (context) => new AlertDialog(
+              title: Text('Buy \"${gift.name}\" for ${gift.price} $currency'),
+              actions: [
+                FlatButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Cancel'),
+                ),
+                FlatButton(
+                  onPressed: () {}, //todo buy
+                  child: Text('Buy'),
+                ),
+              ],
+            ),
+          ),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Flex(
@@ -256,6 +273,7 @@ class AddGiftButton extends StatelessWidget {
             child: Icon(
               Icons.add,
               size: Theme.of(context).textTheme.headline4.fontSize,
+              color: Theme.of(context).hintColor,
             ),
           ),
         ),
