@@ -12,6 +12,8 @@ class DBHelper {
             'CREATE TABLE addictions(id TEXT PRIMARY KEY, name TEXT, quit_date TEXT, consumption_type INTEGER, daily_consumption REAL, unit_cost REAL)');
         await db.execute(
             'CREATE TABLE personal_notes(id TEXT, title TEXT, text TEXT, date TEXT)');
+        await db.execute(
+            'CREATE TABLE gifts(id TEXT, name TEXT, price REAL, count INTEGER)');
       },
       version: 1,
     );
@@ -26,15 +28,18 @@ class DBHelper {
     );
   }
 
-  static Future<List<Map<String, Object>>> getData(
-    String table, [
-    String id = '',
-  ]) async {
+  static Future<List<Map<String, Object>>> getData(String table,
+      [String id = '']) async {
     final db = await DBHelper.database();
     if (id == '') {
       return db.query(table);
-    } else {
+    }
+    if (table == 'personal_notes') {
       return db.rawQuery('SELECT * FROM personal_notes WHERE id = ?', [id]);
     }
+    if (table == 'gifts') {
+      return db.rawQuery('SELECT * FROM gifts WHERE id = ?', [id]);
+    }
+    return null;
   }
 }

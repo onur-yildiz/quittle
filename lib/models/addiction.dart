@@ -10,6 +10,7 @@ class Addiction {
   final double dailyConsumption;
   final double unitCost;
   List<PersonalNote> personalNotes;
+  List<Gift> gifts;
 
   Addiction({
     @required this.id,
@@ -17,8 +18,9 @@ class Addiction {
     @required this.quitDate,
     @required this.consumptionType,
     @required this.dailyConsumption,
-    this.unitCost = 0.0,
+    @required this.unitCost,
     this.personalNotes,
+    this.gifts,
   });
 
   DateTime get quitDateTime {
@@ -60,4 +62,17 @@ class PersonalNote {
     @required this.text,
     @required this.date,
   });
+}
+
+class Gift {
+  final String name;
+  final double price;
+  int count;
+
+  Gift({
+    @required this.name,
+    @required this.price,
+  }) {
+    this.count = 0;
+  }
 }

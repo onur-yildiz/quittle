@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quit_addiction_app/models/addiction_item_screen_args.dart';
 import 'package:flutter_quit_addiction_app/widgets/addiction_item.dart';
+import 'package:flutter_quit_addiction_app/widgets/gifts.dart';
 import 'package:flutter_quit_addiction_app/widgets/settings_view.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
@@ -24,6 +25,7 @@ class _AddictionItemState extends State<AddictionItemScreen> {
     List<Widget> _buildScreens() {
       return [
         AddictionItem(args: args),
+        Gifts(data: args.data),
         SettingsView(),
       ];
     }
@@ -31,14 +33,20 @@ class _AddictionItemState extends State<AddictionItemScreen> {
     List<PersistentBottomNavBarItem> _navBarsItems() {
       return [
         PersistentBottomNavBarItem(
-          icon: Icon(Icons.home_filled),
+          icon: Icon(Icons.home),
           title: ("Home"),
           activeColor: Theme.of(context).primaryColor,
           inactiveColor: Theme.of(context).hintColor,
         ),
         PersistentBottomNavBarItem(
           icon: Icon(Icons.wallet_giftcard),
-          title: ("Settings"),
+          title: ("Gifts"),
+          activeColor: Theme.of(context).primaryColor,
+          inactiveColor: Theme.of(context).hintColor,
+        ),
+        PersistentBottomNavBarItem(
+          icon: Icon(Icons.fact_check_rounded),
+          title: ("Achievements"),
           activeColor: Theme.of(context).primaryColor,
           inactiveColor: Theme.of(context).hintColor,
         ),

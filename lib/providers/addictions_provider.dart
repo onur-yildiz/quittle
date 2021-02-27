@@ -56,6 +56,22 @@ class AddictionsProvider with ChangeNotifier {
           dailyConsumption: addiction['daily_consumption'],
           unitCost: addiction['unit_cost'],
           personalNotes: [],
+          gifts: [
+            Gift(name: 'test', price: 5.5),
+            Gift(name: 'test 2', price: 14),
+            Gift(name: 'test 2', price: 14),
+            Gift(name: 'test 2', price: 14),
+            Gift(name: 'test 2', price: 14),
+            Gift(name: 'test 2', price: 14),
+            Gift(name: 'test 2', price: 14),
+            Gift(name: 'test 2', price: 14),
+            Gift(name: 'test 2', price: 14),
+            Gift(name: 'test 2', price: 14),
+            Gift(name: 'test 2', price: 14),
+            Gift(name: 'test 2', price: 14),
+            Gift(name: 'test 2', price: 14),
+            Gift(name: 'test 2', price: 14),
+          ],
         );
         loadedAddictions.add(temp);
         _addictions = loadedAddictions;
@@ -99,5 +115,20 @@ class AddictionsProvider with ChangeNotifier {
       );
     });
     addiction.personalNotes = loadedNotes;
+  }
+
+  Future<void> fetchGifts(String id) async {
+    final List<Gift> loadedGifts = [];
+    final addiction = _addictions.firstWhere((addiction) => addiction.id == id);
+    final gifts = await DBHelper.getData('gifts', id);
+    gifts.forEach((gift) {
+      loadedGifts.add(
+        Gift(
+          name: gift['name'],
+          price: gift['price'],
+        ),
+      );
+    });
+    addiction.gifts = loadedGifts;
   }
 }
