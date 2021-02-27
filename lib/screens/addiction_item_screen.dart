@@ -67,7 +67,7 @@ class _AddictionItemState extends State<AddictionItemScreen> {
         items: _navBarsItems(),
         confineInSafeArea: true,
         backgroundColor: Colors.white,
-        handleAndroidBackButtonPress: true,
+        handleAndroidBackButtonPress: false, //pop all or one by one
         resizeToAvoidBottomInset:
             true, // This needs to be true if you want to move up the screen when keyboard appears.
         stateManagement: true,

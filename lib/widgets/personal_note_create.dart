@@ -137,6 +137,7 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
                 ),
                 keyboardType: TextInputType.multiline,
                 textInputAction: TextInputAction.newline,
+                minLines: 8,
                 maxLines: null,
                 maxLength: 100,
                 maxLengthEnforced: true,
