@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quit_addiction_app/models/addiction_item_screen_args.dart';
-import 'package:flutter_quit_addiction_app/screens/create_addiction_screen.dart';
 import 'package:flutter_quit_addiction_app/widgets/addiction_item.dart';
 import 'package:flutter_quit_addiction_app/widgets/settings_view.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
@@ -14,6 +13,9 @@ class AddictionItemScreen extends StatefulWidget {
 }
 
 class _AddictionItemState extends State<AddictionItemScreen> {
+  PersistentTabController _controller =
+      PersistentTabController(initialIndex: 0);
+
   @override
   Widget build(BuildContext context) {
     final AddictionItemScreenArgs args =
@@ -29,23 +31,19 @@ class _AddictionItemState extends State<AddictionItemScreen> {
     List<PersistentBottomNavBarItem> _navBarsItems() {
       return [
         PersistentBottomNavBarItem(
-          icon: Icon(CupertinoIcons.home),
+          icon: Icon(Icons.home_filled),
           title: ("Home"),
-          activeColor: CupertinoColors.activeBlue,
-          inactiveColor: CupertinoColors.systemGrey,
+          activeColor: Theme.of(context).primaryColor,
+          inactiveColor: Theme.of(context).hintColor,
         ),
         PersistentBottomNavBarItem(
-          icon: Icon(CupertinoIcons.settings),
+          icon: Icon(Icons.wallet_giftcard),
           title: ("Settings"),
-          activeColor: CupertinoColors.activeBlue,
-          inactiveColor: CupertinoColors.systemGrey,
+          activeColor: Theme.of(context).primaryColor,
+          inactiveColor: Theme.of(context).hintColor,
         ),
       ];
     }
-
-    PersistentTabController _controller;
-
-    _controller = PersistentTabController(initialIndex: 0);
 
     return Scaffold(
       appBar: AppBar(
@@ -68,7 +66,7 @@ class _AddictionItemState extends State<AddictionItemScreen> {
         hideNavigationBarWhenKeyboardShows:
             true, // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument.
         decoration: NavBarDecoration(
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: BorderRadius.circular(0.0),
           colorBehindNavBar: Colors.white,
         ),
         popAllScreensOnTapOfSelectedTab: true,

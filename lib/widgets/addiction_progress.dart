@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_quit_addiction_app/extensions/string_extension.dart';
 import 'package:flutter_quit_addiction_app/models/addiction.dart';
-import 'package:flutter_quit_addiction_app/models/addiction_item_screen_args.dart';
 import 'package:flutter_quit_addiction_app/providers/settings_provider.dart';
 import 'package:flutter_quit_addiction_app/widgets/target_duration_indicator.dart';
 import 'package:provider/provider.dart';
@@ -19,14 +18,9 @@ class AddictionProgress extends StatelessWidget {
   Widget build(BuildContext context) {
     final deviceHeight = MediaQuery.of(context).size.height;
     final local = AppLocalizations.of(context);
-    final quitDate = DateTime.parse(addictionData.quitDate);
-    final abstinenceTime = DateTime.now().difference(quitDate);
-    final notUsedCount =
-        ((addictionData.dailyConsumption / Duration.hoursPerDay) *
-            (abstinenceTime.inHours));
     final consumptionType = (addictionData.consumptionType == 1)
-        ? local.hour(notUsedCount.toInt())
-        : local.times(notUsedCount.toInt());
+        ? local.hour(addictionData.notUsedCount.toInt())
+        : local.times(addictionData.notUsedCount.toInt());
 
     return Container(
       height: deviceHeight * .25,
@@ -56,9 +50,13 @@ class AddictionProgress extends StatelessWidget {
                           children: [
                             Text(local.savedFor.capitalizeFirstLetter()),
                             Text(
-                              notUsedCount.toStringAsFixed(2) +
-                                  ' ' +
-                                  consumptionType,
+                              addictionData.consumptionType == 0
+                                  ? addictionData.notUsedCount
+                                      .toStringAsFixed(2)
+                                  : addictionData.notUsedCount
+                                          .toStringAsFixed(0) +
+                                      ' ' +
+                                      consumptionType,
                             ),
                           ],
                         )
@@ -70,7 +68,8 @@ class AddictionProgress extends StatelessWidget {
                             ),
                             Consumer<SettingsProvider>(
                               builder: (_, settings, _ch) => Text(
-                                (addictionData.unitCost * notUsedCount)
+                                (addictionData.unitCost *
+                                            addictionData.notUsedCount)
                                         .toStringAsFixed(2) +
                                     ' ' +
                                     settings.currency,
@@ -82,7 +81,7 @@ class AddictionProgress extends StatelessWidget {
               ),
             ],
           ),
-          TargetDurationIndicator(duration: abstinenceTime),
+          TargetDurationIndicator(duration: addictionData.abstinenceTime),
         ],
       ),
     );

@@ -33,13 +33,15 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
       firstDate: DateTime.now().subtract(Duration(days: 365)),
       lastDate: DateTime.now(),
     );
-    setState(() {
-      if (date != null) {
-        noteData['date'] = date.toString();
-      } else {
-        noteData['date'] = DateTime.now().toString();
-      }
-    });
+    if (mounted) {
+      setState(() {
+        if (date != null) {
+          noteData['date'] = date.toString();
+        } else {
+          noteData['date'] = DateTime.now().toString();
+        }
+      });
+    }
   }
 
   void trySubmit(BuildContext ctx) {
@@ -85,12 +87,10 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
         key: _formKey,
         child: Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).highlightColor,
-            border: Border(
-              top: BorderSide(
-                width: 1,
-                color: Theme.of(context).accentColor,
-              ),
+            color: Theme.of(context).cardColor,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10),
+              topRight: Radius.circular(10),
             ),
           ),
           padding: EdgeInsets.only(
@@ -154,11 +154,11 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
                       borderRadius: BorderRadius.circular(5),
                       child: InkWell(
                         onTap: () {
-                          setState(
-                            () {
+                          if (mounted) {
+                            setState(() {
                               _selectDate(context);
-                            },
-                          );
+                            });
+                          }
                         },
                         splashColor: Theme.of(context).primaryColor,
                         borderRadius: BorderRadius.circular(5),

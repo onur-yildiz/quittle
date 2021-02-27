@@ -10,7 +10,7 @@ class AddictionsProvider with ChangeNotifier {
     return [..._addictions];
   }
 
-  Future<void> createAddiction(Map<String, dynamic> data) async {
+  Future<Addiction> createAddiction(Map<String, dynamic> data) async {
     data['id'] = Uuid().v1();
     final newAddiction = Addiction(
       id: data['id'],
@@ -34,6 +34,7 @@ class AddictionsProvider with ChangeNotifier {
       },
     );
     notifyListeners();
+    return newAddiction;
   }
 
   Future<void> fetchAddictions() async {

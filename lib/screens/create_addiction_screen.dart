@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_quit_addiction_app/extensions/string_extension.dart';
-import 'package:flutter_quit_addiction_app/models/addiction.dart';
+import 'package:flutter_quit_addiction_app/models/addiction_item_screen_args.dart';
 import 'package:flutter_quit_addiction_app/providers/addictions_provider.dart';
-import 'package:flutter_quit_addiction_app/screens/addictions_screen.dart';
+import 'package:flutter_quit_addiction_app/screens/addiction_item_screen.dart';
 import 'package:flutter_quit_addiction_app/widgets/custom_text_form_field.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -65,15 +65,19 @@ class _AddictionCardState extends State<AddictionCard> {
     });
   }
 
-  void trySubmit(BuildContext ctx) {
+  void trySubmit(BuildContext ctx) async {
     final isValid = _formKey.currentState.validate();
     FocusScope.of(context).unfocus();
 
     if (isValid) {
       _formKey.currentState.save();
-      Provider.of<AddictionsProvider>(context, listen: false)
-          .createAddiction(addictionData);
-      Navigator.of(ctx).popAndPushNamed(AddictionsScreen.routeName);
+      final newAddiction =
+          await Provider.of<AddictionsProvider>(context, listen: false)
+              .createAddiction(addictionData);
+      Navigator.of(ctx).popAndPushNamed(
+        AddictionItemScreen.routeName,
+        arguments: AddictionItemScreenArgs(newAddiction),
+      );
     }
   }
 
@@ -131,7 +135,6 @@ class _AddictionCardState extends State<AddictionCard> {
                           color: Theme.of(context).canvasColor,
                           borderRadius: BorderRadius.circular(5),
                           child: InkWell(
-                            focusNode: focusNode,
                             borderRadius: BorderRadius.circular(5),
                             splashColor: Theme.of(context).highlightColor,
                             onTap: () {

@@ -54,9 +54,11 @@ class _SettingsViewState extends State<SettingsView> {
                     local.progressNotificationDesc.capitalizeFirstLetter()),
                 value: _progressCheck,
                 onChanged: (value) {
-                  setState(() {
-                    _progressCheck = value;
-                  });
+                  if (mounted) {
+                    setState(() {
+                      _progressCheck = value;
+                    });
+                  }
                 },
               ),
               Divider(
@@ -70,9 +72,11 @@ class _SettingsViewState extends State<SettingsView> {
                 subtitle: Text(local.quoteOfTheDayDesc.capitalizeFirstLetter()),
                 value: _quoteCheck,
                 onChanged: (value) {
-                  setState(() {
-                    _quoteCheck = value;
-                  });
+                  if (mounted) {
+                    setState(() {
+                      _quoteCheck = value;
+                    });
+                  }
                 },
               ),
               Divider(

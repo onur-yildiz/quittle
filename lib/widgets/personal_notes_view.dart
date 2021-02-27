@@ -72,11 +72,14 @@ class _PersonalNotesViewState extends State<PersonalNotesView> {
           ),
         ),
         FloatingActionButton(
+          heroTag: null,
           elevation: 12.0,
           highlightElevation: 8.0,
           tooltip: local.newNote.capitalizeWords(),
           onPressed: () {
             showModalBottomSheet(
+              backgroundColor: Colors.transparent,
+              useRootNavigator: true,
               isScrollControlled: true,
               context: context,
               builder: (_) {

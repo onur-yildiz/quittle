@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_quit_addiction_app/models/addiction.dart';
 import 'package:intl/intl.dart';
 
@@ -12,8 +13,9 @@ class Note extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _controller = TextEditingController(text: data.text);
-    final formattedStartDate =
-        DateFormat('dd/MM/yyyy').format(DateTime.parse(data.date));
+    final local = AppLocalizations.of(context);
+    final quitDateFormatted =
+        DateFormat.yMMMd(local.localeName).format(DateTime.parse(data.date));
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
@@ -40,7 +42,7 @@ class Note extends StatelessWidget {
                 ),
               ),
               Text(
-                formattedStartDate,
+                quitDateFormatted,
                 style: TextStyle(
                   color: Theme.of(context).hintColor,
                   fontWeight: FontWeight.bold,

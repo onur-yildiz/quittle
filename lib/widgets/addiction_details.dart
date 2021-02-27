@@ -26,14 +26,14 @@ class _AddictionDetailsState extends State<AddictionDetails> {
   void initState() {
     notUsedCount = widget.addictionData.notUsedCount;
     abstinenceTime = widget.addictionData.abstinenceTime;
-    quitDateFormatted =
-        DateFormat('dd/MM/yyyy').format(widget.addictionData.quitDateTime);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final local = AppLocalizations.of(context);
+    quitDateFormatted = DateFormat.yMMMd(local.localeName)
+        .format(widget.addictionData.quitDateTime);
     final consumptionType = ((widget.addictionData.consumptionType == 1)
             ? local.hour(
                 notUsedCount.toInt(),

@@ -47,7 +47,7 @@
     }
   },
   
-  "times": "{count,plural, =0{kere}=1{kere}other{kere}}",
+  "times": "{count,plural, =0{adet}=1{adet}other{adet}}",
   "@times": {
     "placeholders": {
     "count": {}

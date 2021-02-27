@@ -92,9 +92,11 @@ class _TargetDurationIndicatorState extends State<TargetDurationIndicator> {
     updatedDuration = widget.duration;
     Future.delayed(Duration.zero, () {
       final local = AppLocalizations.of(context);
-      setState(() {
-        setValues(updatedDuration, local);
-      });
+      if (mounted) {
+        setState(() {
+          setValues(updatedDuration, local);
+        });
+      }
       Timer.periodic(
         Duration(seconds: refreshInterval),
         (timer) {

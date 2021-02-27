@@ -51,20 +51,6 @@ class MyApp extends StatelessWidget {
           cardColor: Color.fromRGBO(230, 230, 230, 1),
           hintColor: Colors.blueGrey[700],
           visualDensity: VisualDensity.adaptivePlatformDensity,
-          textTheme: TextTheme(
-            headline6: TextStyle(
-              // TODO: FIND A BETTER WAY TO CHANGE THIS
-              fontSize: Theme.of(context).textTheme.headline6.fontSize * .9,
-            ),
-            bodyText2: TextStyle(
-              color: Theme.of(context).hintColor,
-            ),
-          ),
-          accentTextTheme: TextTheme(
-            button: TextStyle(
-              color: Theme.of(context).hintColor,
-            ),
-          ),
         ),
         home: AddictionsScreen(), // todo startup page logic
         routes: {

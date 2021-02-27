@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:intl/intl.dart';
 
 enum ConsumptionType { quantity, hour }
 
@@ -39,7 +38,7 @@ class Addiction {
       return (dailyConsumption / Duration.hoursPerDay) * abstinenceTime.inHours;
     }
     return ((dailyConsumption / Duration.hoursPerDay) * abstinenceTime.inHours)
-        .roundToDouble();
+        .floorToDouble();
   }
 
   List<PersonalNote> get personalNotesDateSorted {
