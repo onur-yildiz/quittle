@@ -145,6 +145,7 @@ class GiftCard extends StatelessWidget {
                     gift.name,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
+                      color: Theme.of(context).hintColor,
                     ),
                   ),
                 ),
@@ -154,18 +155,32 @@ class GiftCard extends StatelessWidget {
                   child: Center(
                     child: Text(
                       gift.count.toString(),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).hintColor,
+                      ),
                     ),
                   ),
                 ),
                 Flexible(
                   flex: 2,
                   fit: FlexFit.tight,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(gift.price.toString() + ' ' + currency),
-                      Text('X days left'),
-                    ],
+                  child: DefaultTextStyle(
+                    style: TextStyle(
+                      // fontWeight: FontWeight.bold,
+                      color: Theme.of(context).hintColor,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          gift.price.toString() + ' ' + currency,
+                        ),
+                        Text(
+                          'X days left',
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Flexible(
@@ -197,7 +212,14 @@ class GiftCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                )
+                ),
+                Flexible(
+                  flex: 1,
+                  child: Icon(
+                    Icons.drag_handle_rounded,
+                    color: Theme.of(context).hintColor,
+                  ),
+                ),
               ],
             ),
           ),
