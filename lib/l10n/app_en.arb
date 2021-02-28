@@ -174,5 +174,41 @@
   "save": "save",
   "@save": {
     "description": ""
+  },
+
+  "available": "available",
+  "@available": {
+    "description": ""
+  },
+  
+  "spent": "spent",
+  "@spent": {
+    "description": ""
+  },
+  
+  "daysLeft": "{count,plural, =0{days left}=1{days left}other{days left}}",
+  "@daysLeft": {
+    "placeholders": {
+    "count": {}
+    }
+  },
+
+  "purchaseGiftMsg": "Purchase {item} for {money}",
+  "@purchaseGiftMsg": {
+    "description": "",
+    "placeholders": {
+      "money": {},
+      "item": {}
+      }
+  },
+
+  "areYouSure": "are you sure?",
+  "@areYouSure": {
+    "description": ""
+  },
+
+  "deleteGiftWarningMsg": "All the money spent on this gift will be returned.",
+  "@deleteGiftWarningMsg": {
+    "description": ""
   }
 }

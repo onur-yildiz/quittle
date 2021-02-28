@@ -85,13 +85,15 @@ class Gift {
   final String addictionId;
   final String name;
   final double price;
-  int count = 0;
+  int count;
 
   Gift({
     @required this.id,
     @required this.addictionId,
     @required this.name,
     @required this.price,
-    this.count,
-  });
+    int count,
+  }) {
+    this.count = count ?? 0;
+  }
 }

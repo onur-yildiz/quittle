@@ -51,7 +51,7 @@
   "@times": {
     "placeholders": {
     "count": {}
-  }
+    }
   },
 
   "level": "seviye",
@@ -150,6 +150,42 @@
 
   "save": "kaydet",
   "@save": {
+    "description": ""
+  },
+
+  "available": "mevcut",
+  "@available": {
+    "description": ""
+  },
+
+  "spent": "harcanan",
+  "@spent": {
+    "description": ""
+  },
+
+  "daysLeft": "{count,plural, =0{gün kaldı}=1{gün kaldı}other{gün kaldı}}",
+  "@daysLeft": {
+    "placeholders": {
+    "count": {}
+    }
+  },
+
+  "purchaseGiftMsg": "fiyatı {money} olan {item} al ",
+  "@purchaseGiftMsg": {
+    "description": "",
+    "placeholders": {
+      "money": {},
+      "item": {}
+      }
+  },
+
+  "areYouSure": "emin misin?",
+  "@areYouSure": {
+    "description": ""
+  },
+
+  "deleteGiftWarningMsg": "Bu hediyeye harcanan paranın hepsi iade edilecektir.",
+  "@deleteGiftWarningMsg": {
     "description": ""
   }
 }

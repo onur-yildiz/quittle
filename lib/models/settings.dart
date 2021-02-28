@@ -2,6 +2,8 @@ class Settings {
   String currency;
 
   Settings({
-    this.currency,
-  });
+    currency,
+  }) {
+    this.currency = currency ?? 'USD';
+  }
 }

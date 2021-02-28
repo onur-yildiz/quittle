@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_quit_addiction_app/extensions/string_extension.dart';
 import 'package:flutter_quit_addiction_app/models/addiction.dart';
 import 'package:flutter_quit_addiction_app/providers/addictions_provider.dart';
 import 'package:flutter_quit_addiction_app/providers/settings_provider.dart';
@@ -49,6 +51,7 @@ class _GiftsState extends State<Gifts> {
 
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context);
     final deviceSize = MediaQuery.of(context).size;
     final currency =
         Provider.of<SettingsProvider>(context, listen: false).currency;
@@ -94,13 +97,15 @@ class _GiftsState extends State<Gifts> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Available: ' +
+                            local.available.capitalizeWords() +
+                                ': ' +
                                 NumberFormat.simpleCurrency(
                                   name: currency,
                                 ).format(widget.data.availableMoney),
                           ),
                           Text(
-                            'Spent: ' +
+                            local.spent.capitalizeWords() +
+                                ': ' +
                                 NumberFormat.simpleCurrency(
                                   name: currency,
                                 ).format(widget.data.totalSpent),
@@ -135,12 +140,20 @@ class GiftCard extends StatefulWidget {
 class _GiftCardState extends State<GiftCard> {
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context);
+    final materialLocal = MaterialLocalizations.of(context);
     final deviceSize = MediaQuery.of(context).size;
     final currency =
         Provider.of<SettingsProvider>(context, listen: false).currency;
     final giftPrice = NumberFormat.compactSimpleCurrency(
       name: currency,
     ).format(widget.gift.price);
+    final daysLeft =
+        ((widget.gift.price - widget.availableMoney) / widget.dailyGain);
+    final daysLeftClamped = daysLeft.clamp(0, 365);
+    final percentage =
+        (widget.availableMoney / widget.gift.price).clamp(0.0, 1.0);
+
     return Stack(
       children: [
         SizedBox(
@@ -160,13 +173,19 @@ class _GiftCardState extends State<GiftCard> {
               onTap: () => showDialog(
                 context: context,
                 builder: (context) => new AlertDialog(
-                  title: Text('Buy \"${widget.gift.name}\" for $giftPrice'),
+                  title: Text(
+                    local
+                        .purchaseGiftMsg(giftPrice, widget.gift.name)
+                        .capitalizeFirstLetter(),
+                  ), //'Purchase \"${widget.gift.name}\" for $giftPrice'
                   actions: [
                     FlatButton(
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      child: Text('Cancel'),
+                      child: Text(
+                        materialLocal.cancelButtonLabel,
+                      ),
                     ),
                     FlatButton(
                       onPressed: () {
@@ -177,7 +196,9 @@ class _GiftCardState extends State<GiftCard> {
                           Navigator.of(context).pop();
                         });
                       },
-                      child: Text('Buy'),
+                      child: Text(
+                        materialLocal.okButtonLabel,
+                      ),
                     ),
                   ],
                 ),
@@ -226,11 +247,10 @@ class _GiftCardState extends State<GiftCard> {
                               giftPrice.toString(),
                             ),
                             Text(
-                              ((widget.gift.price - widget.availableMoney) /
-                                          widget.dailyGain)
-                                      .clamp(0, double.infinity)
-                                      .toStringAsFixed(0) +
-                                  ' days left',
+                              daysLeftClamped.toStringAsFixed(0) +
+                                  (daysLeft > 365 ? '+' : '') +
+                                  ' ' +
+                                  local.daysLeft(daysLeftClamped.toInt()),
                             ),
                           ],
                         ),
@@ -248,10 +268,11 @@ class _GiftCardState extends State<GiftCard> {
                             ),
                             clipBehavior: Clip.hardEdge,
                             child: LinearProgressIndicator(
-                              value: (widget.availableMoney / widget.gift.price)
-                                  .clamp(0.0, 1.0),
+                              value: percentage,
                               valueColor: AlwaysStoppedAnimation<Color>(
-                                Theme.of(context).primaryColorLight,
+                                percentage == 1.0
+                                    ? Theme.of(context).primaryColor
+                                    : Theme.of(context).primaryColorLight,
                               ),
                               backgroundColor: Theme.of(context).canvasColor,
                               minHeight: Theme.of(context)
@@ -301,22 +322,30 @@ class _GiftCardState extends State<GiftCard> {
               showDialog(
                 context: context,
                 builder: (context) => new AlertDialog(
-                  title: Text('Are you sure?'),
+                  title: Text(
+                    local.areYouSure.capitalizeFirstLetter(),
+                  ),
                   content: Text(
-                      'All the money spent on this gift will be returned.'),
+                    local.deleteGiftWarningMsg.capitalizeFirstLetter(),
+                  ),
                   actions: [
                     FlatButton(
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      child: Text('Cancel'),
+                      child: Text(
+                        materialLocal.cancelButtonLabel,
+                      ),
                     ),
                     FlatButton(
                       onPressed: () {
                         Provider.of<AddictionsProvider>(context, listen: false)
                             .deleteGift(widget.gift);
+                        Navigator.of(context).pop();
                       },
-                      child: Text('Delete'),
+                      child: Text(
+                        materialLocal.deleteButtonTooltip,
+                      ),
                     ),
                   ],
                 ),

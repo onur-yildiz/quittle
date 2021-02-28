@@ -10,11 +10,15 @@ class SettingsProvider with ChangeNotifier {
   }
 
   Future<void> fetchSettings() async {
-    final settings =
-        await DBHelper.getData('settings').then((value) => value[0]);
-    _settings = Settings(
-      currency: settings['currency'],
-    );
+    final settings = await DBHelper.getData('settings');
+
+    if (settings != null && settings.length != 0) {
+      _settings = Settings(
+        currency: settings[0]['currency'],
+      );
+    } else {
+      _settings = Settings();
+    }
     notifyListeners();
   }
 
