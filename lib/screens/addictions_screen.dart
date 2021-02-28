@@ -79,15 +79,35 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
                 onRefresh: () async {
                   await addictionsData.fetchAddictions();
                 },
-                child: ListView.builder(
-                  physics: BouncingScrollPhysics(),
-                  itemCount: addictionsData.addictions.length,
-                  itemBuilder: (ctx, index) {
-                    return AddictionItem(
-                      addictionData: addictionsData.addictions[index],
-                    );
-                  },
-                ),
+                child: addictionsData.addictions.length > 0
+                    ? ListView.builder(
+                        physics: BouncingScrollPhysics(),
+                        itemCount: addictionsData.addictions.length,
+                        itemBuilder: (ctx, index) {
+                          return AddictionItem(
+                            addictionData: addictionsData.addictions[index],
+                          );
+                        },
+                      )
+                    : Material(
+                        type: MaterialType.canvas,
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.of(context)
+                                .pushNamed(CreateAddictionScreen.routeName);
+                          },
+                          child: Center(
+                            child: Icon(
+                              Icons.add,
+                              size: Theme.of(context)
+                                  .textTheme
+                                  .headline1
+                                  .fontSize,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                          ),
+                        ),
+                      ),
               ),
             );
           }

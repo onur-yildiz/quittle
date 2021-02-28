@@ -203,6 +203,7 @@ class _AddictionCardState extends State<AddictionCard> {
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       FlatButton(
+                                        minWidth: double.maxFinite,
                                         padding: const EdgeInsets.all(24.0),
                                         onPressed: () {
                                           setState(() {
@@ -217,6 +218,7 @@ class _AddictionCardState extends State<AddictionCard> {
                                         ),
                                       ),
                                       FlatButton(
+                                        minWidth: double.maxFinite,
                                         padding: const EdgeInsets.all(24.0),
                                         onPressed: () {
                                           setState(() {

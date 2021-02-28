@@ -56,22 +56,7 @@ class AddictionsProvider with ChangeNotifier {
           dailyConsumption: addiction['daily_consumption'],
           unitCost: addiction['unit_cost'],
           personalNotes: [],
-          gifts: [
-            Gift(name: 'test', price: 5.5),
-            Gift(name: 'test 2', price: 14),
-            Gift(name: 'test 3', price: 14),
-            Gift(name: 'test 4', price: 14),
-            Gift(name: 'test 5', price: 14),
-            Gift(name: 'test 6', price: 14),
-            Gift(name: 'test 7', price: 14),
-            Gift(name: 'test 8', price: 14),
-            Gift(name: 'test 9', price: 14),
-            Gift(name: 'test 10', price: 14),
-            Gift(name: 'test 11', price: 14),
-            Gift(name: 'test 12', price: 14),
-            Gift(name: 'test 13', price: 14),
-            Gift(name: 'test 14', price: 14),
-          ],
+          gifts: [],
         );
         loadedAddictions.add(temp);
         _addictions = loadedAddictions;
@@ -117,6 +102,38 @@ class AddictionsProvider with ChangeNotifier {
     addiction.personalNotes = loadedNotes;
   }
 
+  void createGift(Map<String, dynamic> data, String id) {
+    final addiction = _addictions.firstWhere((addiction) => addiction.id == id);
+    final giftId = Uuid().v1();
+    final newGift = Gift(
+      id: giftId,
+      addictionId: id,
+      name: data['name'],
+      price: data['price'],
+    );
+    addiction.gifts.add(newGift);
+
+    DBHelper.insert(
+      'gifts',
+      {
+        'id': giftId,
+        'addictionId': id,
+        'name': data['name'],
+        'price': data['price'],
+        'count': 0,
+      },
+    );
+    notifyListeners();
+  }
+
+  void deleteGift(Gift gift) async {
+    final Addiction addiction =
+        _addictions.firstWhere((addiction) => addiction.id == gift.addictionId);
+    addiction.gifts.remove(gift);
+    await DBHelper.delete('gifts', gift.id);
+    notifyListeners();
+  }
+
   Future<void> fetchGifts(String id) async {
     final List<Gift> loadedGifts = [];
     final addiction = _addictions.firstWhere((addiction) => addiction.id == id);
@@ -124,11 +141,27 @@ class AddictionsProvider with ChangeNotifier {
     gifts.forEach((gift) {
       loadedGifts.add(
         Gift(
+          id: gift['id'],
+          addictionId: gift['addictionId'],
           name: gift['name'],
           price: gift['price'],
+          count: gift['count'],
         ),
       );
     });
     addiction.gifts = loadedGifts;
   }
+
+  void buyGift(Gift gift) async {
+    // final addiction = _addictions.firstWhere((addiction) => addiction.id == id);
+    gift.count = gift.count + 1;
+    await DBHelper.update(
+      'gifts',
+      gift.id,
+      gift.count,
+    );
+    notifyListeners();
+  }
 }
+
+// TODO fix bought number of gifts not saving

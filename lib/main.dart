@@ -53,7 +53,13 @@ class MyApp extends StatelessWidget {
           hintColor: Colors.blueGrey[700],
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: AddictionsScreen(), // todo startup page logic
+        home: Builder(
+          builder: (context) => FutureBuilder(
+            future: Provider.of<SettingsProvider>(context, listen: false)
+                .fetchSettings(),
+            builder: (_, snapshot) => AddictionsScreen(),
+          ),
+        ),
         routes: {
           CreateAddictionScreen.routeName: (ctx) => CreateAddictionScreen(),
           AddictionsScreen.routeName: (ctx) => AddictionsScreen(),

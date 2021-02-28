@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quit_addiction_app/models/addiction.dart';
 import 'package:flutter_quit_addiction_app/providers/addictions_provider.dart';
 import 'package:flutter_quit_addiction_app/providers/settings_provider.dart';
+import 'package:flutter_quit_addiction_app/widgets/gifts_create.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:reorderables/reorderables.dart';
 
@@ -19,19 +21,30 @@ class Gifts extends StatefulWidget {
 class _GiftsState extends State<Gifts> {
   List<Widget> _tiles;
 
+  void getTiles() async {
+    await Provider.of<AddictionsProvider>(context).fetchGifts(widget.data.id);
+    setState(() {
+      _tiles = widget.data.gifts
+          .map<Widget>(
+            (gift) => GiftCard(
+              gift: gift,
+              availableMoney: widget.data.availableMoney,
+              dailyGain: (widget.data.dailyConsumption * widget.data.unitCost),
+            ),
+          )
+          .toList()
+            ..add(
+              AddGiftButton(
+                id: widget.data.id,
+              ),
+            );
+    });
+  }
+
   @override
-  void initState() {
-    _tiles = widget.data.gifts
-        .map<Widget>(
-          (gift) => GiftCard(
-            gift: gift,
-          ),
-        )
-        .toList()
-          ..add(
-            AddGiftButton(),
-          );
-    super.initState();
+  void didChangeDependencies() {
+    getTiles();
+    super.didChangeDependencies();
   }
 
   @override
@@ -51,205 +64,275 @@ class _GiftsState extends State<Gifts> {
     }
 
     return SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Consumer<AddictionsProvider>(
-            builder: (_, addictionData, _ch) => Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
-              child: ReorderableWrap(
-                direction: Axis.horizontal,
-                scrollDirection: Axis.vertical,
-                alignment: WrapAlignment.start,
-                padding: EdgeInsets.symmetric(
-                  horizontal: deviceSize.width * .02,
-                ),
-                maxMainAxisCount: 2,
-                spacing: deviceSize.width * .0399,
-                runSpacing: deviceSize.width * .04,
-                children: _tiles,
-                onReorder: _onReorder,
-                needsLongPressDraggable: true,
-                header: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Available: ' +
-                            (widget.data.notUsedCount *
-                                    widget.data.dailyConsumption)
-                                .toStringAsFixed(2) +
-                            ' ' +
-                            currency,
+      child: FutureBuilder(
+        future:
+            Provider.of<AddictionsProvider>(context).fetchGifts(widget.data.id),
+        builder: (_, snapshot) => snapshot.connectionState ==
+                ConnectionState.waiting
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : Consumer<AddictionsProvider>(builder: (_, addictionData, _ch) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: ReorderableWrap(
+                    direction: Axis.horizontal,
+                    scrollDirection: Axis.vertical,
+                    alignment: WrapAlignment.start,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: deviceSize.width * .02,
+                    ),
+                    maxMainAxisCount: 2,
+                    spacing: deviceSize.width * .0399,
+                    runSpacing: deviceSize.width * .04,
+                    children: _tiles,
+                    onReorder: _onReorder,
+                    needsLongPressDraggable: true,
+                    header: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Available: ' +
+                                NumberFormat.simpleCurrency(
+                                  name: currency,
+                                ).format(widget.data.availableMoney),
+                          ),
+                          Text(
+                            'Spent: ' +
+                                NumberFormat.simpleCurrency(
+                                  name: currency,
+                                ).format(widget.data.totalSpent),
+                          ),
+                        ],
                       ),
-                      Text(
-                        'Spent on gifts: ' +
-                            (widget.data.notUsedCount *
-                                    widget.data.dailyConsumption)
-                                .toStringAsFixed(2) +
-                            ' ' +
-                            currency,
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-            ),
-          ),
-        ],
+                );
+              }),
       ),
     );
   }
 }
 
-class GiftCard extends StatelessWidget {
+class GiftCard extends StatefulWidget {
   const GiftCard({
     Key key,
     @required this.gift,
+    @required this.availableMoney,
+    @required this.dailyGain,
   }) : super(key: key);
 
   final Gift gift;
+  final double availableMoney;
+  final double dailyGain;
 
+  @override
+  _GiftCardState createState() => _GiftCardState();
+}
+
+class _GiftCardState extends State<GiftCard> {
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
     final currency =
         Provider.of<SettingsProvider>(context, listen: false).currency;
-
-    return SizedBox(
-      height: deviceSize.height * .2,
-      width: deviceSize.width * .46,
-      child: Material(
-        color: Theme.of(context).cardColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5),
-          side: BorderSide(
-            width: 1,
-            color: Theme.of(context).dividerColor,
-          ),
-        ),
-        elevation: 5,
-        child: InkWell(
-          onTap: () => showDialog(
-            context: context,
-            builder: (context) => new AlertDialog(
-              title: Text('Buy \"${gift.name}\" for ${gift.price} $currency'),
-              actions: [
-                FlatButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('Cancel'),
-                ),
-                FlatButton(
-                  onPressed: () {}, //todo buy
-                  child: Text('Buy'),
-                ),
-              ],
+    final giftPrice = NumberFormat.compactSimpleCurrency(
+      name: currency,
+    ).format(widget.gift.price);
+    return Stack(
+      children: [
+        SizedBox(
+          height: deviceSize.height * .2,
+          width: deviceSize.width * .46,
+          child: Material(
+            color: Theme.of(context).cardColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5),
+              side: BorderSide(
+                width: 1,
+                color: Theme.of(context).dividerColor,
+              ),
             ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Flex(
-              mainAxisSize: MainAxisSize.max,
-              direction: Axis.vertical,
-              children: [
-                Flexible(
-                  flex: 3,
-                  fit: FlexFit.tight,
-                  child: Text(
-                    gift.name,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).hintColor,
+            elevation: 5,
+            child: InkWell(
+              onTap: () => showDialog(
+                context: context,
+                builder: (context) => new AlertDialog(
+                  title: Text('Buy \"${widget.gift.name}\" for $giftPrice'),
+                  actions: [
+                    FlatButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text('Cancel'),
                     ),
-                  ),
+                    FlatButton(
+                      onPressed: () {
+                        setState(() {
+                          Provider.of<AddictionsProvider>(context,
+                                  listen: false)
+                              .buyGift(widget.gift);
+                          Navigator.of(context).pop();
+                        });
+                      },
+                      child: Text('Buy'),
+                    ),
+                  ],
                 ),
-                Flexible(
-                  flex: 4,
-                  fit: FlexFit.tight,
-                  child: Center(
-                    child: Text(
-                      gift.count.toString(),
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Flex(
+                  mainAxisSize: MainAxisSize.max,
+                  direction: Axis.vertical,
+                  children: [
+                    Flexible(
+                      flex: 3,
+                      fit: FlexFit.tight,
+                      child: Text(
+                        widget.gift.name,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).hintColor,
+                        ),
+                      ),
+                    ),
+                    Flexible(
+                      flex: 4,
+                      fit: FlexFit.tight,
+                      child: Center(
+                        child: Text(
+                          widget.gift.count.toString(),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).hintColor,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Flexible(
+                      flex: 2,
+                      fit: FlexFit.tight,
+                      child: DefaultTextStyle(
+                        style: TextStyle(
+                          color: Theme.of(context).hintColor,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              giftPrice.toString(),
+                            ),
+                            Text(
+                              ((widget.gift.price - widget.availableMoney) /
+                                          widget.dailyGain)
+                                      .clamp(0, double.infinity)
+                                      .toStringAsFixed(0) +
+                                  ' days left',
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Flexible(
+                      flex: 2,
+                      fit: FlexFit.tight,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            clipBehavior: Clip.hardEdge,
+                            child: LinearProgressIndicator(
+                              value: (widget.availableMoney / widget.gift.price)
+                                  .clamp(0.0, 1.0),
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                Theme.of(context).primaryColorLight,
+                              ),
+                              backgroundColor: Theme.of(context).canvasColor,
+                              minHeight: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1
+                                  .fontSize,
+                            ),
+                          ),
+                          Text(
+                            ((widget.availableMoney / widget.gift.price)
+                                            .clamp(0.0, 1.0) *
+                                        100)
+                                    .toStringAsFixed(0) +
+                                '%',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Flexible(
+                      flex: 1,
+                      child: Icon(
+                        Icons.drag_handle_rounded,
                         color: Theme.of(context).hintColor,
                       ),
                     ),
-                  ),
+                  ],
                 ),
-                Flexible(
-                  flex: 2,
-                  fit: FlexFit.tight,
-                  child: DefaultTextStyle(
-                    style: TextStyle(
-                      // fontWeight: FontWeight.bold,
-                      color: Theme.of(context).hintColor,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          gift.price.toString() + ' ' + currency,
-                        ),
-                        Text(
-                          'X days left',
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Flexible(
-                  flex: 2,
-                  fit: FlexFit.tight,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        clipBehavior: Clip.hardEdge,
-                        child: LinearProgressIndicator(
-                          value: .7,
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            Theme.of(context).primaryColorLight,
-                          ),
-                          backgroundColor: Theme.of(context).canvasColor,
-                          minHeight:
-                              Theme.of(context).textTheme.bodyText1.fontSize,
-                        ),
-                      ),
-                      Text(
-                        '35%',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Flexible(
-                  flex: 1,
-                  child: Icon(
-                    Icons.drag_handle_rounded,
-                    color: Theme.of(context).hintColor,
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
         ),
-      ),
+        Positioned(
+          top: 0,
+          right: 0,
+          child: IconButton(
+            alignment: Alignment.topRight,
+            // padding: EdgeInsets.zero,
+            icon: Icon(
+              Icons.delete,
+              color: Theme.of(context).errorColor,
+              size: Theme.of(context).textTheme.headline6.fontSize,
+            ),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => new AlertDialog(
+                  title: Text('Are you sure?'),
+                  content: Text(
+                      'All the money spent on this gift will be returned.'),
+                  actions: [
+                    FlatButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text('Cancel'),
+                    ),
+                    FlatButton(
+                      onPressed: () {
+                        Provider.of<AddictionsProvider>(context, listen: false)
+                            .deleteGift(widget.gift);
+                      },
+                      child: Text('Delete'),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        )
+      ],
     );
   }
 }
 
 class AddGiftButton extends StatelessWidget {
-  const AddGiftButton({
-    Key key,
-  }) : super(key: key);
+  const AddGiftButton({@required this.id});
+
+  final String id;
 
   @override
   Widget build(BuildContext context) {
@@ -268,7 +351,13 @@ class AddGiftButton extends StatelessWidget {
         ),
         elevation: 5,
         child: InkWell(
-          onTap: () {},
+          onTap: () {
+            showModalBottomSheet(
+              backgroundColor: Colors.transparent,
+              context: context,
+              builder: (context) => CreateGift(addictionId: id),
+            );
+          },
           child: Center(
             child: Icon(
               Icons.add,

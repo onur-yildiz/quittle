@@ -43,6 +43,22 @@ class Addiction {
         .floorToDouble();
   }
 
+  double get totalSaved {
+    return notUsedCount * dailyConsumption;
+  }
+
+  double get totalSpent {
+    double total = 0.0;
+    gifts.forEach((gift) {
+      total += gift.price * gift.count;
+    });
+    return total;
+  }
+
+  double get availableMoney {
+    return totalSaved - totalSpent;
+  }
+
   List<PersonalNote> get personalNotesDateSorted {
     List<PersonalNote> list = [...personalNotes];
     list.sort((a, b) {
@@ -65,14 +81,17 @@ class PersonalNote {
 }
 
 class Gift {
+  final String id;
+  final String addictionId;
   final String name;
   final double price;
-  int count;
+  int count = 0;
 
   Gift({
+    @required this.id,
+    @required this.addictionId,
     @required this.name,
     @required this.price,
-  }) {
-    this.count = 0;
-  }
+    this.count,
+  });
 }

@@ -1,14 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_quit_addiction_app/helpers/db_helper.dart';
+import 'package:flutter_quit_addiction_app/models/settings.dart';
 
 class SettingsProvider with ChangeNotifier {
-  String _currency = 'USD'; //todo initial val on first load
+  Settings _settings = Settings(currency: 'USD');
 
   String get currency {
-    return _currency;
+    return _settings.currency;
+  }
+
+  Future<void> fetchSettings() async {
+    final settings =
+        await DBHelper.getData('settings').then((value) => value[0]);
+    _settings = Settings(
+      currency: settings['currency'],
+    );
+    notifyListeners();
   }
 
   void updateCurrency(String newCurrency) {
-    _currency = newCurrency;
+    DBHelper.insert(
+      'settings',
+      {'currency': newCurrency},
+    );
+    _settings.currency = newCurrency;
     notifyListeners();
   }
 }

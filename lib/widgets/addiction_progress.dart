@@ -69,9 +69,8 @@ class AddictionProgress extends StatelessWidget {
                             ),
                             Consumer<SettingsProvider>(
                               builder: (_, settings, _ch) => Text(
-                                NumberFormat.currency(
+                                NumberFormat.simpleCurrency(
                                   name: settings.currency,
-                                  symbol: settings.currency,
                                 ).format(
                                   addictionData.unitCost *
                                       addictionData.notUsedCount,

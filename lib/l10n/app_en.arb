@@ -87,6 +87,10 @@
   "@savedFor": {
     "description": "title for how many times/hours X is not used"
   },
+  "price": "price",
+  "@price": {
+    "description": ""
+  },
   "note": "note",
   "@note": {
     "description": "note input title"

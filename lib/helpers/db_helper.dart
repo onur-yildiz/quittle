@@ -10,10 +10,11 @@ class DBHelper {
       onCreate: (db, version) async {
         await db.execute(
             'CREATE TABLE addictions(id TEXT PRIMARY KEY, name TEXT, quit_date TEXT, consumption_type INTEGER, daily_consumption REAL, unit_cost REAL)');
+        await db.execute('CREATE TABLE settings(currency TEXT)');
         await db.execute(
             'CREATE TABLE personal_notes(id TEXT, title TEXT, text TEXT, date TEXT)');
         await db.execute(
-            'CREATE TABLE gifts(id TEXT, name TEXT, price REAL, count INTEGER)');
+            'CREATE TABLE gifts(id TEXT PRIMARY KEY, addictionId TEXT, name TEXT, price REAL, count INTEGER)');
       },
       version: 1,
     );
@@ -28,17 +29,35 @@ class DBHelper {
     );
   }
 
+  static Future<void> update(String table, String id, int count) async {
+    final db = await DBHelper.database();
+    if (table == 'gifts') {
+      return await db
+          .rawUpdate('UPDATE gifts SET count = ? WHERE id = ?', [count, id]);
+    }
+  }
+
+  static Future<void> delete(String table, String id) async {
+    final db = await DBHelper.database();
+    if (table == 'gifts') {
+      db.rawDelete('DELETE FROM gifts WHERE id = ?', [id]);
+    }
+  }
+
   static Future<List<Map<String, Object>>> getData(String table,
       [String id = '']) async {
     final db = await DBHelper.database();
-    if (id == '') {
+    if (table == 'addictions') {
+      return db.query(table);
+    }
+    if (table == 'settings') {
       return db.query(table);
     }
     if (table == 'personal_notes') {
       return db.rawQuery('SELECT * FROM personal_notes WHERE id = ?', [id]);
     }
     if (table == 'gifts') {
-      return db.rawQuery('SELECT * FROM gifts WHERE id = ?', [id]);
+      return db.rawQuery('SELECT * FROM gifts WHERE addictionId = ?', [id]);
     }
     return null;
   }
