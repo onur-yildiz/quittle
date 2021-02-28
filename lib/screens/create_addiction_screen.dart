@@ -5,6 +5,8 @@ import 'package:flutter_quit_addiction_app/models/addiction_item_screen_args.dar
 import 'package:flutter_quit_addiction_app/providers/addictions_provider.dart';
 import 'package:flutter_quit_addiction_app/screens/addiction_item_screen.dart';
 import 'package:flutter_quit_addiction_app/widgets/custom_text_form_field.dart';
+import 'package:flutter_quit_addiction_app/models/addiction.dart'
+    show getAchievementDurations;
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -47,21 +49,31 @@ class _AddictionCardState extends State<AddictionCard> {
     'consumption_type': 0,
     'daily_consumption': 1.0,
     'unit_cost': 1.0,
+    'level': 0,
   };
 
   Future<void> _selectDate(context) async {
-    final date = await showDatePicker(
+    DateTime date = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime.now().subtract(Duration(days: 365)),
+      firstDate: DateTime.now().subtract(Duration(days: 900)),
       lastDate: DateTime.now(),
     );
     setState(() {
       if (date != null) {
         addictionData['quit_date'] = date.toString();
       } else {
-        addictionData['quit_date'] = DateTime.now().toString();
+        date = DateTime.now();
+        addictionData['quit_date'] = date.toString();
       }
+      int levelCount = 0;
+      Duration quitDuration = DateTime.now().difference(date);
+      for (Duration duration in getAchievementDurations) {
+        if (quitDuration.inMicroseconds > duration.inMicroseconds) {
+          levelCount = levelCount + 1;
+        }
+      }
+      addictionData['level'] = levelCount;
     });
   }
 

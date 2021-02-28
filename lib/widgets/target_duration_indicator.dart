@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:flutter/material.dart';
+import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 
 class TargetDurationIndicator extends StatefulWidget {
   TargetDurationIndicator({
@@ -101,75 +102,35 @@ class _TargetDurationIndicatorState extends State<TargetDurationIndicator> {
 
   @override
   Widget build(BuildContext context) {
-    final deviceSize = MediaQuery.of(context).size;
-
     return Center(
-      child: Wrap(
-        direction: Axis.vertical,
-        spacing: 10,
-        runSpacing: 10,
-        alignment: WrapAlignment.center,
-        crossAxisAlignment: WrapCrossAlignment.center,
-        children: [
-          SizedBox.fromSize(
-            size: Size.square(deviceSize.height * .15),
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                TweenAnimationBuilder(
-                    tween: Tween<double>(
-                      begin: 0,
-                      end: percentage,
-                    ),
-                    duration: Duration(milliseconds: 800),
-                    builder: (_, value, _ch) {
-                      return CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                          Theme.of(context).accentColor,
-                        ),
-                        value: value,
-                        strokeWidth:
-                            Theme.of(context).textTheme.bodyText1.fontSize,
-                        backgroundColor:
-                            Theme.of(context).accentColor.withAlpha(100),
-                      );
-                    }),
-                Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        (percentage * 100).toStringAsFixed(1),
-                        style: TextStyle(
-                          fontSize:
-                              Theme.of(context).textTheme.bodyText1.fontSize *
-                                  1.3,
-                          color: Theme.of(context).primaryColorLight,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        '%',
-                        style: TextStyle(
-                          color: Theme.of(context).primaryColorLight,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+      child: SleekCircularSlider(
+        appearance: CircularSliderAppearance(
+          infoProperties: InfoProperties(
+            bottomLabelText: targetValue.toString() + ' ' + targetUnit,
+            bottomLabelStyle: TextStyle(
+              color: Theme.of(context).hintColor,
+              fontWeight: FontWeight.bold,
+            ),
+            mainLabelStyle: TextStyle(
+              color: Theme.of(context).primaryColor,
+              fontSize: Theme.of(context).textTheme.headline5.fontSize,
+              fontWeight: FontWeight.bold,
             ),
           ),
-          Container(
-            child: Text(
-              targetValue.toString() + ' ' + targetUnit,
-              style: TextStyle(
-                color: Theme.of(context).hintColor,
-              ),
-            ),
+          customWidths: CustomSliderWidths(
+            handlerSize: 0,
+            progressBarWidth: Theme.of(context).textTheme.bodyText1.fontSize,
+            trackWidth: Theme.of(context).textTheme.bodyText1.fontSize,
           ),
-        ],
+          customColors: CustomSliderColors(
+            hideShadow: true,
+            progressBarColor: Theme.of(context).accentColor,
+            trackColor: Theme.of(context).accentColor.withAlpha(100),
+          ),
+        ),
+        min: 0,
+        max: 100,
+        initialValue: percentage * 100,
       ),
     );
   }

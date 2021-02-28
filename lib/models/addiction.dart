@@ -1,6 +1,25 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter_quit_addiction_app/models/personal_note.dart';
+import 'package:flutter_quit_addiction_app/models/gift.dart';
+import 'package:flutter_quit_addiction_app/models/achievements.dart';
 
 enum ConsumptionType { quantity, hour }
+
+const _achievementDurations = [
+  Duration(days: 1),
+  Duration(days: 3),
+  Duration(days: 7),
+  Duration(days: 30),
+  Duration(days: 60),
+  Duration(days: 90),
+  Duration(days: 180),
+  Duration(days: 270),
+  Duration(days: 360),
+];
+
+List<Duration> get getAchievementDurations {
+  return _achievementDurations;
+}
 
 class Addiction {
   final String id;
@@ -11,6 +30,8 @@ class Addiction {
   final double unitCost;
   List<PersonalNote> personalNotes;
   List<Gift> gifts;
+  List<Duration> achievements;
+  int level;
 
   Addiction({
     @required this.id,
@@ -21,7 +42,10 @@ class Addiction {
     @required this.unitCost,
     this.personalNotes,
     this.gifts,
-  });
+    this.level,
+  }) {
+    this.achievements = _achievementDurations;
+  }
 
   DateTime get quitDateTime {
     return DateTime.parse(quitDate);
@@ -65,35 +89,5 @@ class Addiction {
       return DateTime.parse(b.date).compareTo(DateTime.parse(a.date));
     });
     return list;
-  }
-}
-
-class PersonalNote {
-  final String title;
-  final String text;
-  final String date;
-
-  PersonalNote({
-    @required this.title,
-    @required this.text,
-    @required this.date,
-  });
-}
-
-class Gift {
-  final String id;
-  final String addictionId;
-  final String name;
-  final double price;
-  int count;
-
-  Gift({
-    @required this.id,
-    @required this.addictionId,
-    @required this.name,
-    @required this.price,
-    int count,
-  }) {
-    this.count = count ?? 0;
   }
 }

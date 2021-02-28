@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quit_addiction_app/helpers/db_helper.dart';
 import 'package:flutter_quit_addiction_app/models/addiction.dart';
+import 'package:flutter_quit_addiction_app/models/gift.dart';
+import 'package:flutter_quit_addiction_app/models/personal_note.dart';
 import 'package:uuid/uuid.dart';
 
 class AddictionsProvider with ChangeNotifier {
@@ -19,8 +21,10 @@ class AddictionsProvider with ChangeNotifier {
       consumptionType: data['consumption_type'],
       dailyConsumption: data['daily_consumption'],
       unitCost: data['unit_cost'],
+      level: data['level'],
     );
     _addictions.add(newAddiction);
+    print(newAddiction.level);
 
     DBHelper.insert(
       'addictions',
@@ -31,6 +35,7 @@ class AddictionsProvider with ChangeNotifier {
         'consumption_type': data['consumption_type'],
         'daily_consumption': data['daily_consumption'],
         'unit_cost': data['unit_cost'],
+        'level': data['level'],
       },
     );
     notifyListeners();
@@ -55,6 +60,7 @@ class AddictionsProvider with ChangeNotifier {
           consumptionType: addiction['consumption_type'],
           dailyConsumption: addiction['daily_consumption'],
           unitCost: addiction['unit_cost'],
+          level: addiction['level'],
           personalNotes: [],
           gifts: [],
         );

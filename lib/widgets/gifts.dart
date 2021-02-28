@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_quit_addiction_app/extensions/string_extension.dart';
 import 'package:flutter_quit_addiction_app/models/addiction.dart';
+import 'package:flutter_quit_addiction_app/models/gift.dart';
 import 'package:flutter_quit_addiction_app/providers/addictions_provider.dart';
 import 'package:flutter_quit_addiction_app/providers/settings_provider.dart';
 import 'package:flutter_quit_addiction_app/widgets/gifts_create.dart';
