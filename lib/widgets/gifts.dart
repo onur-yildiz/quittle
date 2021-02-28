@@ -154,6 +154,40 @@ class _GiftCardState extends State<GiftCard> {
     final percentage =
         (widget.availableMoney / widget.gift.price).clamp(0.0, 1.0);
 
+    _deleteDialog() {
+      showDialog(
+        context: context,
+        builder: (context) => new AlertDialog(
+          title: Text(
+            local.areYouSure.capitalizeFirstLetter(),
+          ),
+          content: Text(
+            local.deleteGiftWarningMsg.capitalizeFirstLetter(),
+          ),
+          actions: [
+            FlatButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                materialLocal.cancelButtonLabel,
+              ),
+            ),
+            FlatButton(
+              onPressed: () {
+                Provider.of<AddictionsProvider>(context, listen: false)
+                    .deleteGift(widget.gift);
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                materialLocal.deleteButtonTooltip,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     return Stack(
       children: [
         SizedBox(
@@ -310,49 +344,25 @@ class _GiftCardState extends State<GiftCard> {
         Positioned(
           top: 0,
           right: 0,
-          child: IconButton(
-            alignment: Alignment.topRight,
-            // padding: EdgeInsets.zero,
-            icon: Icon(
-              Icons.delete,
-              color: Theme.of(context).errorColor,
-              size: Theme.of(context).textTheme.headline6.fontSize,
-            ),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (context) => new AlertDialog(
-                  title: Text(
-                    local.areYouSure.capitalizeFirstLetter(),
-                  ),
-                  content: Text(
-                    local.deleteGiftWarningMsg.capitalizeFirstLetter(),
-                  ),
-                  actions: [
-                    FlatButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Text(
-                        materialLocal.cancelButtonLabel,
-                      ),
-                    ),
-                    FlatButton(
-                      onPressed: () {
-                        Provider.of<AddictionsProvider>(context, listen: false)
-                            .deleteGift(widget.gift);
-                        Navigator.of(context).pop();
-                      },
-                      child: Text(
-                        materialLocal.deleteButtonTooltip,
-                      ),
-                    ),
-                  ],
+          child: Material(
+            type: MaterialType.circle,
+            color: Colors.transparent,
+            child: InkWell(
+              splashColor: Colors.red,
+              customBorder: CircleBorder(),
+              child: Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Icon(
+                  Icons.delete,
+                  color: Theme.of(context).errorColor,
+                  size: Theme.of(context).textTheme.headline6.fontSize,
                 ),
-              );
-            },
+              ),
+              onLongPress: _deleteDialog,
+              onTap: _deleteDialog,
+            ),
           ),
-        )
+        ),
       ],
     );
   }
