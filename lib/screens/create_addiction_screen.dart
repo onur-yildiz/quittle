@@ -52,20 +52,42 @@ class _AddictionCardState extends State<AddictionCard> {
     'level': 0,
   };
 
-  Future<void> _selectDate(context) async {
+  void _selectDate(context, DateTime currentlyPicked) async {
+    timeOfDayDuration(TimeOfDay time) =>
+        Duration(hours: time.hour, minutes: time.minute);
     DateTime date = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime.now().subtract(Duration(days: 900)),
       lastDate: DateTime.now(),
     );
-    setState(() {
-      if (date != null) {
-        addictionData['quit_date'] = date.toString();
+    if (date != null) {
+      TimeOfDay time = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.now(),
+      );
+      if (time != null) {
+        if (timeOfDayDuration(time).inSeconds <=
+            timeOfDayDuration(TimeOfDay.now()).inSeconds) {
+          date.add(timeOfDayDuration(time));
+        } else {
+          Scaffold.of(context)
+            ..removeCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Text('Can\'t pick a future time.'), // todo localize
+              ),
+            );
+          date.add(timeOfDayDuration(TimeOfDay.now()));
+        }
       } else {
-        date = DateTime.now();
-        addictionData['quit_date'] = date.toString();
+        date = currentlyPicked;
       }
+    } else {
+      date = currentlyPicked;
+    }
+    setState(() {
+      addictionData['quit_date'] = date.toString();
       int levelCount = 0;
       Duration quitDuration = DateTime.now().difference(date);
       for (Duration duration in getAchievementDurations) {
@@ -151,7 +173,10 @@ class _AddictionCardState extends State<AddictionCard> {
                             splashColor: Theme.of(context).highlightColor,
                             onTap: () {
                               setState(() {
-                                _selectDate(context);
+                                _selectDate(
+                                  context,
+                                  DateTime.parse(addictionData['quit_date']),
+                                );
                               });
                             },
                             child: Container(
