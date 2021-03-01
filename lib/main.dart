@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_quit_addiction_app/screens/addiction_item_screen.dart';
@@ -8,8 +10,68 @@ import 'package:flutter_quit_addiction_app/providers/addictions_provider.dart';
 import 'package:flutter_quit_addiction_app/providers/settings_provider.dart';
 import 'package:flutter_quit_addiction_app/screens/addictions_screen.dart';
 import 'package:flutter_quit_addiction_app/screens/create_addiction_screen.dart';
+import 'package:rxdart/subjects.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
-void main() {
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
+final BehaviorSubject<ReceivedNotification> didReceiveLocalNotificationSubject =
+    BehaviorSubject<ReceivedNotification>();
+
+final BehaviorSubject<String> selectNotificationSubject =
+    BehaviorSubject<String>();
+
+// const MethodChannel platform = MethodChannel('flutter_quit_addiction');
+
+class ReceivedNotification {
+  ReceivedNotification({
+    @required this.id,
+    @required this.title,
+    @required this.body,
+    @required this.payload,
+  });
+
+  final int id;
+  final String title;
+  final String body;
+  final String payload;
+}
+
+String selectedNotificationPayload;
+String initialRoute;
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await _configureLocalTimeZone();
+
+  final NotificationAppLaunchDetails notificationAppLaunchDetails =
+      await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+
+  initialRoute = AddictionsScreen.routeName;
+  if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {
+    selectedNotificationPayload = notificationAppLaunchDetails.payload;
+    initialRoute = AddictionItemScreen.routeName;
+  }
+
+  const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('ic_launcher');
+
+  final InitializationSettings initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid,
+  );
+
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings,
+      onSelectNotification: (String payload) async {
+    if (payload != null) {
+      debugPrint('notification payload: $payload');
+    }
+    selectedNotificationPayload = payload;
+    selectNotificationSubject.add(payload);
+  });
+
   runApp(MyApp());
 }
 
@@ -53,13 +115,14 @@ class MyApp extends StatelessWidget {
           hintColor: Colors.blueGrey[700],
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: Builder(
-          builder: (context) => FutureBuilder(
-            future: Provider.of<SettingsProvider>(context, listen: false)
-                .fetchSettings(),
-            builder: (_, snapshot) => AddictionsScreen(),
-          ),
-        ),
+        initialRoute: initialRoute,
+        // home: Builder(
+        //   builder: (context) => FutureBuilder(
+        //     future: Provider.of<SettingsProvider>(context, listen: false)
+        //         .fetchSettings(),
+        //     builder: (_, snapshot) => AddictionsScreen(),
+        //   ),
+        // ),
         routes: {
           CreateAddictionScreen.routeName: (ctx) => CreateAddictionScreen(),
           AddictionsScreen.routeName: (ctx) => AddictionsScreen(),
@@ -68,6 +131,33 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<void> _configureLocalTimeZone() async {
+  tz.initializeTimeZones();
+  // final String timeZoneName = await platform.invokeMethod('getTimeZoneName');
+  // // final String timeZoneName = await FlutterNativeTimezone.getLocalTimezone();
+  // tz.setLocalLocation(tz.getLocation(timeZoneName));
+}
+
+showProgressNotification() {
+  var androidDetails = AndroidNotificationDetails('quitAllProgress',
+      'progressNotifications', 'quitAllProgressNotifications');
+  var genNotDetails = NotificationDetails(
+    android: androidDetails,
+  );
+  var scheduledDate =
+      tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5));
+  flutterLocalNotificationsPlugin.zonedSchedule(
+    1,
+    'Progress',
+    'Progress Notification Body',
+    scheduledDate,
+    genNotDetails,
+    uiLocalNotificationDateInterpretation:
+        UILocalNotificationDateInterpretation.wallClockTime,
+    androidAllowWhileIdle: false,
+  );
 }
 
 /*

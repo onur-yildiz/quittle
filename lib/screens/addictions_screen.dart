@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_quit_addiction_app/extensions/string_extension.dart';
+import 'package:flutter_quit_addiction_app/main.dart';
 import 'package:flutter_quit_addiction_app/providers/addictions_provider.dart';
 import 'package:flutter_quit_addiction_app/screens/create_addiction_screen.dart';
 import 'package:flutter_quit_addiction_app/widgets/addiction_item_card.dart';

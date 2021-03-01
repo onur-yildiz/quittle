@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_quit_addiction_app/models/personal_note.dart';
 import 'package:flutter_quit_addiction_app/models/gift.dart';
-import 'package:flutter_quit_addiction_app/models/achievements.dart';
 
 enum ConsumptionType { quantity, hour }
 
@@ -18,7 +17,7 @@ const _achievementDurations = [
 ];
 
 List<Duration> get getAchievementDurations {
-  return _achievementDurations;
+  return [..._achievementDurations];
 }
 
 class Addiction {
@@ -50,10 +49,6 @@ class Addiction {
   DateTime get quitDateTime {
     return DateTime.parse(quitDate);
   }
-
-  // String get quitDateTimeFormatted {
-  //   return DateFormat('dd/MM/yyyy').format(quitDateTime);
-  // }
 
   Duration get abstinenceTime {
     return DateTime.now().difference(quitDateTime);

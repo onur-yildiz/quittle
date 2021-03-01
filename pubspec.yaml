@@ -33,6 +33,9 @@ dependencies:
   persistent_bottom_nav_bar: ^3.1.0
   reorderables: ^0.3.2
   sleek_circular_slider: ^1.2.0+web
+  flutter_local_notifications: ^4.0.1+1
+  rxdart: ^0.25.0
+  flutter_native_timezone: ^1.0.4
 
 
   # The following adds the Cupertino Icons font to your application.
