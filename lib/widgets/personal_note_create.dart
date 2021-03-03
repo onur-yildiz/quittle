@@ -96,7 +96,7 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
             ),
           ),
           padding: EdgeInsets.only(
-            bottom: viewInsets.bottom + 10,
+            bottom: 8,
             top: 20,
             left: 8,
             right: 8,

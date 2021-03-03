@@ -74,9 +74,8 @@ class _CreateGiftNoteState extends State<CreateGift> {
             ),
           ),
           padding: EdgeInsets.only(
-            bottom:
-                viewInsets.bottom <= 0 ? 10 : viewInsets.bottom - buttonHeight,
             top: 20,
+            bottom: 8,
             left: 8,
             right: 8,
           ),
