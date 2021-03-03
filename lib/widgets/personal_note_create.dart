@@ -76,7 +76,8 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
     final local = AppLocalizations.of(context);
     final deviceWidth = MediaQuery.of(context).size.width;
     final inputBackgroundColor = Theme.of(context).canvasColor;
-    // final deviceHeight = MediaQuery.of(context).size.height;
+    final viewInsets = MediaQuery.of(context).viewInsets;
+    final buttonHeight = Theme.of(context).buttonTheme.height * 2;
 
     return DefaultTextStyle(
       style: TextStyle(
@@ -94,7 +95,7 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
             ),
           ),
           padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom + 10,
+            bottom: viewInsets.bottom + 10,
             top: 20,
             left: 8,
             right: 8,
@@ -144,7 +145,7 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
                 onSaved: (newValue) => noteData['text'] = newValue.trim(),
               ),
               SizedBox(
-                height: Theme.of(context).buttonTheme.height * 2,
+                height: buttonHeight,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   // crossAxisAlignment: CrossAxisAlignment.center,
@@ -163,33 +164,34 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
                         },
                         splashColor: Theme.of(context).primaryColor,
                         borderRadius: BorderRadius.circular(5),
-                        child: Container(
+                        child: Padding(
                           padding: const EdgeInsets.all(10),
-                          alignment: Alignment.center,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                DateFormat('dd/MM/yyyy').format(
-                                  DateTime.parse(noteData['date']),
+                          child: Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  DateFormat('dd/MM/yyyy').format(
+                                    DateTime.parse(noteData['date']),
+                                  ),
+                                  style: TextStyle(
+                                      color: Theme.of(context).hintColor,
+                                      fontWeight: FontWeight.bold),
                                 ),
-                                style: TextStyle(
-                                    color: Theme.of(context).hintColor,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(
-                                width: deviceWidth * .1,
-                                child: FlatButton(
-                                  materialTapTargetSize:
-                                      MaterialTapTargetSize.shrinkWrap,
-                                  visualDensity: VisualDensity.compact,
-                                  child: Icon(Icons.date_range),
-                                  onPressed: null,
-                                  disabledTextColor:
-                                      Theme.of(context).primaryColor,
+                                SizedBox(
+                                  width: deviceWidth * .1,
+                                  child: FlatButton(
+                                    materialTapTargetSize:
+                                        MaterialTapTargetSize.shrinkWrap,
+                                    visualDensity: VisualDensity.compact,
+                                    child: Icon(Icons.date_range),
+                                    onPressed: null,
+                                    disabledTextColor:
+                                        Theme.of(context).primaryColor,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),

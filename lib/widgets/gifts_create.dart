@@ -55,6 +55,8 @@ class _CreateGiftNoteState extends State<CreateGift> {
   Widget build(BuildContext context) {
     final local = AppLocalizations.of(context);
     final inputBackgroundColor = Theme.of(context).canvasColor;
+    final viewInsets = MediaQuery.of(context).viewInsets;
+    final buttonHeight = Theme.of(context).buttonTheme.height * 2;
 
     return DefaultTextStyle(
       style: TextStyle(
@@ -72,7 +74,8 @@ class _CreateGiftNoteState extends State<CreateGift> {
             ),
           ),
           padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom + 10,
+            bottom:
+                viewInsets.bottom <= 0 ? 10 : viewInsets.bottom - buttonHeight,
             top: 20,
             left: 8,
             right: 8,
@@ -106,7 +109,7 @@ class _CreateGiftNoteState extends State<CreateGift> {
                 },
               ),
               SizedBox(
-                height: Theme.of(context).buttonTheme.height * 2,
+                height: buttonHeight,
                 child: FlatButton(
                   color: inputBackgroundColor,
                   shape: RoundedRectangleBorder(

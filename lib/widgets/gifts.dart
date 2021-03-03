@@ -403,6 +403,8 @@ class AddGiftButton extends StatelessWidget {
           onTap: () {
             showModalBottomSheet(
               backgroundColor: Colors.transparent,
+              useRootNavigator: true,
+              isScrollControlled: true,
               context: context,
               builder: (context) => CreateGift(addictionId: id),
             );

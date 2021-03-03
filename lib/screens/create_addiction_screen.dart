@@ -51,7 +51,7 @@ class _AddictionCardState extends State<AddictionCard> {
     'consumption_type': 0,
     'daily_consumption': 1.0,
     'unit_cost': 1.0,
-    'level': 0,
+    'level': -1,
   };
 
   void _selectDate(context, DateTime currentlyPicked) async {
@@ -96,7 +96,7 @@ class _AddictionCardState extends State<AddictionCard> {
       int levelCount = -1;
       Duration quitDuration = DateTime.now().difference(date);
       for (Duration duration in getAchievementDurations) {
-        if (quitDuration.inMicroseconds > duration.inMicroseconds) {
+        if (quitDuration.inSeconds >= duration.inSeconds) {
           levelCount = levelCount + 1;
         }
       }
@@ -240,41 +240,75 @@ class _AddictionCardState extends State<AddictionCard> {
                             onTap: () {
                               setState(() {
                                 showModalBottomSheet(
+                                  backgroundColor: Colors.transparent,
                                   context: context,
-                                  builder: (context) => Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      FlatButton(
-                                        minWidth: double.maxFinite,
-                                        padding: const EdgeInsets.all(24.0),
-                                        onPressed: () {
-                                          setState(() {
-                                            addictionData['consumption_type'] =
-                                                0;
-                                            _consumptionType = local.quantity;
-                                            Navigator.of(context).pop();
-                                          });
-                                        },
-                                        child: Text(
-                                          local.quantity.capitalizeWords(),
-                                        ),
+                                  builder: (context) => Container(
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context).cardColor,
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10),
                                       ),
-                                      FlatButton(
-                                        minWidth: double.maxFinite,
-                                        padding: const EdgeInsets.all(24.0),
-                                        onPressed: () {
-                                          setState(() {
-                                            addictionData['consumption_type'] =
-                                                1;
-                                            _consumptionType = local.hour(0);
-                                            Navigator.of(context).pop();
-                                          });
-                                        },
-                                        child: Text(
-                                          local.hour(0).capitalizeWords(),
+                                    ),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      children: [
+                                        FlatButton.icon(
+                                          padding: const EdgeInsets.all(32.0),
+                                          onPressed: () {
+                                            setState(() {
+                                              addictionData[
+                                                  'consumption_type'] = 0;
+                                              _consumptionType = local.quantity;
+                                              Navigator.of(context).pop();
+                                            });
+                                          },
+                                          icon: Icon(
+                                            Icons.iso_outlined,
+                                            color: Theme.of(context).hintColor,
+                                          ),
+                                          label: Text(
+                                            local.quantity.capitalizeWords(),
+                                            style: TextStyle(
+                                              color:
+                                                  Theme.of(context).hintColor,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                        Divider(
+                                          thickness: 1,
+                                          indent: 8,
+                                          endIndent: 8,
+                                          height: 0,
+                                        ),
+                                        FlatButton.icon(
+                                          padding: const EdgeInsets.all(32.0),
+                                          onPressed: () {
+                                            setState(() {
+                                              addictionData[
+                                                  'consumption_type'] = 1;
+                                              _consumptionType = local.hour(0);
+                                              Navigator.of(context).pop();
+                                            });
+                                          },
+                                          icon: Icon(
+                                            Icons.hourglass_bottom_rounded,
+                                            color: Theme.of(context).hintColor,
+                                          ),
+                                          label: Text(
+                                            local.hour(0).capitalizeWords(),
+                                            style: TextStyle(
+                                              color:
+                                                  Theme.of(context).hintColor,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 );
                               });
@@ -306,6 +340,13 @@ class _AddictionCardState extends State<AddictionCard> {
                                     _consumptionType != null
                                         ? _consumptionType.capitalizeWords()
                                         : local.quantity.capitalizeWords(),
+                                    style: TextStyle(
+                                      fontSize: Theme.of(context)
+                                          .textTheme
+                                          .subtitle2
+                                          .fontSize,
+                                      color: Theme.of(context).hintColor,
+                                    ),
                                   ),
                                 ],
                               ),
