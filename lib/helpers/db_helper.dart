@@ -10,7 +10,8 @@ class DBHelper {
       onCreate: (db, version) async {
         await db.execute(
             'CREATE TABLE addictions(id TEXT PRIMARY KEY, name TEXT, quit_date TEXT, consumption_type INTEGER, daily_consumption REAL, unit_cost REAL, level INTEGER)');
-        await db.execute('CREATE TABLE settings(currency TEXT)');
+        await db.execute(
+            'CREATE TABLE settings(id INTEGER, currency TEXT, allow_progress_notification INTEGER, allow_quote_notification INTEGER)');
         await db.execute(
             'CREATE TABLE personal_notes(id TEXT, title TEXT, text TEXT, date TEXT)');
         await db.execute(

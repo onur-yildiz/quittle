@@ -89,7 +89,6 @@ class _SettingsViewState extends State<SettingsView> {
                   context: context,
                   builder: (context) => CurrencyPicker(),
                 ),
-                // isThreeLine: true,
                 contentPadding:
                     const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
                 leading: Icon(Icons.account_balance_wallet_outlined),

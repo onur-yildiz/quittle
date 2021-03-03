@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_quit_addiction_app/extensions/string_extension.dart';
 import 'package:flutter_quit_addiction_app/providers/addictions_provider.dart';
+import 'package:flutter_quit_addiction_app/providers/settings_provider.dart';
 import 'package:flutter_quit_addiction_app/screens/create_addiction_screen.dart';
 import 'package:flutter_quit_addiction_app/widgets/addiction_item_card.dart';
 import 'package:flutter_quit_addiction_app/widgets/settings_view.dart';
@@ -17,14 +18,10 @@ class AddictionsScreen extends StatefulWidget {
 class _AddictionsScreenState extends State<AddictionsScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
-  Future<void> _fetchAddictions() async {
+  Future<void> _fetchData() async {
     await Provider.of<AddictionsProvider>(context, listen: false)
         .fetchAddictions();
-  }
-
-  @override
-  void initState() {
-    super.initState();
+    await Provider.of<SettingsProvider>(context, listen: false).fetchSettings();
   }
 
   @override
@@ -71,7 +68,7 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
       ),
       drawer: SettingsView(),
       body: FutureBuilder(
-        future: _fetchAddictions(),
+        future: _fetchData(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
