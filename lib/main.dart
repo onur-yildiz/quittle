@@ -158,7 +158,8 @@ void callbackDispatcher() {
           unitCost: addictionData[0]['unit_cost'],
           level: addictionData[0]['level'],
         );
-        final nextLevel = addiction.level;
+        final nextLevel =
+            addiction.level + 1; // next level index = current level's index + 1
         if (addiction.abstinenceTime.inSeconds >=
             getAchievementDurations[nextLevel].inSeconds) {
           await DBHelper.update(
@@ -167,8 +168,8 @@ void callbackDispatcher() {
             addiction.id,
             nextLevel,
           );
-          showProgressNotification(
-              addiction.name.toUpperCase(), 'You reached level $nextLevel!');
+          showProgressNotification(addiction.name.toUpperCase(),
+              'You reached level ${(nextLevel + 1)}!'); // next level index + 1 to show real level value
         }
         // if last achievement level, cancel
         if (addiction.level == 8) {
