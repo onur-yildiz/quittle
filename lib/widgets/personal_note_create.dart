@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_quit_addiction_app/extensions/string_extension.dart';
 import 'package:flutter_quit_addiction_app/providers/addictions_provider.dart';
@@ -141,7 +142,7 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
                 minLines: 8,
                 maxLines: null,
                 maxLength: 100,
-                maxLengthEnforced: true,
+                maxLengthEnforcement: MaxLengthEnforcement.enforced,
                 onSaved: (newValue) => noteData['text'] = newValue.trim(),
               ),
               SizedBox(
@@ -180,14 +181,9 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
                                 ),
                                 SizedBox(
                                   width: deviceWidth * .1,
-                                  child: FlatButton(
-                                    materialTapTargetSize:
-                                        MaterialTapTargetSize.shrinkWrap,
-                                    visualDensity: VisualDensity.compact,
-                                    child: Icon(Icons.date_range),
-                                    onPressed: null,
-                                    disabledTextColor:
-                                        Theme.of(context).primaryColor,
+                                  child: Icon(
+                                    Icons.date_range,
+                                    color: Theme.of(context).primaryColor,
                                   ),
                                 ),
                               ],
@@ -198,10 +194,10 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
                     ),
                     SizedBox(
                       height: double.maxFinite,
-                      child: FlatButton(
-                        color: inputBackgroundColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0),
+                      child: TextButton(
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(inputBackgroundColor),
                         ),
                         onPressed: () {
                           trySubmit(context);
@@ -215,12 +211,12 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
                             children: [
                               Icon(
                                 Icons.save,
-                                color: Theme.of(context).primaryColorLight,
+                                color: Theme.of(context).primaryColor,
                               ),
                               Text(
                                 local.save.capitalizeWords(),
                                 style: TextStyle(
-                                  color: Theme.of(context).primaryColorLight,
+                                  color: Theme.of(context).primaryColor,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),

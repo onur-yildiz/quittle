@@ -19,9 +19,6 @@ class _SettingsViewState extends State<SettingsView> {
   @override
   Widget build(BuildContext context) {
     final local = AppLocalizations.of(context);
-    final mediaQuery = MediaQuery.of(context);
-    final deviceHeight = mediaQuery.size.height;
-    // final deviceWidth = mediaQuery.size.width;
     return Drawer(
         child: LayoutBuilder(
       builder: (context, constraints) => SingleChildScrollView(
@@ -44,7 +41,7 @@ class _SettingsViewState extends State<SettingsView> {
                             decoration: BoxDecoration(
                               border: Border(
                                 bottom: BorderSide(
-                                  width: 1,
+                                  width: 0,
                                   color: Theme.of(context).primaryColor,
                                 ),
                               ),
@@ -109,7 +106,7 @@ class _SettingsViewState extends State<SettingsView> {
                           ),
                           contentPadding: const EdgeInsets.symmetric(
                               vertical: 8, horizontal: 8),
-                          leading: Icon(Icons.account_balance_wallet_outlined),
+                          leading: FaIcon(FontAwesomeIcons.moneyBillWave),
                           title: Text(local.currency.capitalizeWords()),
                           subtitle: Text(
                               Provider.of<SettingsProvider>(context).currency),

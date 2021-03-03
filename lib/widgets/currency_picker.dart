@@ -42,10 +42,16 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
             width: deviceWidth * .4,
             child: ListView.builder(
               itemCount: _currencies.length,
-              itemBuilder: (context, index) => FlatButton(
-                padding: const EdgeInsets.all(16.0),
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                color: Theme.of(context).canvasColor,
+              itemBuilder: (context, index) => TextButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(
+                    Theme.of(context).canvasColor,
+                  ),
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  padding: MaterialStateProperty.all(
+                    const EdgeInsets.all(16.0),
+                  ),
+                ),
                 onPressed: () {
                   setState(() {
                     Provider.of<SettingsProvider>(context, listen: false)

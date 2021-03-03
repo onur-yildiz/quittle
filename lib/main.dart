@@ -13,7 +13,6 @@ import 'package:flutter_quit_addiction_app/screens/addictions_screen.dart';
 import 'package:flutter_quit_addiction_app/screens/create_addiction_screen.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:timezone/data/latest.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
 import 'package:workmanager/workmanager.dart';
 import 'package:flutter_quit_addiction_app/util/achievement_constants.dart';
 
@@ -112,7 +111,7 @@ class MyApp extends StatelessWidget {
           primaryColorLight: Color.fromRGBO(230, 86, 81, .8),
           primaryColor: Color.fromRGBO(230, 86, 81, 1),
           primaryColorDark: Color.fromRGBO(182, 85, 81, 1),
-          primarySwatch: Colors.red,
+          primarySwatch: Colors.red, //todo custom swatch
           // accentColor: Color.fromRGBO(147, 181, 198, 1),
           accentColor: Color.fromRGBO(46, 105, 153, 1), // 74, 111, 134
           buttonColor: Color.fromRGBO(247, 244, 243, 1),

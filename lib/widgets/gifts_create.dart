@@ -110,10 +110,10 @@ class _CreateGiftNoteState extends State<CreateGift> {
               ),
               SizedBox(
                 height: buttonHeight,
-                child: FlatButton(
-                  color: inputBackgroundColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0),
+                child: TextButton(
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all(inputBackgroundColor),
                   ),
                   onPressed: () {
                     trySubmit(context);

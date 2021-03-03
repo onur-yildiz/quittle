@@ -164,6 +164,7 @@ class _GiftCardState extends State<GiftCard> {
     final percentage =
         (widget.availableMoney / widget.gift.price).clamp(0.0, 1.0);
 
+// todo not showing when first adding
     _deleteDialog() {
       showDialog(
         context: context,
@@ -175,7 +176,7 @@ class _GiftCardState extends State<GiftCard> {
             local.deleteGiftWarningMsg.capitalizeFirstLetter(),
           ),
           actions: [
-            FlatButton(
+            TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -183,7 +184,7 @@ class _GiftCardState extends State<GiftCard> {
                 materialLocal.cancelButtonLabel,
               ),
             ),
-            FlatButton(
+            TextButton(
               onPressed: () {
                 Provider.of<AddictionsProvider>(context, listen: false)
                     .deleteGift(widget.gift);
@@ -223,7 +224,7 @@ class _GiftCardState extends State<GiftCard> {
                         .capitalizeFirstLetter(),
                   ), //'Purchase \"${widget.gift.name}\" for $giftPrice'
                   actions: [
-                    FlatButton(
+                    TextButton(
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
@@ -231,7 +232,7 @@ class _GiftCardState extends State<GiftCard> {
                         materialLocal.cancelButtonLabel,
                       ),
                     ),
-                    FlatButton(
+                    TextButton(
                       onPressed: () {
                         setState(() {
                           Provider.of<AddictionsProvider>(context,

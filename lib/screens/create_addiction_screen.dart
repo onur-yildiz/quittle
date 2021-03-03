@@ -71,7 +71,7 @@ class _AddictionCardState extends State<AddictionCard> {
               TimeOfDay.now().asDuration.inSeconds) {
             date = date.add(time.asDuration);
           } else {
-            Scaffold.of(context)
+            ScaffoldMessenger.of(context)
               ..removeCurrentSnackBar()
               ..showSnackBar(
                 SnackBar(
@@ -253,8 +253,12 @@ class _AddictionCardState extends State<AddictionCard> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.stretch,
                                       children: [
-                                        FlatButton.icon(
-                                          padding: const EdgeInsets.all(32.0),
+                                        TextButton.icon(
+                                          style: ButtonStyle(
+                                            padding: MaterialStateProperty.all(
+                                              EdgeInsets.all(32.0),
+                                            ),
+                                          ),
                                           onPressed: () {
                                             setState(() {
                                               addictionData[
@@ -282,8 +286,12 @@ class _AddictionCardState extends State<AddictionCard> {
                                           endIndent: 8,
                                           height: 0,
                                         ),
-                                        FlatButton.icon(
-                                          padding: const EdgeInsets.all(32.0),
+                                        TextButton.icon(
+                                          style: ButtonStyle(
+                                            padding: MaterialStateProperty.all(
+                                              EdgeInsets.all(32.0),
+                                            ),
+                                          ),
                                           onPressed: () {
                                             setState(() {
                                               addictionData[
@@ -388,10 +396,7 @@ class _AddictionCardState extends State<AddictionCard> {
                   },
                   inputAction: TextInputAction.done,
                 ),
-                RaisedButton(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
-                  ),
+                ElevatedButton(
                   onPressed: () => trySubmit(context),
                   child: Container(
                     width: deviceSize.width,
