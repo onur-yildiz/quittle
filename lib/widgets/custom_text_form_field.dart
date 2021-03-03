@@ -59,6 +59,7 @@ class CustomTextFormField extends StatelessWidget {
       keyboardType: inputType,
       validator: validator,
       textInputAction: inputAction,
+      textCapitalization: TextCapitalization.sentences,
       onEditingComplete: () => inputAction == TextInputAction.done
           ? FocusScope.of(context).unfocus()
           : FocusScope.of(context).nextFocus(),

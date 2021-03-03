@@ -1,24 +1,9 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter_quit_addiction_app/util/achievement_constants.dart';
 import 'package:flutter_quit_addiction_app/models/personal_note.dart';
 import 'package:flutter_quit_addiction_app/models/gift.dart';
 
 enum ConsumptionType { quantity, hour }
-
-const _achievementDurations = [
-  Duration(days: 1),
-  Duration(days: 3),
-  Duration(days: 7),
-  Duration(days: 30),
-  Duration(days: 60),
-  Duration(days: 90),
-  Duration(days: 180),
-  Duration(days: 270),
-  Duration(days: 360),
-];
-
-List<Duration> get getAchievementDurations {
-  return [..._achievementDurations];
-}
 
 class Addiction {
   final String id;
@@ -43,7 +28,7 @@ class Addiction {
     this.gifts,
     this.level,
   }) {
-    this.achievements = _achievementDurations;
+    this.achievements = getAchievementDurations;
   }
 
   DateTime get quitDateTime {

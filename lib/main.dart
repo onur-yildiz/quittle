@@ -15,6 +15,7 @@ import 'package:rxdart/subjects.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:workmanager/workmanager.dart';
+import 'package:flutter_quit_addiction_app/util/achievement_constants.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -50,7 +51,7 @@ void main() async {
     callbackDispatcher,
   );
 
-  await _configureLocalTimeZone();
+  tz.initializeTimeZones();
 
   final NotificationAppLaunchDetails notificationAppLaunchDetails =
       await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
@@ -113,7 +114,7 @@ class MyApp extends StatelessWidget {
           primaryColorDark: Color.fromRGBO(182, 85, 81, 1),
           primarySwatch: Colors.red,
           // accentColor: Color.fromRGBO(147, 181, 198, 1),
-          accentColor: Color.fromRGBO(74, 111, 134, 1),
+          accentColor: Color.fromRGBO(46, 105, 153, 1), // 74, 111, 134
           buttonColor: Color.fromRGBO(247, 244, 243, 1),
           canvasColor: Color.fromRGBO(247, 244, 243, 1),
           cardColor: Color.fromRGBO(220, 220, 220, 1),
@@ -121,12 +122,6 @@ class MyApp extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         initialRoute: _initialRoute,
-        // home: Builder(
-        //   builder: (context) => FutureBuilder(
-        //     future: startup(context),
-        //     builder: (_, snapshot) => AddictionsScreen(),
-        //   ),
-        // ),
         routes: {
           CreateAddictionScreen.routeName: (ctx) => CreateAddictionScreen(),
           AddictionsScreen.routeName: (ctx) => AddictionsScreen(),
@@ -136,12 +131,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-// Future<void> startup(BuildContext context) async {
-//   await Provider.of<AddictionsProvider>(context).fetchAddictions();
-//   await Provider.of<SettingsProvider>(context, listen: false).fetchSettings();
-//   return Future.value(null);
-// }
 
 void callbackDispatcher() {
   Workmanager.executeTask((taskName, inputData) async {
@@ -158,8 +147,7 @@ void callbackDispatcher() {
           unitCost: addictionData[0]['unit_cost'],
           level: addictionData[0]['level'],
         );
-        final nextLevel =
-            addiction.level + 1; // next level index = current level's index + 1
+        final nextLevel = addiction.level + 1;
         if (addiction.abstinenceTime.inSeconds >=
             getAchievementDurations[nextLevel].inSeconds) {
           await DBHelper.update(
@@ -169,7 +157,7 @@ void callbackDispatcher() {
             nextLevel,
           );
           showProgressNotification(addiction.name.toUpperCase(),
-              'You reached level ${(nextLevel + 1)}!'); // next level index + 1 to show real level value
+              'You reached level ${(nextLevel)}!');
         }
         // if last achievement level, cancel
         if (addiction.level == 8) {
@@ -180,13 +168,6 @@ void callbackDispatcher() {
     }
     return Future.value(true);
   });
-}
-
-Future<void> _configureLocalTimeZone() async {
-  tz.initializeTimeZones();
-  // final String timeZoneName = await platform.invokeMethod('getTimeZoneName');
-  // // final String timeZoneName = await FlutterNativeTimezone.getLocalTimezone();
-  // tz.setLocalLocation(tz.getLocation(timeZoneName));
 }
 
 void showProgressNotification(
@@ -224,43 +205,3 @@ void showProgressNotification(
 //     androidAllowWhileIdle: false,
 //   );
 // }
-
-/*
-
-Settings {
-  startOfWeek: String = 'monday',
-  theme: ThemeMode = ThemeMode.system  // LOOK FOR ALREADY IMPLEMENTED STANDART
-}
-
-User {
-  addictions: List<Addiction>,
-  achievementSummary: AchievementSummary,
-  achievements = {
-
-  }
-}
-
-Addiction {
-  name: String,
-  quitDate: DateTime = DateTime.now,
-  consumptionType: ComsumptionType = ConsumptionType.quantity,
-  dailyConsumption: double,
-  comsumptionUnitCost: double,
-  personalNotes: List<PersonalNote>,
-}
-
-AchievementSummary {
-  bronzeTrophies: int,
-  silverTrophies: int,
-  goldTrophies: int,
-  diamondTrophies: int,
-  platinumTrophies: int,
-}
-
-PersonalNote {
-  title: String,
-  text: String,
-  date: DateTime = DateTime.now,
-}
-
-*/

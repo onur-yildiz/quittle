@@ -1,5 +1,6 @@
 extension StringExtension on String {
   String capitalizeWords() {
+    if (this.length == 0) return '';
     final List words = this.split(' ');
     List capitalizedWords = [];
     words.forEach((word) {

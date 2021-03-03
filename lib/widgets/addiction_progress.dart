@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_quit_addiction_app/extensions/string_extension.dart';
 import 'package:flutter_quit_addiction_app/models/addiction.dart';
 import 'package:flutter_quit_addiction_app/providers/settings_provider.dart';
+import 'package:flutter_quit_addiction_app/util/achievement_constants.dart';
 import 'package:flutter_quit_addiction_app/widgets/target_duration_indicator.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -17,69 +18,90 @@ class AddictionProgress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final deviceHeight = MediaQuery.of(context).size.height;
     final local = AppLocalizations.of(context);
     final consumptionType = (addictionData.consumptionType == 1)
         ? local.hour(addictionData.notUsedCount.toInt())
         : local.times(addictionData.notUsedCount.toInt());
 
-    return Container(
-      height: deviceHeight * .25,
+    return Padding(
+      padding: const EdgeInsets.only(top: 16.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Flex(
-            direction: Axis.vertical,
+          Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Flexible(
-                flex: 1,
-                child: Text(local.level.capitalizeWords() + '1'),
+              DefaultTextStyle(
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).hintColor,
+                  fontSize: Theme.of(context).textTheme.subtitle1.fontSize,
+                ),
+                child: Column(
+                  children: [
+                    Text(
+                      local.level.capitalizeWords() +
+                          ' ' +
+                          (addictionData.level + 1).toString(),
+                    ),
+                    Text(
+                      getAchievementNames(local.localeName)[addictionData.level]
+                          .capitalizeWords(),
+                    )
+                  ],
+                ),
               ),
-              Flexible(
-                flex: 3,
-                child: DefaultTextStyle(
-                  style: TextStyle(
-                    fontSize: Theme.of(context).textTheme.headline6.fontSize,
-                    color: Theme.of(context).hintColor,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  child: addictionData.unitCost == 0
-                      ? Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(local.savedFor.capitalizeFirstLetter()),
-                            Text(
-                              addictionData.consumptionType == 0
-                                  ? addictionData.notUsedCount
-                                      .toStringAsFixed(2)
-                                  : addictionData.notUsedCount
-                                          .toStringAsFixed(0) +
-                                      ' ' +
-                                      consumptionType,
+              Divider(
+                color: Colors.transparent,
+                thickness: 0,
+              ),
+              DefaultTextStyle(
+                style: TextStyle(
+                  fontSize: Theme.of(context).textTheme.subtitle1.fontSize,
+                  color: Theme.of(context).hintColor,
+                  fontWeight: FontWeight.bold,
+                ),
+                child: addictionData.unitCost == 0
+                    ? Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(local.savedFor.capitalizeFirstLetter()),
+                          Text(
+                            addictionData.consumptionType == 0
+                                ? addictionData.notUsedCount.toStringAsFixed(2)
+                                : addictionData.notUsedCount
+                                        .toStringAsFixed(0) +
+                                    ' ' +
+                                    consumptionType,
+                            style: TextStyle(
+                              color: Colors.red,
                             ),
-                          ],
-                        )
-                      : Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              local.moneySaved.capitalizeWords(),
-                            ),
-                            Consumer<SettingsProvider>(
-                              builder: (_, settings, _ch) => Text(
-                                NumberFormat.simpleCurrency(
-                                  name: settings.currency,
-                                ).format(
-                                  addictionData.unitCost *
-                                      addictionData.notUsedCount,
-                                ),
+                          ),
+                        ],
+                      )
+                    : Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            local.moneySaved.capitalizeWords(),
+                          ),
+                          Consumer<SettingsProvider>(
+                            builder: (_, settings, _ch) => Text(
+                              NumberFormat.simpleCurrency(
+                                name: settings.currency,
+                              ).format(
+                                addictionData.unitCost *
+                                    addictionData.notUsedCount,
+                              ),
+                              style: TextStyle(
+                                color: Colors.green[800],
                               ),
                             ),
-                          ],
-                        ),
-                ),
+                          ),
+                        ],
+                      ),
               ),
             ],
           ),

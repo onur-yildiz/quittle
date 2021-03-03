@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_quit_addiction_app/extensions/string_extension.dart';
+import 'package:flutter_quit_addiction_app/util/achievement_constants.dart';
 import 'package:flutter_quit_addiction_app/models/addiction_item_screen_args.dart';
 import 'package:flutter_quit_addiction_app/providers/addictions_provider.dart';
 import 'package:flutter_quit_addiction_app/screens/addiction_item_screen.dart';
 import 'package:flutter_quit_addiction_app/widgets/custom_text_form_field.dart';
-import 'package:flutter_quit_addiction_app/models/addiction.dart'
-    show getAchievementDurations;
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_quit_addiction_app/extensions/datetime_extension.dart';
@@ -51,7 +50,7 @@ class _AddictionCardState extends State<AddictionCard> {
     'consumption_type': 0,
     'daily_consumption': 1.0,
     'unit_cost': 1.0,
-    'level': -1,
+    'level': 0,
   };
 
   void _selectDate(context, DateTime currentlyPicked) async {
@@ -90,7 +89,6 @@ class _AddictionCardState extends State<AddictionCard> {
     } else {
       date = currentlyPicked;
     }
-    debugPrint(date.toString());
     setState(() {
       addictionData['quit_date'] = date.toString();
       int levelCount = -1;

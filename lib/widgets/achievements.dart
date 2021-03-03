@@ -16,29 +16,30 @@ class Achievements extends StatefulWidget {
 }
 
 class _AchievementsState extends State<Achievements> {
-  List achNames;
+  List formattedDurations;
 
-  void _getLocalizedAchievementNames(AppLocalizations local) {
-    for (var i = 0; i < widget.data.achievements.length; i++) {
+  void _getLocalizedAchievementDurations(AppLocalizations local) {
+    formattedDurations[0] = 'a new start!';
+    for (var i = 1; i < widget.data.achievements.length; i++) {
       if (widget.data.achievements[i].inDays < 30) {
-        achNames[i] =
+        formattedDurations[i] =
             ('${widget.data.achievements[i].inDays} ${local.day(widget.data.achievements[i].inDays)}');
       } else if (widget.data.achievements[i].inDays < 360) {
         final int inMonths = (widget.data.achievements[i].inDays / 30).floor();
-        achNames[i] = ('$inMonths ${local.month(inMonths)}');
+        formattedDurations[i] = ('$inMonths ${local.month(inMonths)}');
       } else {
         final int inYears = (widget.data.achievements[i].inDays / 360).floor();
-        achNames[i] = ('$inYears ${local.year(inYears)}');
+        formattedDurations[i] = ('$inYears ${local.year(inYears)}');
       }
     }
   }
 
   @override
   void initState() {
-    achNames = List.filled(widget.data.achievements.length, '');
+    formattedDurations = List.filled(widget.data.achievements.length, '');
     Future.delayed(Duration.zero, () {
       setState(() {
-        _getLocalizedAchievementNames(AppLocalizations.of(context));
+        _getLocalizedAchievementDurations(AppLocalizations.of(context));
       });
     });
     super.initState();
@@ -46,7 +47,13 @@ class _AchievementsState extends State<Achievements> {
 
   Map<String, Object> _getTileAttr(int itemLevel) {
     final currentLevel = widget.data.level;
-    if (itemLevel <= currentLevel && currentLevel != -1) {
+    if (itemLevel == 0) {
+      return {
+        'tileColor': Colors.green,
+        'icon': Icons.radio_button_checked,
+        'iconColor': Colors.white,
+      };
+    } else if (itemLevel <= currentLevel) {
       return {
         'tileColor': Colors.green,
         'icon': Icons.check,
@@ -55,7 +62,7 @@ class _AchievementsState extends State<Achievements> {
     } else {
       final diff = itemLevel - currentLevel;
       final tileColor = Colors.amber
-          .withGreen((Colors.amber.green - (diff * 30)).clamp(0, 255));
+          .withGreen((Colors.amber.green - (diff * 20)).clamp(0, 255));
       return {
         'tileColor': tileColor,
         'icon': Icons.lock_clock,
@@ -67,119 +74,121 @@ class _AchievementsState extends State<Achievements> {
   @override
   Widget build(BuildContext context) {
     // final local = AppLocalizations.of(context);
+    final currentLevel = widget.data.level;
 
     return ListView.builder(
-        itemCount: widget.data.achievements.length,
-        itemBuilder: (context, index) {
-          final tileAttr = _getTileAttr(index);
-          return (widget.data.level + 1 == index)
-              ? ListTile(
-                  tileColor: tileAttr['tileColor'],
-                  contentPadding: EdgeInsets.all(
-                      Theme.of(context).textTheme.headline4.fontSize),
-                  title: Center(
-                    child: Text(
-                      achNames[index],
-                      style: TextStyle(
-                        fontSize:
-                            Theme.of(context).textTheme.headline4.fontSize,
-                        fontWeight: FontWeight.bold,
-                      ),
+      itemCount: widget.data.achievements.length,
+      itemBuilder: (context, index) {
+        final tileAttr = _getTileAttr(index);
+        return (currentLevel + 1 == index)
+            ? ListTile(
+                tileColor: tileAttr['tileColor'],
+                contentPadding: EdgeInsets.all(
+                    Theme.of(context).textTheme.headline4.fontSize),
+                title: Center(
+                  child: Text(
+                    formattedDurations[index],
+                    style: TextStyle(
+                      fontSize: Theme.of(context).textTheme.headline4.fontSize,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                  subtitle: Padding(
-                    padding: EdgeInsets.all(
-                        Theme.of(context).textTheme.headline1.fontSize / 2),
-                    child: Center(
-                      child: SleekCircularSlider(
-                        innerWidget: (percentage) => Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              percentage.toStringAsFixed(0),
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: Theme.of(context)
-                                    .textTheme
-                                    .headline5
-                                    .fontSize,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              '%',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1
-                                    .fontSize,
-                              ),
-                            ),
-                          ],
-                        ),
-                        appearance: CircularSliderAppearance(
-                          animationEnabled: true,
-                          infoProperties: InfoProperties(
-                            mainLabelStyle: TextStyle(
+                ),
+                subtitle: Padding(
+                  padding: EdgeInsets.all(
+                      Theme.of(context).textTheme.headline1.fontSize / 2),
+                  child: FittedBox(
+                    fit: BoxFit.cover,
+                    child: SleekCircularSlider(
+                      innerWidget: (percentage) => Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            percentage.toStringAsFixed(0),
+                            style: TextStyle(
                               color: Colors.white,
                               fontSize: Theme.of(context)
                                   .textTheme
-                                  .headline6
+                                  .headline5
                                   .fontSize,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          customWidths: CustomSliderWidths(
-                            trackWidth:
-                                Theme.of(context).textTheme.headline5.fontSize,
-                            handlerSize: 0,
-                            progressBarWidth:
-                                Theme.of(context).textTheme.headline5.fontSize,
+                          Text(
+                            '%',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1
+                                  .fontSize,
+                            ),
                           ),
-                          customColors: CustomSliderColors(
-                            progressBarColor: Theme.of(context).primaryColor,
-                            trackColor: Theme.of(context).canvasColor,
-                            hideShadow: true,
+                        ],
+                      ),
+                      appearance: CircularSliderAppearance(
+                        animationEnabled: true,
+                        infoProperties: InfoProperties(
+                          mainLabelStyle: TextStyle(
+                            color: Colors.white,
+                            fontSize:
+                                Theme.of(context).textTheme.headline6.fontSize,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        min: 0,
-                        max: 100,
-                        initialValue: (widget.data.abstinenceTime.inSeconds /
-                                    widget.data.achievements[index].inSeconds)
-                                .clamp(0.0, 1.0) *
-                            100,
+                        customWidths: CustomSliderWidths(
+                          trackWidth:
+                              Theme.of(context).textTheme.bodyText1.fontSize,
+                          handlerSize: 0,
+                          progressBarWidth:
+                              Theme.of(context).textTheme.bodyText1.fontSize,
+                        ),
+                        customColors: CustomSliderColors(
+                          progressBarColors: [
+                            Theme.of(context).accentColor,
+                            Theme.of(context).accentColor.withOpacity(.5),
+                          ],
+                          trackColor: Theme.of(context).canvasColor,
+                          hideShadow: true,
+                        ),
                       ),
+                      min: 0,
+                      max: 100,
+                      initialValue: (widget.data.abstinenceTime.inSeconds /
+                                  widget.data.achievements[index].inSeconds)
+                              .clamp(0.0, 1.0) *
+                          100,
                     ),
                   ),
-                )
-              : ListTile(
-                  tileColor: tileAttr['tileColor'],
-                  contentPadding: EdgeInsets.all(
-                    Theme.of(context).textTheme.headline4.fontSize,
-                  ),
-                  title: Center(
-                    child: Text(
-                      achNames[index],
-                      style: TextStyle(
-                        fontSize:
-                            Theme.of(context).textTheme.headline4.fontSize,
-                        fontWeight: FontWeight.bold,
-                        color: tileAttr['iconColor'],
-                      ),
-                    ),
-                  ),
-                  subtitle: Padding(
-                    padding: EdgeInsets.all(
-                        Theme.of(context).textTheme.headline1.fontSize / 2),
-                    child: Icon(
-                      tileAttr['icon'],
-                      size: Theme.of(context).textTheme.headline1.fontSize,
+                ),
+              )
+            : ListTile(
+                tileColor: tileAttr['tileColor'],
+                contentPadding: EdgeInsets.all(
+                  Theme.of(context).textTheme.headline4.fontSize,
+                ),
+                title: Center(
+                  child: Text(
+                    formattedDurations[index],
+                    style: TextStyle(
+                      fontSize: Theme.of(context).textTheme.headline4.fontSize,
+                      fontWeight: FontWeight.bold,
                       color: tileAttr['iconColor'],
                     ),
                   ),
-                );
-        });
+                ),
+                subtitle: Padding(
+                  padding: EdgeInsets.all(
+                      Theme.of(context).textTheme.headline1.fontSize / 2),
+                  child: Icon(
+                    tileAttr['icon'],
+                    size: Theme.of(context).textTheme.headline1.fontSize,
+                    color: tileAttr['iconColor'],
+                  ),
+                ),
+              );
+      },
+    );
   }
 }
 

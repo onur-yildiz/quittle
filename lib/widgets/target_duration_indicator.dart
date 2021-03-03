@@ -102,36 +102,37 @@ class _TargetDurationIndicatorState extends State<TargetDurationIndicator> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: SleekCircularSlider(
-        appearance: CircularSliderAppearance(
-          infoProperties: InfoProperties(
-            bottomLabelText: targetValue.toString() + ' ' + targetUnit,
-            bottomLabelStyle: TextStyle(
-              color: Theme.of(context).hintColor,
-              fontWeight: FontWeight.bold,
-            ),
-            mainLabelStyle: TextStyle(
-              color: Theme.of(context).primaryColor,
-              fontSize: Theme.of(context).textTheme.headline5.fontSize,
-              fontWeight: FontWeight.bold,
-            ),
+    return SleekCircularSlider(
+      appearance: CircularSliderAppearance(
+        infoProperties: InfoProperties(
+          bottomLabelText: targetValue.toString() + ' ' + targetUnit,
+          bottomLabelStyle: TextStyle(
+            color: Theme.of(context).hintColor,
+            fontWeight: FontWeight.bold,
           ),
-          customWidths: CustomSliderWidths(
-            handlerSize: 0,
-            progressBarWidth: Theme.of(context).textTheme.bodyText1.fontSize,
-            trackWidth: Theme.of(context).textTheme.bodyText1.fontSize,
-          ),
-          customColors: CustomSliderColors(
-            hideShadow: true,
-            progressBarColor: Theme.of(context).accentColor,
-            trackColor: Theme.of(context).accentColor.withAlpha(100),
+          mainLabelStyle: TextStyle(
+            color: Theme.of(context).primaryColor,
+            fontSize: Theme.of(context).textTheme.headline5.fontSize,
+            fontWeight: FontWeight.bold,
           ),
         ),
-        min: 0,
-        max: 100,
-        initialValue: percentage * 100,
+        customWidths: CustomSliderWidths(
+          handlerSize: 0,
+          progressBarWidth: Theme.of(context).textTheme.bodyText1.fontSize,
+          trackWidth: Theme.of(context).textTheme.bodyText1.fontSize,
+        ),
+        customColors: CustomSliderColors(
+          hideShadow: true,
+          progressBarColors: [
+            Theme.of(context).accentColor,
+            Theme.of(context).accentColor.withOpacity(.5),
+          ],
+          trackColor: Theme.of(context).accentColor.withAlpha(100),
+        ),
       ),
+      min: 0,
+      max: 100,
+      initialValue: percentage * 100,
     );
   }
 }

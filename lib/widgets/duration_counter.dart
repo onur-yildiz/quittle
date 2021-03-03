@@ -17,7 +17,7 @@ class _DurationCounterState extends State<DurationCounter> {
   String durationAsString = '';
   Duration updatedDuration;
 
-  String printDuration(Duration duration) {
+  String durationString(Duration duration) {
     String twoDigits(int n) => n.toString().padLeft(2, '0');
     String twoDigitHours = twoDigits(duration.inHours.remainder(24));
     String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
@@ -28,13 +28,13 @@ class _DurationCounterState extends State<DurationCounter> {
   @override
   void initState() {
     updatedDuration = widget.duration;
-    durationAsString = printDuration(updatedDuration);
+    durationAsString = durationString(updatedDuration);
 
     Timer.periodic(Duration(seconds: 1), (timer) {
       if (mounted) {
         setState(() {
           updatedDuration = updatedDuration + Duration(seconds: 1);
-          durationAsString = printDuration(updatedDuration);
+          durationAsString = durationString(updatedDuration);
         });
       } else {
         timer.cancel();

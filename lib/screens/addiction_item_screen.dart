@@ -16,6 +16,7 @@ class AddictionItemScreen extends StatefulWidget {
 class _AddictionItemState extends State<AddictionItemScreen> {
   PersistentTabController _controller =
       PersistentTabController(initialIndex: 0);
+  final tabLength = 3;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +31,7 @@ class _AddictionItemState extends State<AddictionItemScreen> {
       ];
     }
 
-    List<PersistentBottomNavBarItem> _navBarsItems() {
+    List<PersistentBottomNavBarItem> _navBarItems() {
       return [
         PersistentBottomNavBarItem(
           icon: Icon(Icons.home),
@@ -60,38 +61,48 @@ class _AddictionItemState extends State<AddictionItemScreen> {
           overflow: TextOverflow.ellipsis,
         ),
       ),
-      body: PersistentTabView(
-        context,
-        controller: _controller,
-        screens: _buildScreens(),
-        items: _navBarsItems(),
-        confineInSafeArea: true,
-        backgroundColor: Colors.white,
-        handleAndroidBackButtonPress: false, //pop all or one by one
-        resizeToAvoidBottomInset:
-            true, // This needs to be true if you want to move up the screen when keyboard appears.
-        stateManagement: true,
-        hideNavigationBarWhenKeyboardShows:
-            true, // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument.
-        decoration: NavBarDecoration(
-          borderRadius: BorderRadius.circular(0.0),
-          colorBehindNavBar: Colors.white,
+      body: GestureDetector(
+        onHorizontalDragEnd: (details) {
+          if (details.primaryVelocity < -1500 &&
+              _controller.index < tabLength - 1) {
+            _controller.jumpToTab(_controller.index + 1);
+          } else if (details.primaryVelocity > 1500 && _controller.index > 0) {
+            _controller.jumpToTab(_controller.index - 1);
+          }
+        },
+        child: PersistentTabView(
+          context,
+          controller: _controller,
+          screens: _buildScreens(),
+          items: _navBarItems(),
+          confineInSafeArea: true,
+          backgroundColor: Colors.white,
+          handleAndroidBackButtonPress: false, //pop all or one by one
+          resizeToAvoidBottomInset:
+              true, // This needs to be true if you want to move up the screen when keyboard appears.
+          stateManagement: true,
+          hideNavigationBarWhenKeyboardShows:
+              true, // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument.
+          decoration: NavBarDecoration(
+            borderRadius: BorderRadius.circular(0.0),
+            colorBehindNavBar: Colors.white,
+          ),
+          popAllScreensOnTapOfSelectedTab: true,
+          popActionScreens: PopActionScreensType.all,
+          itemAnimationProperties: ItemAnimationProperties(
+            // Navigation Bar's items animation properties.
+            duration: Duration(milliseconds: 250),
+            curve: Curves.ease,
+          ),
+          screenTransitionAnimation: ScreenTransitionAnimation(
+            // Screen transition animation on change of selected tab.
+            animateTabTransition: true,
+            curve: Curves.ease,
+            duration: Duration(milliseconds: 250),
+          ),
+          navBarStyle: NavBarStyle
+              .style4, // Choose the nav bar style with this property.
         ),
-        popAllScreensOnTapOfSelectedTab: true,
-        popActionScreens: PopActionScreensType.all,
-        itemAnimationProperties: ItemAnimationProperties(
-          // Navigation Bar's items animation properties.
-          duration: Duration(milliseconds: 200),
-          curve: Curves.ease,
-        ),
-        screenTransitionAnimation: ScreenTransitionAnimation(
-          // Screen transition animation on change of selected tab.
-          animateTabTransition: true,
-          curve: Curves.ease,
-          duration: Duration(milliseconds: 200),
-        ),
-        navBarStyle:
-            NavBarStyle.style4, // Choose the nav bar style with this property.
       ),
     );
   }
