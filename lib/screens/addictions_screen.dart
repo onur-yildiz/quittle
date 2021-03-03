@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_quit_addiction_app/extensions/string_extension.dart';
-import 'package:flutter_quit_addiction_app/main.dart';
 import 'package:flutter_quit_addiction_app/providers/addictions_provider.dart';
 import 'package:flutter_quit_addiction_app/screens/create_addiction_screen.dart';
 import 'package:flutter_quit_addiction_app/widgets/addiction_item_card.dart';
@@ -32,17 +30,26 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
   @override
   Widget build(BuildContext context) {
     final local = AppLocalizations.of(context);
-    // final deviceSize = MediaQuery.of(context).size;
+    final deviceSize = MediaQuery.of(context).size;
     return Scaffold(
       key: _scaffoldKey,
-      floatingActionButton: FloatingActionButton(
-        heroTag: 'newAddiction',
-        onPressed: () {
-          Navigator.of(context).pushNamed(CreateAddictionScreen.routeName);
+      floatingActionButton: Consumer<AddictionsProvider>(
+        child: FloatingActionButton(
+          heroTag: 'newAddiction',
+          onPressed: () {
+            Navigator.of(context).pushNamed(CreateAddictionScreen.routeName);
+          },
+          backgroundColor: Theme.of(context).primaryColor,
+          tooltip: 'New',
+          child: Icon(Icons.add),
+        ),
+        builder: (_, addictionsData, child) {
+          return addictionsData.addictions.length == 0
+              ? SizedBox()
+              : SizedBox(
+                  child: child,
+                );
         },
-        backgroundColor: Theme.of(context).primaryColor,
-        tooltip: 'New',
-        child: Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: Builder(
@@ -90,25 +97,54 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
                           );
                         },
                       )
-                    : Material(
-                        type: MaterialType.canvas,
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.of(context)
-                                .pushNamed(CreateAddictionScreen.routeName);
-                          },
-                          child: Center(
-                            child: Icon(
-                              Icons.add,
-                              size: Theme.of(context)
-                                  .textTheme
-                                  .headline1
-                                  .fontSize,
-                              color: Theme.of(context).primaryColor,
+                    : Container(
+                        height: deviceSize.height,
+                        width: deviceSize.width,
+                        child: Center(
+                          child: SizedBox.fromSize(
+                            size: Size.square(deviceSize.width * .5),
+                            child: FloatingActionButton(
+                              heroTag: 'newAddiction',
+                              elevation: 0,
+                              backgroundColor: Theme.of(context).primaryColor,
+                              foregroundColor: Theme.of(context).canvasColor,
+                              splashColor: Theme.of(context).primaryColorLight,
+                              tooltip: 'New',
+                              child: Icon(
+                                Icons.add,
+                                size: Theme.of(context)
+                                    .textTheme
+                                    .headline1
+                                    .fontSize,
+                              ),
+                              onPressed: () {
+                                Navigator.of(context)
+                                    .pushNamed(CreateAddictionScreen.routeName);
+                              },
                             ),
                           ),
                         ),
                       ),
+
+                // Material(
+                //     type: MaterialType.canvas,
+                //     child: InkWell(
+                //       onTap: () {
+                //         Navigator.of(context)
+                //             .pushNamed(CreateAddictionScreen.routeName);
+                //       },
+                //       child: Center(
+                //         child: Icon(
+                //           Icons.add,
+                //           size: Theme.of(context)
+                //               .textTheme
+                //               .headline1
+                //               .fontSize,
+                //           color: Theme.of(context).primaryColor,
+                //         ),
+                //       ),
+                //     ),
+                //   ),
               ),
             );
           }
