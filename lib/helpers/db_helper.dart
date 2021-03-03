@@ -29,11 +29,15 @@ class DBHelper {
     );
   }
 
-  static Future<void> update(String table, String id, int count) async {
+  static Future<void> update(String table, String id, dynamic data) async {
     final db = await DBHelper.database();
     if (table == 'gifts') {
       return await db
-          .rawUpdate('UPDATE gifts SET count = ? WHERE id = ?', [count, id]);
+          .rawUpdate('UPDATE gifts SET count = ? WHERE id = ?', [data, id]);
+    }
+    if (table == 'addictions') {
+      return await db.rawUpdate(
+          'UPDATE addictions SET level = ? WHERE id = ?', [data, id]);
     }
   }
 
@@ -47,8 +51,11 @@ class DBHelper {
   static Future<List<Map<String, Object>>> getData(String table,
       [String id = '']) async {
     final db = await DBHelper.database();
-    if (table == 'addictions') {
+    if (table == 'addictions' && id == '') {
       return db.query(table);
+    }
+    if (table == 'addictions') {
+      return db.rawQuery('SELECT * FROM addictions WHERE id = ?', [id]);
     }
     if (table == 'settings') {
       return db.query(table);

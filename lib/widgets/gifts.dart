@@ -44,6 +44,8 @@ class _GiftsState extends State<Gifts> {
     });
   }
 
+// TODO FIX giftcard orders not saving and AddGiftButton reorderable by moving a GiftCard in its place
+
   @override
   void didChangeDependencies() {
     getTiles();

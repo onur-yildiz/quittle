@@ -46,7 +46,7 @@ class _AchievementsState extends State<Achievements> {
 
   Map<String, Object> _getTileAttr(int itemLevel) {
     final currentLevel = widget.data.level;
-    if (itemLevel <= currentLevel && currentLevel != 0) {
+    if (itemLevel <= currentLevel && currentLevel != -1) {
       return {
         'tileColor': Colors.green,
         'icon': Icons.check,
@@ -71,8 +71,8 @@ class _AchievementsState extends State<Achievements> {
     return ListView.builder(
         itemCount: widget.data.achievements.length,
         itemBuilder: (context, index) {
-          final tileAttr = _getTileAttr(index + 1);
-          return (widget.data.level == index)
+          final tileAttr = _getTileAttr(index);
+          return (widget.data.level + 1 == index)
               ? ListTile(
                   tileColor: tileAttr['tileColor'],
                   contentPadding: EdgeInsets.all(
@@ -146,7 +146,8 @@ class _AchievementsState extends State<Achievements> {
                         min: 0,
                         max: 100,
                         initialValue: (widget.data.abstinenceTime.inSeconds /
-                                widget.data.achievements[index].inSeconds) *
+                                    widget.data.achievements[index].inSeconds)
+                                .clamp(0.0, 1.0) *
                             100,
                       ),
                     ),

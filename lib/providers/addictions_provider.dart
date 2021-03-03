@@ -4,6 +4,7 @@ import 'package:flutter_quit_addiction_app/models/addiction.dart';
 import 'package:flutter_quit_addiction_app/models/gift.dart';
 import 'package:flutter_quit_addiction_app/models/personal_note.dart';
 import 'package:uuid/uuid.dart';
+import 'package:workmanager/workmanager.dart';
 
 class AddictionsProvider with ChangeNotifier {
   List<Addiction> _addictions = [];
@@ -39,6 +40,17 @@ class AddictionsProvider with ChangeNotifier {
       },
     );
     notifyListeners();
+
+    Workmanager.registerPeriodicTask(
+      data['id'],
+      'progress-notification',
+      inputData: {
+        'id': data['id'],
+      },
+      frequency: Duration(minutes: 15),
+      existingWorkPolicy: ExistingWorkPolicy.replace,
+    );
+
     return newAddiction;
   }
 
@@ -64,8 +76,20 @@ class AddictionsProvider with ChangeNotifier {
           personalNotes: [],
           gifts: [],
         );
+
         loadedAddictions.add(temp);
+
         _addictions = loadedAddictions;
+
+        Workmanager.registerPeriodicTask(
+          addiction['id'],
+          'progress-notification',
+          inputData: {
+            'id': addiction['id'],
+          },
+          frequency: Duration(minutes: 15),
+          existingWorkPolicy: ExistingWorkPolicy.replace,
+        );
       },
     );
     notifyListeners();

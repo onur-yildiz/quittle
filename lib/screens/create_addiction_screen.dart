@@ -9,6 +9,8 @@ import 'package:flutter_quit_addiction_app/models/addiction.dart'
     show getAchievementDurations;
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_quit_addiction_app/extensions/datetime_extension.dart';
+import 'package:flutter_quit_addiction_app/extensions/timeofday_extension.dart';
 
 class CreateAddictionScreen extends StatelessWidget {
   static const routeName = '/create-addiction';
@@ -53,8 +55,6 @@ class _AddictionCardState extends State<AddictionCard> {
   };
 
   void _selectDate(context, DateTime currentlyPicked) async {
-    timeOfDayDuration(TimeOfDay time) =>
-        Duration(hours: time.hour, minutes: time.minute);
     DateTime date = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -67,18 +67,22 @@ class _AddictionCardState extends State<AddictionCard> {
         initialTime: TimeOfDay.now(),
       );
       if (time != null) {
-        if (timeOfDayDuration(time).inSeconds <=
-            timeOfDayDuration(TimeOfDay.now()).inSeconds) {
-          date.add(timeOfDayDuration(time));
+        if (date.isSameDate(DateTime.now())) {
+          if (time.asDuration.inSeconds <=
+              TimeOfDay.now().asDuration.inSeconds) {
+            date = date.add(time.asDuration);
+          } else {
+            Scaffold.of(context)
+              ..removeCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(
+                  content: Text('Can\'t pick a future time.'), // todo localize
+                ),
+              );
+            date = date.add(TimeOfDay.now().asDuration);
+          }
         } else {
-          Scaffold.of(context)
-            ..removeCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                content: Text('Can\'t pick a future time.'), // todo localize
-              ),
-            );
-          date.add(timeOfDayDuration(TimeOfDay.now()));
+          date = date.add(time.asDuration);
         }
       } else {
         date = currentlyPicked;
@@ -86,9 +90,10 @@ class _AddictionCardState extends State<AddictionCard> {
     } else {
       date = currentlyPicked;
     }
+    debugPrint(date.toString());
     setState(() {
       addictionData['quit_date'] = date.toString();
-      int levelCount = 0;
+      int levelCount = -1;
       Duration quitDuration = DateTime.now().difference(date);
       for (Duration duration in getAchievementDurations) {
         if (quitDuration.inMicroseconds > duration.inMicroseconds) {

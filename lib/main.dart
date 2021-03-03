@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_quit_addiction_app/helpers/db_helper.dart';
+import 'package:flutter_quit_addiction_app/models/addiction.dart';
 import 'package:flutter_quit_addiction_app/screens/addiction_item_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -13,6 +14,8 @@ import 'package:flutter_quit_addiction_app/screens/create_addiction_screen.dart'
 import 'package:rxdart/subjects.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+import 'package:uuid/uuid.dart';
+import 'package:workmanager/workmanager.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -40,20 +43,24 @@ class ReceivedNotification {
 }
 
 String selectedNotificationPayload;
-String initialRoute;
+String _initialRoute;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Workmanager.initialize(
+    callbackDispatcher,
+    isInDebugMode: true,
+  );
 
   await _configureLocalTimeZone();
 
   final NotificationAppLaunchDetails notificationAppLaunchDetails =
       await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
 
-  initialRoute = AddictionsScreen.routeName;
+  _initialRoute = AddictionsScreen.routeName;
   if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {
     selectedNotificationPayload = notificationAppLaunchDetails.payload;
-    initialRoute = AddictionItemScreen.routeName;
+    _initialRoute = AddictionItemScreen.routeName;
   }
 
   const AndroidInitializationSettings initializationSettingsAndroid =
@@ -115,11 +122,10 @@ class MyApp extends StatelessWidget {
           hintColor: Colors.blueGrey[700],
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        initialRoute: initialRoute,
+        initialRoute: _initialRoute,
         // home: Builder(
         //   builder: (context) => FutureBuilder(
-        //     future: Provider.of<SettingsProvider>(context, listen: false)
-        //         .fetchSettings(),
+        //     future: startup(context),
         //     builder: (_, snapshot) => AddictionsScreen(),
         //   ),
         // ),
@@ -133,6 +139,45 @@ class MyApp extends StatelessWidget {
   }
 }
 
+// Future<void> startup(BuildContext context) async {
+//   await Provider.of<AddictionsProvider>(context).fetchAddictions();
+//   await Provider.of<SettingsProvider>(context, listen: false).fetchSettings();
+//   return Future.value(null);
+// }
+
+void callbackDispatcher() {
+  Workmanager.executeTask((taskName, inputData) async {
+    switch (taskName) {
+      case 'progress-notification':
+        final addictionData =
+            await DBHelper.getData('addictions', inputData['id']);
+        final addiction = Addiction(
+          id: addictionData[0]['id'],
+          name: addictionData[0]['name'],
+          quitDate: addictionData[0]['quit_date'],
+          consumptionType: addictionData[0]['consumption_type'],
+          dailyConsumption: addictionData[0]['daily_consumption'],
+          unitCost: addictionData[0]['unit_cost'],
+          level: addictionData[0]['level'],
+        );
+        final nextLevel = addiction.level;
+        if (addiction.abstinenceTime.inSeconds >=
+            getAchievementDurations[nextLevel].inSeconds) {
+          await DBHelper.update('addictions', addiction.id, nextLevel);
+          showProgressNotification(
+              addiction.name.toUpperCase(), 'You reached level $nextLevel!');
+        }
+        // if last achievement level, cancel
+        if (addiction.level == 8) {
+          Workmanager.cancelByUniqueName(addiction.id);
+        }
+        break;
+      default:
+    }
+    return Future.value(true);
+  });
+}
+
 Future<void> _configureLocalTimeZone() async {
   tz.initializeTimeZones();
   // final String timeZoneName = await platform.invokeMethod('getTimeZoneName');
@@ -140,25 +185,41 @@ Future<void> _configureLocalTimeZone() async {
   // tz.setLocalLocation(tz.getLocation(timeZoneName));
 }
 
-showProgressNotification() {
-  var androidDetails = AndroidNotificationDetails('quitAllProgress',
+void showProgressNotification(
+    String notificationTitle, String notificationBody) {
+  final androidDetails = AndroidNotificationDetails('quitAllProgress',
       'progressNotifications', 'quitAllProgressNotifications');
-  var genNotDetails = NotificationDetails(
+  final genNotDetails = NotificationDetails(
     android: androidDetails,
   );
-  var scheduledDate =
-      tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5));
-  flutterLocalNotificationsPlugin.zonedSchedule(
-    1,
-    'Progress',
-    'Progress Notification Body',
-    scheduledDate,
+  flutterLocalNotificationsPlugin.show(
+    2,
+    notificationTitle,
+    notificationBody,
     genNotDetails,
-    uiLocalNotificationDateInterpretation:
-        UILocalNotificationDateInterpretation.wallClockTime,
-    androidAllowWhileIdle: false,
   );
 }
+
+// void showProgressNotification(
+//     String notificationTitle, String notificationBody) {
+//   final androidDetails = AndroidNotificationDetails('quitAllProgress',
+//       'progressNotifications', 'quitAllProgressNotifications');
+//   final genNotDetails = NotificationDetails(
+//     android: androidDetails,
+//   );
+//   final scheduledDate =
+//       tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5));
+//   flutterLocalNotificationsPlugin.zonedSchedule(
+//     1,
+//     notificationTitle,
+//     notificationBody,
+//     scheduledDate,
+//     genNotDetails,
+//     uiLocalNotificationDateInterpretation:
+//         UILocalNotificationDateInterpretation.wallClockTime,
+//     androidAllowWhileIdle: false,
+//   );
+// }
 
 /*
 
