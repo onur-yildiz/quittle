@@ -27,7 +27,7 @@ class AddictionsProvider with ChangeNotifier {
     _addictions.add(newAddiction);
     print(newAddiction.level);
 
-    DBHelper.insert(
+    await DBHelper.insert(
       'addictions',
       {
         'id': data['id'],
@@ -95,16 +95,14 @@ class AddictionsProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void createNote(Map<String, dynamic> data, String id) {
+  void createNote(Map<String, dynamic> data, String id) async {
     final addiction = _addictions.firstWhere((addiction) => addiction.id == id);
     final newNote = PersonalNote(
       title: data['title'],
       text: data['text'],
       date: data['date'],
     );
-    addiction.personalNotes.add(newNote);
-
-    DBHelper.insert(
+    await DBHelper.insert(
       'personal_notes',
       {
         'id': id,
@@ -113,6 +111,7 @@ class AddictionsProvider with ChangeNotifier {
         'date': data['date'],
       },
     );
+    addiction.personalNotes.add(newNote);
     notifyListeners();
   }
 
@@ -136,7 +135,7 @@ class AddictionsProvider with ChangeNotifier {
     addiction.personalNotes = loadedNotes;
   }
 
-  void createGift(Map<String, dynamic> data, String id) {
+  void createGift(Map<String, dynamic> data, String id) async {
     final addiction = _addictions.firstWhere((addiction) => addiction.id == id);
     final giftId = Uuid().v1();
     final newGift = Gift(
@@ -144,10 +143,9 @@ class AddictionsProvider with ChangeNotifier {
       addictionId: id,
       name: data['name'],
       price: data['price'],
+      sortOrder: addiction.gifts.length,
     );
-    addiction.gifts.add(newGift);
-
-    DBHelper.insert(
+    await DBHelper.insert(
       'gifts',
       {
         'id': giftId,
@@ -155,9 +153,10 @@ class AddictionsProvider with ChangeNotifier {
         'name': data['name'],
         'price': data['price'],
         'count': 0,
-        'sortOrder': addiction.gifts.length,
+        'sort_order': addiction.gifts.length,
       },
     );
+    addiction.gifts.add(newGift);
     notifyListeners();
   }
 
@@ -185,6 +184,7 @@ class AddictionsProvider with ChangeNotifier {
           name: gift['name'],
           price: gift['price'],
           count: gift['count'],
+          sortOrder: gift['sort_order'],
         ),
       );
     });

@@ -22,7 +22,7 @@ class DBHelper {
 
   static Future<void> insert(String table, Map<String, Object> data) async {
     final db = await DBHelper.database();
-    db.insert(
+    return db.insert(
       table,
       data,
       conflictAlgorithm: ConflictAlgorithm.replace,
@@ -36,26 +36,35 @@ class DBHelper {
     dynamic data,
   ) async {
     final db = await DBHelper.database();
-    return await db
+    return db
         .rawUpdate('UPDATE $table SET $column = ? WHERE id = ?', [data, id]);
   }
 
-  static Future<void> updateWhere(
+  //? maybe a more generalized version of this function
+  static Future<void> switchGiftOrders(
     String table,
-    String updatingColumn,
-    dynamic updatingData,
-    String conditionColumn,
-    dynamic conditionData,
+    String column,
+    int oldIndex,
+    int newIndex,
   ) async {
     final db = await DBHelper.database();
-    return await db.rawUpdate(
-        'UPDATE $table SET $updatingColumn = ? WHERE $conditionColumn = ?',
-        [updatingData, conditionData]);
+    await db.rawUpdate(
+      'UPDATE $table SET $column = ? WHERE $column = ?',
+      [-1, oldIndex],
+    );
+    await db.rawUpdate(
+      'UPDATE $table SET $column = ? WHERE $column = ?',
+      [oldIndex, newIndex],
+    );
+    return db.rawUpdate(
+      'UPDATE $table SET $column = ? WHERE $column = ?',
+      [newIndex, -1],
+    );
   }
 
   static Future<void> delete(String table, String id) async {
     final db = await DBHelper.database();
-    db.rawDelete('DELETE FROM $table WHERE id = ?', [id]);
+    return db.rawDelete('DELETE FROM $table WHERE id = ?', [id]);
   }
 
   static Future<List<Map<String, Object>>> getData(

@@ -22,8 +22,8 @@ class SettingsProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void updateCurrency(String newCurrency) {
-    DBHelper.insert(
+  void updateCurrency(String newCurrency) async {
+    await DBHelper.insert(
       'settings',
       {'currency': newCurrency},
     );

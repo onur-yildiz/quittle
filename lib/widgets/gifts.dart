@@ -28,6 +28,7 @@ class _GiftsState extends State<Gifts> {
   void getTiles() async {
     await Provider.of<AddictionsProvider>(context).fetchGifts(widget.data.id);
     setState(() {
+      widget.data.gifts.sort((a, b) => a.sortOrder.compareTo(b.sortOrder));
       _tiles = widget.data.gifts
           .map<Widget>(
             (gift) => GiftCard(
@@ -45,8 +46,6 @@ class _GiftsState extends State<Gifts> {
     });
   }
 
-// TODO FIX giftcard orders not saving and AddGiftButton reorderable by moving a GiftCard in its place
-
   @override
   void didChangeDependencies() {
     getTiles();
@@ -60,22 +59,21 @@ class _GiftsState extends State<Gifts> {
     final currency =
         Provider.of<SettingsProvider>(context, listen: false).currency;
 
-    void _onReorder(int oldIndex, int newIndex) {
-      setState(() async {
+    void _onReorder(int oldIndex, int newIndex) async {
+      setState(() {
         if (_tiles.elementAt(oldIndex).runtimeType == AddGiftButton ||
             newIndex == _tiles.length - 1) {
           return;
         }
-        await DBHelper.updateWhere(
-          'gifts',
-          'sort_order',
-          newIndex,
-          'sort_order',
-          oldIndex,
-        );
         Widget row = _tiles.removeAt(oldIndex);
         _tiles.insert(newIndex, row);
       });
+      await DBHelper.switchGiftOrders(
+        'gifts',
+        'sort_order',
+        oldIndex,
+        newIndex,
+      );
     }
 
     return SingleChildScrollView(

@@ -14,7 +14,6 @@ import 'package:flutter_quit_addiction_app/screens/create_addiction_screen.dart'
 import 'package:rxdart/subjects.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
-import 'package:uuid/uuid.dart';
 import 'package:workmanager/workmanager.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -49,7 +48,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Workmanager.initialize(
     callbackDispatcher,
-    isInDebugMode: true,
   );
 
   await _configureLocalTimeZone();
