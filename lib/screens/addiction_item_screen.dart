@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quit_addiction_app/models/addiction_item_screen_args.dart';
 import 'package:flutter_quit_addiction_app/widgets/addiction_item.dart';
 import 'package:flutter_quit_addiction_app/widgets/gifts.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:flutter_quit_addiction_app/widgets/achievements.dart';
 
@@ -34,19 +35,19 @@ class _AddictionItemState extends State<AddictionItemScreen> {
     List<PersistentBottomNavBarItem> _navBarItems() {
       return [
         PersistentBottomNavBarItem(
-          icon: Icon(Icons.home),
-          title: ("Home"),
+          icon: FaIcon(FontAwesomeIcons.infoCircle),
+          title: ("Overview"),
           activeColor: Theme.of(context).primaryColor,
           inactiveColor: Theme.of(context).hintColor,
         ),
         PersistentBottomNavBarItem(
-          icon: Icon(Icons.wallet_giftcard),
-          title: ("Gifts"),
+          icon: FaIcon(FontAwesomeIcons.gifts),
+          title: ("Rewards"),
           activeColor: Theme.of(context).primaryColor,
           inactiveColor: Theme.of(context).hintColor,
         ),
         PersistentBottomNavBarItem(
-          icon: Icon(Icons.fact_check_rounded),
+          icon: FaIcon(FontAwesomeIcons.trophy),
           title: ("Achievements"),
           activeColor: Theme.of(context).primaryColor,
           inactiveColor: Theme.of(context).hintColor,
