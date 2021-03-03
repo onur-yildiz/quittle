@@ -94,54 +94,37 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
                           );
                         },
                       )
-                    : Container(
-                        height: deviceSize.height,
-                        width: deviceSize.width,
-                        child: Center(
-                          child: SizedBox.fromSize(
-                            size: Size.square(deviceSize.width * .5),
-                            child: FloatingActionButton(
-                              heroTag: 'newAddiction',
-                              elevation: 0,
-                              backgroundColor: Theme.of(context).primaryColor,
-                              foregroundColor: Theme.of(context).canvasColor,
-                              splashColor: Theme.of(context).primaryColorLight,
-                              tooltip: 'New',
-                              child: Icon(
-                                Icons.add,
-                                size: Theme.of(context)
-                                    .textTheme
-                                    .headline1
-                                    .fontSize,
+                    : InkWell(
+                        onTap: () {
+                          Navigator.of(context)
+                              .pushNamed(CreateAddictionScreen.routeName);
+                        },
+                        child: Container(
+                          height: deviceSize.height,
+                          width: deviceSize.width,
+                          child: Center(
+                            child: SizedBox.fromSize(
+                              size: Size.square(deviceSize.width * .5),
+                              child: FloatingActionButton(
+                                heroTag: 'newAddiction',
+                                elevation: 0,
+                                backgroundColor: Theme.of(context).primaryColor,
+                                foregroundColor: Theme.of(context).canvasColor,
+                                splashColor:
+                                    Theme.of(context).primaryColorLight,
+                                child: Icon(
+                                  Icons.add,
+                                  size: Theme.of(context)
+                                      .textTheme
+                                      .headline1
+                                      .fontSize,
+                                ),
+                                onPressed: null,
                               ),
-                              onPressed: () {
-                                Navigator.of(context)
-                                    .pushNamed(CreateAddictionScreen.routeName);
-                              },
                             ),
                           ),
                         ),
                       ),
-
-                // Material(
-                //     type: MaterialType.canvas,
-                //     child: InkWell(
-                //       onTap: () {
-                //         Navigator.of(context)
-                //             .pushNamed(CreateAddictionScreen.routeName);
-                //       },
-                //       child: Center(
-                //         child: Icon(
-                //           Icons.add,
-                //           size: Theme.of(context)
-                //               .textTheme
-                //               .headline1
-                //               .fontSize,
-                //           color: Theme.of(context).primaryColor,
-                //         ),
-                //       ),
-                //     ),
-                //   ),
               ),
             );
           }
