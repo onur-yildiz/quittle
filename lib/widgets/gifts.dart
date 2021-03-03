@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_quit_addiction_app/extensions/string_extension.dart';
+import 'package:flutter_quit_addiction_app/helpers/db_helper.dart';
 import 'package:flutter_quit_addiction_app/models/addiction.dart';
 import 'package:flutter_quit_addiction_app/models/gift.dart';
 import 'package:flutter_quit_addiction_app/providers/addictions_provider.dart';
@@ -60,10 +61,18 @@ class _GiftsState extends State<Gifts> {
         Provider.of<SettingsProvider>(context, listen: false).currency;
 
     void _onReorder(int oldIndex, int newIndex) {
-      setState(() {
-        if (_tiles.elementAt(oldIndex).runtimeType == AddGiftButton) {
+      setState(() async {
+        if (_tiles.elementAt(oldIndex).runtimeType == AddGiftButton ||
+            newIndex == _tiles.length - 1) {
           return;
         }
+        await DBHelper.updateWhere(
+          'gifts',
+          'sort_order',
+          newIndex,
+          'sort_order',
+          oldIndex,
+        );
         Widget row = _tiles.removeAt(oldIndex);
         _tiles.insert(newIndex, row);
       });

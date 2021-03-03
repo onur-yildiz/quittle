@@ -119,7 +119,11 @@ class AddictionsProvider with ChangeNotifier {
   Future<void> fetchNotes(String id) async {
     final List<PersonalNote> loadedNotes = [];
     final addiction = _addictions.firstWhere((addiction) => addiction.id == id);
-    final notes = await DBHelper.getData('personal_notes', id);
+    final notes = await DBHelper.getData(
+      'personal_notes',
+      'id',
+      id,
+    );
     notes.forEach((note) {
       loadedNotes.add(
         PersonalNote(
@@ -147,10 +151,11 @@ class AddictionsProvider with ChangeNotifier {
       'gifts',
       {
         'id': giftId,
-        'addictionId': id,
+        'addiction_id': id,
         'name': data['name'],
         'price': data['price'],
         'count': 0,
+        'sortOrder': addiction.gifts.length,
       },
     );
     notifyListeners();
@@ -167,12 +172,16 @@ class AddictionsProvider with ChangeNotifier {
   Future<void> fetchGifts(String id) async {
     final List<Gift> loadedGifts = [];
     final addiction = _addictions.firstWhere((addiction) => addiction.id == id);
-    final gifts = await DBHelper.getData('gifts', id);
+    final gifts = await DBHelper.getData(
+      'gifts',
+      'addiction_id',
+      id,
+    );
     gifts.forEach((gift) {
       loadedGifts.add(
         Gift(
           id: gift['id'],
-          addictionId: gift['addictionId'],
+          addictionId: gift['addiction_id'],
           name: gift['name'],
           price: gift['price'],
           count: gift['count'],
@@ -187,6 +196,7 @@ class AddictionsProvider with ChangeNotifier {
     gift.count = gift.count + 1;
     await DBHelper.update(
       'gifts',
+      'count',
       gift.id,
       gift.count,
     );

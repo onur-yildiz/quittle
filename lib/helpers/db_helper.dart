@@ -9,12 +9,12 @@ class DBHelper {
       path.join(dbPath, 'user.db'),
       onCreate: (db, version) async {
         await db.execute(
-            'CREATE TABLE addictions(id TEXT PRIMARY KEY, name TEXT, quit_date TEXT, consumption_type INTEGER, daily_consumption REAL, unit_cost REAL, level INT)');
+            'CREATE TABLE addictions(id TEXT PRIMARY KEY, name TEXT, quit_date TEXT, consumption_type INTEGER, daily_consumption REAL, unit_cost REAL, level INTEGER)');
         await db.execute('CREATE TABLE settings(currency TEXT)');
         await db.execute(
             'CREATE TABLE personal_notes(id TEXT, title TEXT, text TEXT, date TEXT)');
         await db.execute(
-            'CREATE TABLE gifts(id TEXT PRIMARY KEY, addictionId TEXT, name TEXT, price REAL, count INTEGER)');
+            'CREATE TABLE gifts(id TEXT PRIMARY KEY, addiction_id TEXT, name TEXT, price REAL, count INTEGER, sort_order INTEGER)');
       },
       version: 1,
     );
@@ -29,43 +29,44 @@ class DBHelper {
     );
   }
 
-  static Future<void> update(String table, String id, dynamic data) async {
+  static Future<void> update(
+    String table,
+    String column,
+    String id,
+    dynamic data,
+  ) async {
     final db = await DBHelper.database();
-    if (table == 'gifts') {
-      return await db
-          .rawUpdate('UPDATE gifts SET count = ? WHERE id = ?', [data, id]);
-    }
-    if (table == 'addictions') {
-      return await db.rawUpdate(
-          'UPDATE addictions SET level = ? WHERE id = ?', [data, id]);
-    }
+    return await db
+        .rawUpdate('UPDATE $table SET $column = ? WHERE id = ?', [data, id]);
+  }
+
+  static Future<void> updateWhere(
+    String table,
+    String updatingColumn,
+    dynamic updatingData,
+    String conditionColumn,
+    dynamic conditionData,
+  ) async {
+    final db = await DBHelper.database();
+    return await db.rawUpdate(
+        'UPDATE $table SET $updatingColumn = ? WHERE $conditionColumn = ?',
+        [updatingData, conditionData]);
   }
 
   static Future<void> delete(String table, String id) async {
     final db = await DBHelper.database();
-    if (table == 'gifts') {
-      db.rawDelete('DELETE FROM gifts WHERE id = ?', [id]);
-    }
+    db.rawDelete('DELETE FROM $table WHERE id = ?', [id]);
   }
 
-  static Future<List<Map<String, Object>>> getData(String table,
-      [String id = '']) async {
+  static Future<List<Map<String, Object>>> getData(
+    String table, [
+    String column = '',
+    String id = '',
+  ]) async {
     final db = await DBHelper.database();
-    if (table == 'addictions' && id == '') {
+    if (id == '' || column == '') {
       return db.query(table);
     }
-    if (table == 'addictions') {
-      return db.rawQuery('SELECT * FROM addictions WHERE id = ?', [id]);
-    }
-    if (table == 'settings') {
-      return db.query(table);
-    }
-    if (table == 'personal_notes') {
-      return db.rawQuery('SELECT * FROM personal_notes WHERE id = ?', [id]);
-    }
-    if (table == 'gifts') {
-      return db.rawQuery('SELECT * FROM gifts WHERE addictionId = ?', [id]);
-    }
-    return null;
+    return db.rawQuery('SELECT * FROM $table WHERE $column = ?', [id]);
   }
 }

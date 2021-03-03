@@ -150,7 +150,7 @@ void callbackDispatcher() {
     switch (taskName) {
       case 'progress-notification':
         final addictionData =
-            await DBHelper.getData('addictions', inputData['id']);
+            await DBHelper.getData('addictions', 'id', inputData['id']);
         final addiction = Addiction(
           id: addictionData[0]['id'],
           name: addictionData[0]['name'],
@@ -163,7 +163,12 @@ void callbackDispatcher() {
         final nextLevel = addiction.level;
         if (addiction.abstinenceTime.inSeconds >=
             getAchievementDurations[nextLevel].inSeconds) {
-          await DBHelper.update('addictions', addiction.id, nextLevel);
+          await DBHelper.update(
+            'addictions',
+            'level',
+            addiction.id,
+            nextLevel,
+          );
           showProgressNotification(
               addiction.name.toUpperCase(), 'You reached level $nextLevel!');
         }
