@@ -83,7 +83,6 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
                 },
                 child: addictionsData.addictions.length > 0
                     ? ListView.builder(
-                        physics: BouncingScrollPhysics(),
                         itemCount: addictionsData.addictions.length,
                         itemBuilder: (ctx, index) {
                           return AddictionItem(
