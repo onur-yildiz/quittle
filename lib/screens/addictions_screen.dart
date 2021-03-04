@@ -1,21 +1,15 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:quittle/extensions/string_extension.dart';
-import 'package:quittle/main.dart';
 import 'package:quittle/models/addiction.dart';
 import 'package:quittle/providers/addictions_provider.dart';
 import 'package:quittle/providers/settings_provider.dart';
 import 'package:quittle/screens/create_addiction_screen.dart';
 import 'package:quittle/util/achievement_constants.dart';
-import 'package:quittle/util/quotes_constants.dart';
 import 'package:quittle/widgets/addiction_item_card.dart';
 import 'package:quittle/widgets/settings_view.dart';
 import 'package:provider/provider.dart';
 import 'package:workmanager/workmanager.dart';
-import 'package:timezone/timezone.dart' as tz;
 
 class AddictionsScreen extends StatefulWidget {
   static const routeName = '/addictions';
