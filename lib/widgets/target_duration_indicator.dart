@@ -70,7 +70,7 @@ class _TargetDurationIndicatorState extends State<TargetDurationIndicator> {
         percentage = time.inDays / (360 * targetValue);
       }
     }
-  } // todo: do better, can be better
+  } // TODO: do better, can be better
 
   @override
   void initState() {

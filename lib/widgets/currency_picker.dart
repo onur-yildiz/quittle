@@ -82,7 +82,7 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
                       flex: 3,
                       fit: FlexFit.tight,
                       child: Text(
-                        _currencies[index]['name'], // todo localization
+                        _currencies[index]['name'], // TODO localization
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
