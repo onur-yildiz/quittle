@@ -12,10 +12,10 @@ import 'package:provider/provider.dart';
 import 'package:reorderables/reorderables.dart';
 
 class Gifts extends StatefulWidget {
-  final Addiction data;
+  final String id;
 
   Gifts({
-    this.data,
+    this.id,
   });
 
   @override
@@ -25,31 +25,21 @@ class Gifts extends StatefulWidget {
 class _GiftsState extends State<Gifts> {
   List<Widget> _tiles;
 
-  void getTiles() async {
-    await Provider.of<AddictionsProvider>(context).fetchGifts(widget.data.id);
-    setState(() {
-      widget.data.gifts.sort((a, b) => a.sortOrder.compareTo(b.sortOrder));
-      _tiles = widget.data.gifts
-          .map<Widget>(
-            (gift) => GiftCard(
-              gift: gift,
-              availableMoney: widget.data.availableMoney,
-              dailyGain: (widget.data.dailyConsumption * widget.data.unitCost),
+  List<Widget> getTiles(Addiction data) {
+    return data.gifts
+        .map<Widget>(
+          (gift) => GiftCard(
+            gift: gift,
+            availableMoney: data.availableMoney,
+            dailyGain: (data.dailyConsumption * data.unitCost),
+          ),
+        )
+        .toList()
+          ..add(
+            AddGiftButton(
+              id: data.id,
             ),
-          )
-          .toList()
-            ..add(
-              AddGiftButton(
-                id: widget.data.id,
-              ),
-            );
-    });
-  }
-
-  @override
-  void didChangeDependencies() {
-    getTiles();
-    super.didChangeDependencies();
+          );
   }
 
   @override
@@ -60,14 +50,12 @@ class _GiftsState extends State<Gifts> {
         Provider.of<SettingsProvider>(context, listen: false).currency;
 
     void _onReorder(int oldIndex, int newIndex) async {
-      setState(() {
-        if (_tiles.elementAt(oldIndex).runtimeType == AddGiftButton ||
-            newIndex == _tiles.length - 1) {
-          return;
-        }
-        Widget row = _tiles.removeAt(oldIndex);
-        _tiles.insert(newIndex, row);
-      });
+      if (_tiles.elementAt(oldIndex).runtimeType == AddGiftButton ||
+          newIndex == _tiles.length - 1) {
+        return;
+      }
+      Widget row = _tiles.removeAt(oldIndex);
+      _tiles.insert(newIndex, row);
       await DBHelper.switchGiftOrders(
         'gifts',
         'sort_order',
@@ -78,60 +66,57 @@ class _GiftsState extends State<Gifts> {
 
     return SingleChildScrollView(
       child: FutureBuilder(
-        future:
-            Provider.of<AddictionsProvider>(context).fetchGifts(widget.data.id),
-        builder: (_, snapshot) => snapshot.connectionState ==
-                ConnectionState.waiting
-            ? Center(
-                child: CircularProgressIndicator(),
-              )
-            : Consumer<AddictionsProvider>(builder: (_, addictionData, _ch) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: ReorderableWrap(
-                    direction: Axis.horizontal,
-                    scrollDirection: Axis.vertical,
-                    alignment: WrapAlignment.start,
-                    padding: EdgeInsets.symmetric(
-                      horizontal: deviceSize.width * .02,
+        future: Provider.of<AddictionsProvider>(context).fetchGifts(widget.id),
+        builder: (_, snapshot) =>
+            Consumer<AddictionsProvider>(builder: (_, addictionsData, _ch) {
+          final addictionData = addictionsData.addictions
+              .firstWhere((addiction) => addiction.id == widget.id);
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: ReorderableWrap(
+              direction: Axis.horizontal,
+              scrollDirection: Axis.vertical,
+              alignment: WrapAlignment.start,
+              padding: EdgeInsets.symmetric(
+                horizontal: deviceSize.width * .02,
+              ),
+              maxMainAxisCount: 2,
+              spacing: deviceSize.width * .0399,
+              runSpacing: deviceSize.width * .04,
+              children: getTiles(addictionData),
+              onReorder: _onReorder,
+              needsLongPressDraggable: true,
+              header: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      local.available.capitalizeWords() +
+                          ': ' +
+                          NumberFormat.simpleCurrency(
+                            name: currency,
+                          ).format(addictionData.availableMoney),
                     ),
-                    maxMainAxisCount: 2,
-                    spacing: deviceSize.width * .0399,
-                    runSpacing: deviceSize.width * .04,
-                    children: _tiles,
-                    onReorder: _onReorder,
-                    needsLongPressDraggable: true,
-                    header: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            local.available.capitalizeWords() +
-                                ': ' +
-                                NumberFormat.simpleCurrency(
-                                  name: currency,
-                                ).format(widget.data.availableMoney),
-                          ),
-                          Text(
-                            local.spent.capitalizeWords() +
-                                ': ' +
-                                NumberFormat.simpleCurrency(
-                                  name: currency,
-                                ).format(widget.data.totalSpent),
-                          ),
-                        ],
-                      ),
+                    Text(
+                      local.spent.capitalizeWords() +
+                          ': ' +
+                          NumberFormat.simpleCurrency(
+                            name: currency,
+                          ).format(addictionData.totalSpent),
                     ),
-                  ),
-                );
-              }),
+                  ],
+                ),
+              ),
+            ),
+          );
+        }),
       ),
     );
   }
 }
 
-class GiftCard extends StatefulWidget {
+class GiftCard extends StatelessWidget {
   const GiftCard({
     Key key,
     @required this.gift,
@@ -144,11 +129,6 @@ class GiftCard extends StatefulWidget {
   final double dailyGain;
 
   @override
-  _GiftCardState createState() => _GiftCardState();
-}
-
-class _GiftCardState extends State<GiftCard> {
-  @override
   Widget build(BuildContext context) {
     final local = AppLocalizations.of(context);
     final materialLocal = MaterialLocalizations.of(context);
@@ -157,14 +137,11 @@ class _GiftCardState extends State<GiftCard> {
         Provider.of<SettingsProvider>(context, listen: false).currency;
     final giftPrice = NumberFormat.compactSimpleCurrency(
       name: currency,
-    ).format(widget.gift.price);
-    final daysLeft =
-        ((widget.gift.price - widget.availableMoney) / widget.dailyGain);
+    ).format(gift.price);
+    final daysLeft = ((gift.price - availableMoney) / dailyGain);
     final daysLeftClamped = daysLeft.clamp(0, 365);
-    final percentage =
-        (widget.availableMoney / widget.gift.price).clamp(0.0, 1.0);
+    final percentage = (availableMoney / gift.price).clamp(0.0, 1.0);
 
-// TODO not showing when first adding
     _deleteDialog() {
       showDialog(
         context: context,
@@ -187,7 +164,7 @@ class _GiftCardState extends State<GiftCard> {
             TextButton(
               onPressed: () {
                 Provider.of<AddictionsProvider>(context, listen: false)
-                    .deleteGift(widget.gift);
+                    .deleteGift(gift);
                 Navigator.of(context).pop();
               },
               child: Text(
@@ -220,7 +197,7 @@ class _GiftCardState extends State<GiftCard> {
                 builder: (context) => new AlertDialog(
                   title: Text(
                     local
-                        .purchaseGiftMsg(giftPrice, widget.gift.name)
+                        .purchaseGiftMsg(giftPrice, gift.name)
                         .capitalizeFirstLetter(),
                   ), //'Purchase \"${widget.gift.name}\" for $giftPrice'
                   actions: [
@@ -234,12 +211,9 @@ class _GiftCardState extends State<GiftCard> {
                     ),
                     TextButton(
                       onPressed: () {
-                        setState(() {
-                          Provider.of<AddictionsProvider>(context,
-                                  listen: false)
-                              .buyGift(widget.gift);
-                          Navigator.of(context).pop();
-                        });
+                        Provider.of<AddictionsProvider>(context, listen: false)
+                            .buyGift(gift);
+                        Navigator.of(context).pop();
                       },
                       child: Text(
                         materialLocal.okButtonLabel,
@@ -258,7 +232,7 @@ class _GiftCardState extends State<GiftCard> {
                       flex: 3,
                       fit: FlexFit.tight,
                       child: Text(
-                        widget.gift.name,
+                        gift.name,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Theme.of(context).hintColor,
@@ -270,7 +244,7 @@ class _GiftCardState extends State<GiftCard> {
                       fit: FlexFit.tight,
                       child: Center(
                         child: Text(
-                          widget.gift.count.toString(),
+                          gift.count.toString(),
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Theme.of(context).hintColor,
@@ -327,8 +301,7 @@ class _GiftCardState extends State<GiftCard> {
                             ),
                           ),
                           Text(
-                            ((widget.availableMoney / widget.gift.price)
-                                            .clamp(0.0, 1.0) *
+                            ((availableMoney / gift.price).clamp(0.0, 1.0) *
                                         100)
                                     .toStringAsFixed(0) +
                                 '%',
