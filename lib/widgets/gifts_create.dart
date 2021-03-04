@@ -55,7 +55,6 @@ class _CreateGiftNoteState extends State<CreateGift> {
   Widget build(BuildContext context) {
     final local = AppLocalizations.of(context);
     final inputBackgroundColor = Theme.of(context).canvasColor;
-    final viewInsets = MediaQuery.of(context).viewInsets;
     final buttonHeight = Theme.of(context).buttonTheme.height * 2;
 
     return DefaultTextStyle(
