@@ -29,8 +29,8 @@ class _AddictionItemState extends State<AddictionItemScreen> {
       return [
         AddictionItem(args: args),
         Gifts(data: args.data),
-        // Achievements(data: args.data),
-        Playground(),
+        Achievements(data: args.data),
+        // Playground(),
       ];
     }
 

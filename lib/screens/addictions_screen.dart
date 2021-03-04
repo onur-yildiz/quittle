@@ -99,6 +99,7 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
                           Navigator.of(context)
                               .pushNamed(CreateAddictionScreen.routeName);
                         },
+                        splashColor: Theme.of(context).accentColor,
                         child: Container(
                           height: deviceSize.height,
                           width: deviceSize.width,
@@ -110,8 +111,6 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
                                 elevation: 0,
                                 backgroundColor: Theme.of(context).primaryColor,
                                 foregroundColor: Theme.of(context).canvasColor,
-                                splashColor:
-                                    Theme.of(context).primaryColorLight,
                                 child: Icon(
                                   Icons.add,
                                   size: Theme.of(context)

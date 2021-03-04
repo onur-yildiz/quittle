@@ -118,101 +118,104 @@ class _SettingsViewState extends State<SettingsView> {
                       ],
                     ),
                     Expanded(
-                      child: Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                local.appName.toUpperCase(),
-                                style: TextStyle(
-                                  color: Theme.of(context).primaryColor,
-                                  fontWeight: FontWeight.bold,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Divider(),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  local.appName.toUpperCase(),
+                                  style: TextStyle(
+                                    color: Theme.of(context).primaryColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                              ),
-                              Row(
-                                children: [
-                                  IconButton(
-                                    icon: FaIcon(
-                                      FontAwesomeIcons.infoCircle,
-                                      color: Theme.of(context).primaryColor,
-                                    ),
-                                    tooltip: 'Licenses',
-                                    onPressed: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) => AboutDialog(
-                                          applicationName: local.appName
-                                              .capitalizeFirstLetter(),
-                                          applicationIcon: SizedBox.fromSize(
-                                            size: Size.square(16.0),
-                                            child: Image.asset(
-                                                'assets/images/font_awesome_chain.png'),
+                                Row(
+                                  children: [
+                                    IconButton(
+                                      icon: FaIcon(
+                                        FontAwesomeIcons.infoCircle,
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                      tooltip: 'Licenses',
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) => AboutDialog(
+                                            applicationName: local.appName
+                                                .capitalizeFirstLetter(),
+                                            applicationIcon: SizedBox.fromSize(
+                                              size: Size.square(16.0),
+                                              child: Image.asset(
+                                                  'assets/images/font_awesome_chain.png'),
+                                            ),
+                                            applicationVersion: '1.0.0+1',
+                                            children: [
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.stretch,
+                                                children: [
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      _launchURL(
+                                                          'https://fontawesome.com/license/free');
+                                                    },
+                                                    child: Text(
+                                                      'Font Awesome Free License',
+                                                    ),
+                                                  ),
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      _launchURL(
+                                                          'https://fontawesome.com/icons/link?style=solid');
+                                                    },
+                                                    child: Text(
+                                                      'App Icon',
+                                                    ),
+                                                  ),
+                                                ],
+                                              )
+                                            ],
+                                            applicationLegalese:
+                                                'App icon is a modified version of font awesome link icon',
+                                            // applicationIcon: ,
                                           ),
-                                          applicationVersion: 'v0.8',
-                                          children: [
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.stretch,
-                                              children: [
-                                                TextButton(
-                                                  onPressed: () {
-                                                    _launchURL(
-                                                        'https://fontawesome.com/license/free');
-                                                  },
-                                                  child: Text(
-                                                    'Font Awesome Free License',
-                                                  ),
-                                                ),
-                                                TextButton(
-                                                  onPressed: () {
-                                                    _launchURL(
-                                                        'https://fontawesome.com/icons/link?style=solid');
-                                                  },
-                                                  child: Text(
-                                                    'App Icon',
-                                                  ),
-                                                ),
-                                              ],
-                                            )
-                                          ],
-                                          applicationLegalese:
-                                              'App icon is a modified version of font awesome link icon',
-                                          // applicationIcon: ,
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                  IconButton(
-                                    icon: FaIcon(
-                                      FontAwesomeIcons.twitter,
-                                      color: Color.fromRGBO(29, 161, 242, 1),
+                                        );
+                                      },
                                     ),
-                                    tooltip: 'Twitter',
-                                    onPressed: () {
-                                      _launchURL(
-                                          'https://twitter.com/onur_ldz');
-                                    },
-                                  ),
-                                  IconButton(
-                                    icon: FaIcon(
-                                      FontAwesomeIcons.github,
+                                    IconButton(
+                                      icon: FaIcon(
+                                        FontAwesomeIcons.twitter,
+                                        color: Color.fromRGBO(29, 161, 242, 1),
+                                      ),
+                                      tooltip: 'Twitter',
+                                      onPressed: () {
+                                        _launchURL(
+                                            'https://twitter.com/onur_ldz');
+                                      },
                                     ),
-                                    tooltip: 'GitHub',
-                                    onPressed: () {
-                                      _launchURL(
-                                          'https://github.com/onur-yildiz');
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+                                    IconButton(
+                                      icon: FaIcon(
+                                        FontAwesomeIcons.github,
+                                      ),
+                                      tooltip: 'GitHub',
+                                      onPressed: () {
+                                        _launchURL(
+                                            'https://github.com/onur-yildiz');
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
