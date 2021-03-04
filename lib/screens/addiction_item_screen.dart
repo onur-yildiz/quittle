@@ -65,10 +65,10 @@ class _AddictionItemState extends State<AddictionItemScreen> {
       ),
       body: GestureDetector(
         onHorizontalDragEnd: (details) {
-          if (details.primaryVelocity < -1500 &&
+          if (details.primaryVelocity < -1200 &&
               _controller.index < tabLength - 1) {
             _controller.jumpToTab(_controller.index + 1);
-          } else if (details.primaryVelocity > 1500 && _controller.index > 0) {
+          } else if (details.primaryVelocity > 1200 && _controller.index > 0) {
             _controller.jumpToTab(_controller.index - 1);
           }
         },
@@ -79,7 +79,7 @@ class _AddictionItemState extends State<AddictionItemScreen> {
           items: _navBarItems(),
           confineInSafeArea: true,
           backgroundColor: Colors.white,
-          handleAndroidBackButtonPress: false, //pop all or one by one
+          handleAndroidBackButtonPress: true, //pop all or one by one
           resizeToAvoidBottomInset:
               true, // This needs to be true if you want to move up the screen when keyboard appears.
           stateManagement: true,

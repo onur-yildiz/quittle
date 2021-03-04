@@ -25,8 +25,8 @@ class Gifts extends StatefulWidget {
 class _GiftsState extends State<Gifts> {
   List<Widget> _tiles;
 
-  List<Widget> getTiles(Addiction data) {
-    return data.gifts
+  List<Widget> _getTiles(Addiction data) {
+    _tiles = data.gifts
         .map<Widget>(
           (gift) => GiftCard(
             gift: gift,
@@ -40,6 +40,22 @@ class _GiftsState extends State<Gifts> {
               id: data.id,
             ),
           );
+    return _tiles;
+  }
+
+  void _onReorder(int oldIndex, int newIndex) async {
+    if (_tiles.elementAt(oldIndex).runtimeType == AddGiftButton ||
+        newIndex == _tiles.length - 1) {
+      return;
+    }
+    Widget row = _tiles.removeAt(oldIndex);
+    _tiles.insert(newIndex, row);
+    await DBHelper.switchGiftOrders(
+      'gifts',
+      'sort_order',
+      oldIndex,
+      newIndex,
+    );
   }
 
   @override
@@ -49,68 +65,58 @@ class _GiftsState extends State<Gifts> {
     final currency =
         Provider.of<SettingsProvider>(context, listen: false).currency;
 
-    void _onReorder(int oldIndex, int newIndex) async {
-      if (_tiles.elementAt(oldIndex).runtimeType == AddGiftButton ||
-          newIndex == _tiles.length - 1) {
-        return;
-      }
-      Widget row = _tiles.removeAt(oldIndex);
-      _tiles.insert(newIndex, row);
-      await DBHelper.switchGiftOrders(
-        'gifts',
-        'sort_order',
-        oldIndex,
-        newIndex,
-      );
-    }
-
     return SingleChildScrollView(
       child: FutureBuilder(
         future: Provider.of<AddictionsProvider>(context).fetchGifts(widget.id),
-        builder: (_, snapshot) =>
-            Consumer<AddictionsProvider>(builder: (_, addictionsData, _ch) {
-          final addictionData = addictionsData.addictions
-              .firstWhere((addiction) => addiction.id == widget.id);
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
-            child: ReorderableWrap(
-              direction: Axis.horizontal,
-              scrollDirection: Axis.vertical,
-              alignment: WrapAlignment.start,
-              padding: EdgeInsets.symmetric(
-                horizontal: deviceSize.width * .02,
-              ),
-              maxMainAxisCount: 2,
-              spacing: deviceSize.width * .0399,
-              runSpacing: deviceSize.width * .04,
-              children: getTiles(addictionData),
-              onReorder: _onReorder,
-              needsLongPressDraggable: true,
-              header: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      local.available.capitalizeWords() +
-                          ': ' +
-                          NumberFormat.simpleCurrency(
-                            name: currency,
-                          ).format(addictionData.availableMoney),
-                    ),
-                    Text(
-                      local.spent.capitalizeWords() +
-                          ': ' +
-                          NumberFormat.simpleCurrency(
-                            name: currency,
-                          ).format(addictionData.totalSpent),
-                    ),
-                  ],
+        builder: (_, snapshot) => snapshot.error != null
+            ? Center(
+                child: Text(
+                  local.genericErrorMessage.capitalizeFirstLetter(),
                 ),
-              ),
-            ),
-          );
-        }),
+              )
+            : Consumer<AddictionsProvider>(builder: (_, addictionsData, _ch) {
+                final addictionData = addictionsData.addictions
+                    .firstWhere((addiction) => addiction.id == widget.id);
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: ReorderableWrap(
+                    direction: Axis.horizontal,
+                    scrollDirection: Axis.vertical,
+                    alignment: WrapAlignment.start,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: deviceSize.width * .02,
+                    ),
+                    maxMainAxisCount: 2,
+                    spacing: deviceSize.width * .0399,
+                    runSpacing: deviceSize.width * .04,
+                    children: _getTiles(addictionData ?? []),
+                    onReorder: _onReorder,
+                    needsLongPressDraggable: true,
+                    header: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            local.available.capitalizeWords() +
+                                ': ' +
+                                NumberFormat.simpleCurrency(
+                                  name: currency,
+                                ).format(addictionData.availableMoney),
+                          ),
+                          Text(
+                            local.spent.capitalizeWords() +
+                                ': ' +
+                                NumberFormat.simpleCurrency(
+                                  name: currency,
+                                ).format(addictionData.totalSpent),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              }),
       ),
     );
   }
