@@ -103,7 +103,7 @@ class MyApp extends StatelessWidget {
           const Locale('en', 'US'),
           const Locale('tr', 'TR'),
         ],
-        title: 'Quit Addiction',
+        title: 'Quittle',
         theme: ThemeData(
           fontFamily: 'Rubik',
           // https://coolors.co/3f2333-f7f4f3-564d4a-f24333-ba1b1d //old
