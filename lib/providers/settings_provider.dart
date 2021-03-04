@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_quit_addiction_app/helpers/db_helper.dart';
-import 'package:flutter_quit_addiction_app/models/settings.dart';
+import 'package:quittle/helpers/db_helper.dart';
+import 'package:quittle/models/settings.dart';
 
 class SettingsProvider with ChangeNotifier {
   Settings _settings;

@@ -1,4 +1,4 @@
-# flutter_quit_addiction_app
+# quittle
 
 A new Flutter project.
 

@@ -1,4 +1,4 @@
-import 'package:flutter_quit_addiction_app/models/addiction.dart';
+import 'package:quittle/models/addiction.dart';
 
 class AddictionItemScreenArgs {
   final Addiction data;

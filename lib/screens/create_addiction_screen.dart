@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_quit_addiction_app/extensions/string_extension.dart';
-import 'package:flutter_quit_addiction_app/util/achievement_constants.dart';
-import 'package:flutter_quit_addiction_app/models/addiction_item_screen_args.dart';
-import 'package:flutter_quit_addiction_app/providers/addictions_provider.dart';
-import 'package:flutter_quit_addiction_app/screens/addiction_item_screen.dart';
-import 'package:flutter_quit_addiction_app/widgets/custom_text_form_field.dart';
+import 'package:quittle/extensions/string_extension.dart';
+import 'package:quittle/util/achievement_constants.dart';
+import 'package:quittle/models/addiction_item_screen_args.dart';
+import 'package:quittle/providers/addictions_provider.dart';
+import 'package:quittle/screens/addiction_item_screen.dart';
+import 'package:quittle/widgets/custom_text_form_field.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_quit_addiction_app/extensions/datetime_extension.dart';
-import 'package:flutter_quit_addiction_app/extensions/timeofday_extension.dart';
+import 'package:quittle/extensions/datetime_extension.dart';
+import 'package:quittle/extensions/timeofday_extension.dart';
 
 class CreateAddictionScreen extends StatelessWidget {
   static const routeName = '/create-addiction';

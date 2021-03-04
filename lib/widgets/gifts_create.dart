@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_quit_addiction_app/extensions/string_extension.dart';
-import 'package:flutter_quit_addiction_app/providers/addictions_provider.dart';
-import 'package:flutter_quit_addiction_app/widgets/custom_text_form_field.dart';
+import 'package:quittle/extensions/string_extension.dart';
+import 'package:quittle/providers/addictions_provider.dart';
+import 'package:quittle/widgets/custom_text_form_field.dart';
 import 'package:provider/provider.dart';
 
 class CreateGift extends StatefulWidget {

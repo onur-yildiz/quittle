@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_quit_addiction_app/models/addiction_item_screen_args.dart';
-import 'package:flutter_quit_addiction_app/widgets/addiction_item.dart';
-import 'package:flutter_quit_addiction_app/widgets/gifts.dart';
+import 'package:quittle/models/addiction_item_screen_args.dart';
+import 'package:quittle/widgets/addiction_item.dart';
+import 'package:quittle/widgets/gifts.dart';
+import 'package:quittle/widgets/playground.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
-import 'package:flutter_quit_addiction_app/widgets/achievements.dart';
+import 'package:quittle/widgets/achievements.dart';
 
 class AddictionItemScreen extends StatefulWidget {
   static const routeName = '/addiction-item';
@@ -28,7 +29,8 @@ class _AddictionItemState extends State<AddictionItemScreen> {
       return [
         AddictionItem(args: args),
         Gifts(data: args.data),
-        Achievements(data: args.data),
+        // Achievements(data: args.data),
+        Playground(),
       ];
     }
 

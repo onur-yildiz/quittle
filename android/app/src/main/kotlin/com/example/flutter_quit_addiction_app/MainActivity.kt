@@ -1,4 +1,4 @@
-package com.example.flutter_quit_addiction_app
+package com.example.quittle
 
 import io.flutter.embedding.android.FlutterActivity
 

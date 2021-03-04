@@ -1,5 +1,5 @@
-name: flutter_quit_addiction_app
-description: A new Flutter project.
+name: quittle
+description: A flutter app designed for Android that keeps track of your progress of being free from addiction.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.

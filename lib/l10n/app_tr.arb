@@ -1,7 +1,5 @@
 {
-  "helloWorld": "Hello World!",
-  
-  "appName": "QuitAll",
+  "appName": "quittle",
   "@appName": {},
 
   "moneySaved": "tasarruf edilen",

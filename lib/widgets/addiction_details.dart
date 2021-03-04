@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_quit_addiction_app/extensions/string_extension.dart';
+import 'package:quittle/extensions/string_extension.dart';
 
-import 'package:flutter_quit_addiction_app/models/addiction.dart';
-import 'package:flutter_quit_addiction_app/widgets/duration_counter.dart';
+import 'package:quittle/models/addiction.dart';
+import 'package:quittle/widgets/duration_counter.dart';
 import 'package:intl/intl.dart';
 
 class AddictionDetails extends StatefulWidget {

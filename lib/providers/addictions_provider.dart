@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_quit_addiction_app/helpers/db_helper.dart';
-import 'package:flutter_quit_addiction_app/models/addiction.dart';
-import 'package:flutter_quit_addiction_app/models/gift.dart';
-import 'package:flutter_quit_addiction_app/models/personal_note.dart';
+import 'package:quittle/helpers/db_helper.dart';
+import 'package:quittle/models/addiction.dart';
+import 'package:quittle/models/gift.dart';
+import 'package:quittle/models/personal_note.dart';
 import 'package:uuid/uuid.dart';
 import 'package:workmanager/workmanager.dart';
-import 'package:flutter_quit_addiction_app/util/achievement_constants.dart';
+import 'package:quittle/util/achievement_constants.dart';
 
 class AddictionsProvider with ChangeNotifier {
   List<Addiction> _addictions = [];

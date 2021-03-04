@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_quit_addiction_app/util/achievement_constants.dart';
-import 'package:flutter_quit_addiction_app/models/personal_note.dart';
-import 'package:flutter_quit_addiction_app/models/gift.dart';
+import 'package:quittle/util/achievement_constants.dart';
+import 'package:quittle/models/personal_note.dart';
+import 'package:quittle/models/gift.dart';
 
 enum ConsumptionType { quantity, hour }
 

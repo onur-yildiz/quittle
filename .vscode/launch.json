@@ -5,7 +5,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "flutter_quit_addiction_app",
+      "name": "quittle",
       "request": "launch",
       "type": "dart",
       "flutterMode": "debug"

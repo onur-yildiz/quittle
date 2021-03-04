@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_quit_addiction_app/models/addiction_item_screen_args.dart';
-import 'package:flutter_quit_addiction_app/widgets/addiction_details.dart';
-import 'package:flutter_quit_addiction_app/widgets/addiction_progress.dart';
-import 'package:flutter_quit_addiction_app/widgets/personal_notes_view.dart';
+import 'package:quittle/models/addiction_item_screen_args.dart';
+import 'package:quittle/widgets/addiction_details.dart';
+import 'package:quittle/widgets/addiction_progress.dart';
+import 'package:quittle/widgets/personal_notes_view.dart';
 
 class AddictionItem extends StatelessWidget {
   const AddictionItem({

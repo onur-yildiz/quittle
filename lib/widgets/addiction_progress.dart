@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_quit_addiction_app/extensions/string_extension.dart';
-import 'package:flutter_quit_addiction_app/models/addiction.dart';
-import 'package:flutter_quit_addiction_app/providers/settings_provider.dart';
-import 'package:flutter_quit_addiction_app/util/achievement_constants.dart';
-import 'package:flutter_quit_addiction_app/widgets/target_duration_indicator.dart';
+import 'package:quittle/extensions/string_extension.dart';
+import 'package:quittle/models/addiction.dart';
+import 'package:quittle/providers/settings_provider.dart';
+import 'package:quittle/util/achievement_constants.dart';
+import 'package:quittle/widgets/target_duration_indicator.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 

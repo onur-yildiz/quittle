@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_quit_addiction_app/extensions/string_extension.dart';
-import 'package:flutter_quit_addiction_app/providers/addictions_provider.dart';
-import 'package:flutter_quit_addiction_app/providers/settings_provider.dart';
-import 'package:flutter_quit_addiction_app/screens/create_addiction_screen.dart';
-import 'package:flutter_quit_addiction_app/widgets/addiction_item_card.dart';
-import 'package:flutter_quit_addiction_app/widgets/settings_view.dart';
+import 'package:quittle/extensions/string_extension.dart';
+import 'package:quittle/providers/addictions_provider.dart';
+import 'package:quittle/providers/settings_provider.dart';
+import 'package:quittle/screens/create_addiction_screen.dart';
+import 'package:quittle/widgets/addiction_item_card.dart';
+import 'package:quittle/widgets/settings_view.dart';
 import 'package:provider/provider.dart';
 
 class AddictionsScreen extends StatefulWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_quit_addiction_app/providers/settings_provider.dart';
+import 'package:quittle/providers/settings_provider.dart';
 import 'dart:convert' show json;
 
 import 'package:provider/provider.dart';

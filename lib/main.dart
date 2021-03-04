@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_quit_addiction_app/helpers/db_helper.dart';
-import 'package:flutter_quit_addiction_app/models/addiction.dart';
-import 'package:flutter_quit_addiction_app/screens/addiction_item_screen.dart';
+import 'package:quittle/helpers/db_helper.dart';
+import 'package:quittle/models/addiction.dart';
+import 'package:quittle/screens/addiction_item_screen.dart';
 import 'package:provider/provider.dart';
 
-import 'package:flutter_quit_addiction_app/providers/addictions_provider.dart';
-import 'package:flutter_quit_addiction_app/providers/settings_provider.dart';
-import 'package:flutter_quit_addiction_app/screens/addictions_screen.dart';
-import 'package:flutter_quit_addiction_app/screens/create_addiction_screen.dart';
+import 'package:quittle/providers/addictions_provider.dart';
+import 'package:quittle/providers/settings_provider.dart';
+import 'package:quittle/screens/addictions_screen.dart';
+import 'package:quittle/screens/create_addiction_screen.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:workmanager/workmanager.dart';
-import 'package:flutter_quit_addiction_app/util/achievement_constants.dart';
+import 'package:quittle/util/achievement_constants.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -62,7 +62,7 @@ void main() async {
   }
 
   const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('ic_launcher');
+      AndroidInitializationSettings('app_icon');
 
   final InitializationSettings initializationSettings = InitializationSettings(
     android: initializationSettingsAndroid,
