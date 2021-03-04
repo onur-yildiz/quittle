@@ -4,8 +4,6 @@ import 'package:quittle/models/addiction.dart';
 import 'package:quittle/models/gift.dart';
 import 'package:quittle/models/personal_note.dart';
 import 'package:uuid/uuid.dart';
-import 'package:workmanager/workmanager.dart';
-import 'package:quittle/util/achievement_constants.dart';
 
 class AddictionsProvider with ChangeNotifier {
   List<Addiction> _addictions = [];
@@ -167,6 +165,7 @@ class AddictionsProvider with ChangeNotifier {
         ),
       );
     });
+    loadedGifts.sort((a, b) => a.sortOrder.compareTo(b.sortOrder));
     addiction.gifts = loadedGifts;
   }
 

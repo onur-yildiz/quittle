@@ -1,34 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:quittle/helpers/db_helper.dart';
 import 'package:quittle/models/settings.dart';
-import 'package:workmanager/workmanager.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SettingsProvider with ChangeNotifier {
   Settings _settings;
-
-  // fetchSettings();
-  // if (_settings.receiveQuoteNotifs) {
-  //   Workmanager.registerOneOffTask(
-  //     'quote-notification-oneoff',
-  //     'quote-notification-oneoff',
-  //     inputData: {
-  //       'locale': this.local.localeName,
-  //     },
-  //   );
-  // }
-  // if (_settings.receiveQuoteNotifs) {
-  //   Workmanager.registerPeriodicTask(
-  //     'quote-notification',
-  //     'quote-notification',
-  //     inputData: {
-  //       'locale': this.local.localeName,
-  //     },
-  //     frequency: Duration(days: 1),
-  //   );
-  // } else {
-  //   Workmanager.cancelByUniqueName('quote-notifications');
-  // }
 
   String get currency {
     return _settings.currency;
