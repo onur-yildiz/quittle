@@ -75,7 +75,7 @@ class _AddictionCardState extends State<AddictionCard> {
               ..removeCurrentSnackBar()
               ..showSnackBar(
                 SnackBar(
-                  content: Text('Can\'t pick a future time.'), // todo localize
+                  content: Text('Can\'t pick a future time.'), // TODO localize
                 ),
               );
             date = date.add(TimeOfDay.now().asDuration);

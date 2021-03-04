@@ -40,19 +40,6 @@ class AddictionsProvider with ChangeNotifier {
       },
     );
     notifyListeners();
-
-    if (newAddiction.level < getAchievementDurations.length - 1) {
-      Workmanager.registerPeriodicTask(
-        data['id'],
-        'progress-notification',
-        inputData: {
-          'id': data['id'],
-        },
-        frequency: Duration(minutes: 15),
-        existingWorkPolicy: ExistingWorkPolicy.replace,
-      );
-    }
-
     return newAddiction;
   }
 
@@ -82,18 +69,6 @@ class AddictionsProvider with ChangeNotifier {
         loadedAddictions.add(temp);
 
         _addictions = loadedAddictions;
-
-        if (temp.level < getAchievementDurations.length - 1) {
-          Workmanager.registerPeriodicTask(
-            addiction['id'],
-            'progress-notification',
-            inputData: {
-              'id': addiction['id'],
-            },
-            frequency: Duration(minutes: 15),
-            existingWorkPolicy: ExistingWorkPolicy.replace,
-          );
-        }
       },
     );
     notifyListeners();

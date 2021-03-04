@@ -164,7 +164,7 @@ class _GiftCardState extends State<GiftCard> {
     final percentage =
         (widget.availableMoney / widget.gift.price).clamp(0.0, 1.0);
 
-// todo not showing when first adding
+// TODO not showing when first adding
     _deleteDialog() {
       showDialog(
         context: context,

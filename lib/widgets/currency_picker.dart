@@ -44,8 +44,14 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
               itemCount: _currencies.length,
               itemBuilder: (context, index) => TextButton(
                 style: ButtonStyle(
+                  shape: MaterialStateProperty.all(
+                    BeveledRectangleBorder(),
+                  ),
                   backgroundColor: MaterialStateProperty.all(
                     Theme.of(context).canvasColor,
+                  ),
+                  foregroundColor: MaterialStateProperty.all(
+                    Theme.of(context).hintColor,
                   ),
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   padding: MaterialStateProperty.all(
@@ -67,6 +73,9 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
                       fit: FlexFit.loose,
                       child: Text(
                         _currencies[index]['code'],
+                        style: TextStyle(
+                          color: Theme.of(context).accentColor,
+                        ),
                       ),
                     ),
                     Flexible(

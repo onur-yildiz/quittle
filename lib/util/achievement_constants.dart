@@ -16,7 +16,7 @@ const _achievementNames = {
     '',
     'novice',
     'eager',
-    'hardworking', //todo naming
+    'hardworking',
     'determined',
     'experienced',
     'expert',

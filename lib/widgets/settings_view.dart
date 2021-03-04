@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
 import 'package:quittle/extensions/string_extension.dart';
 import 'package:quittle/providers/settings_provider.dart';
 import 'package:quittle/widgets/currency_picker.dart';
@@ -15,10 +16,22 @@ class SettingsView extends StatefulWidget {
 class _SettingsViewState extends State<SettingsView> {
   bool _progressCheck = false;
   bool _quoteCheck = false;
+  SettingsProvider settings;
+
+  @override
+  void initState() {
+    settings = Provider.of<SettingsProvider>(context, listen: false);
+    _progressCheck = settings.receiveProgressNotifs;
+    _quoteCheck = settings.receiveQuoteNotifs;
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     final local = AppLocalizations.of(context);
+    final currencyName = Provider.of<SettingsProvider>(context).currency;
+
     return Drawer(
         child: LayoutBuilder(
       builder: (context, constraints) => SingleChildScrollView(
@@ -70,6 +83,7 @@ class _SettingsViewState extends State<SettingsView> {
                           onChanged: (value) {
                             if (mounted) {
                               setState(() {
+                                settings.allowProgressNotif(value);
                                 _progressCheck = value;
                               });
                             }
@@ -89,6 +103,7 @@ class _SettingsViewState extends State<SettingsView> {
                           onChanged: (value) {
                             if (mounted) {
                               setState(() {
+                                settings.allowQuoteNotif(value);
                                 _quoteCheck = value;
                               });
                             }
@@ -105,11 +120,21 @@ class _SettingsViewState extends State<SettingsView> {
                             builder: (context) => CurrencyPicker(),
                           ),
                           contentPadding: const EdgeInsets.symmetric(
-                              vertical: 8, horizontal: 8),
+                              vertical: 24, horizontal: 8),
                           leading: FaIcon(FontAwesomeIcons.moneyBillWave),
                           title: Text(local.currency.capitalizeWords()),
-                          subtitle: Text(
-                              Provider.of<SettingsProvider>(context).currency),
+                          trailing: Text(
+                            '$currencyName (${NumberFormat.simpleCurrency(
+                              name: currencyName,
+                            ).currencySymbol})',
+                            style: TextStyle(
+                              color: Theme.of(context).accentColor,
+                              fontSize: Theme.of(context)
+                                  .textTheme
+                                  .subtitle2
+                                  .fontSize,
+                            ),
+                          ),
                         ),
                         Divider(
                           height: 0,

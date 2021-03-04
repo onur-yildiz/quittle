@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -11,6 +13,8 @@ import 'package:quittle/providers/addictions_provider.dart';
 import 'package:quittle/providers/settings_provider.dart';
 import 'package:quittle/screens/addictions_screen.dart';
 import 'package:quittle/screens/create_addiction_screen.dart';
+import 'package:quittle/util/custom_localizations.dart';
+import 'package:quittle/util/quotes_constants.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:workmanager/workmanager.dart';
@@ -86,10 +90,10 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => new AddictionsProvider(),
+          create: (_) => new SettingsProvider(),
         ),
         ChangeNotifierProvider(
-          create: (_) => new SettingsProvider(),
+          create: (_) => new AddictionsProvider(),
         ),
       ],
       child: MaterialApp(
@@ -111,7 +115,7 @@ class MyApp extends StatelessWidget {
           primaryColorLight: Color.fromRGBO(230, 86, 81, .8),
           primaryColor: Color.fromRGBO(230, 86, 81, 1),
           primaryColorDark: Color.fromRGBO(182, 85, 81, 1),
-          primarySwatch: Colors.red, //todo custom swatch
+          primarySwatch: Colors.red, //TODO custom swatch
           // accentColor: Color.fromRGBO(147, 181, 198, 1),
           accentColor: Color.fromRGBO(46, 105, 153, 1), // 74, 111, 134
           buttonColor: Color.fromRGBO(247, 244, 243, 1),
@@ -155,13 +159,25 @@ void callbackDispatcher() {
             addiction.id,
             nextLevel,
           );
-          showProgressNotification(addiction.name.toUpperCase(),
-              'You reached level ${(nextLevel)}!');
+          showProgressNotification(
+            addiction.name.toUpperCase(),
+            progressNotificationMsg(nextLevel, inputData['locale']),
+          );
         }
         // if last achievement level, cancel
         if (addiction.level == 8) {
           Workmanager.cancelByUniqueName(addiction.id);
         }
+        break;
+      case 'quote-notification':
+        final quoteList = quotes[inputData['locale']];
+        Random random = new Random(DateTime.now().millisecondsSinceEpoch);
+        int rndi = random.nextInt(quoteList.length);
+        print(rndi);
+        showQuoteNotification(
+          quoteOfTheDayLocs[inputData['locale']],
+          quoteList[rndi]['quote'],
+        );
         break;
       default:
     }
@@ -184,23 +200,45 @@ void showProgressNotification(
   );
 }
 
-// void showProgressNotification(
-//     String notificationTitle, String notificationBody) {
-//   final androidDetails = AndroidNotificationDetails('quitAllProgress',
-//       'progressNotifications', 'quitAllProgressNotifications');
-//   final genNotDetails = NotificationDetails(
-//     android: androidDetails,
-//   );
-//   final scheduledDate =
-//       tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5));
-//   flutterLocalNotificationsPlugin.zonedSchedule(
-//     1,
-//     notificationTitle,
-//     notificationBody,
-//     scheduledDate,
-//     genNotDetails,
-//     uiLocalNotificationDateInterpretation:
-//         UILocalNotificationDateInterpretation.wallClockTime,
-//     androidAllowWhileIdle: false,
-//   );
-// }
+void showQuoteNotification(String notificationTitle, String notificationBody) {
+  final androidDetails = AndroidNotificationDetails('quitAllProgress',
+      'progressNotifications', 'quitAllProgressNotifications');
+  final genNotDetails = NotificationDetails(
+    android: androidDetails,
+  );
+  flutterLocalNotificationsPlugin.show(
+    3,
+    notificationTitle,
+    notificationBody,
+    genNotDetails,
+  );
+}
+
+// final androidDetails = AndroidNotificationDetails('quitAllProgress',
+//         'progressNotifications', 'quitAllProgressNotifications');
+//     final generalNotificationDetails = NotificationDetails(
+//       android: androidDetails,
+//     );
+
+//     final tomorrow = tz.TZDateTime.now(tz.local).add(Duration(days: 1));
+//     final tomorrowAtMorning = tz.TZDateTime.local(
+//         tomorrow.year, tomorrow.month, tomorrow.day, 9, 0, 0);
+
+//     final locale = AppLocalizations.of(context).localeName;
+//     final quoteList = quotes[locale];
+//     Random random = new Random();
+//     final notificationTitle = quoteOfTheDayLocs[locale];
+//     final notificationBody =
+//         quoteList[random.nextInt(quoteList.length)]['quote'];
+
+//     flutterLocalNotificationsPlugin.zonedSchedule(
+//       3,
+//       notificationTitle,
+//       notificationBody,
+//       tomorrowAtMorning,
+//       generalNotificationDetails,
+//       uiLocalNotificationDateInterpretation:
+//           UILocalNotificationDateInterpretation.absoluteTime,
+//       androidAllowWhileIdle: false,
+//       matchDateTimeComponents: DateTimeComponents.time,
+//     );

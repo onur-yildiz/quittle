@@ -7,7 +7,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="quittle"
+        android:label="Quittle"
         android:icon="@mipmap/font_awesome_chain_background">
         <activity
             android:name=".MainActivity"

@@ -1,12 +1,21 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:quittle/extensions/string_extension.dart';
+import 'package:quittle/main.dart';
+import 'package:quittle/models/addiction.dart';
 import 'package:quittle/providers/addictions_provider.dart';
 import 'package:quittle/providers/settings_provider.dart';
 import 'package:quittle/screens/create_addiction_screen.dart';
+import 'package:quittle/util/achievement_constants.dart';
+import 'package:quittle/util/quotes_constants.dart';
 import 'package:quittle/widgets/addiction_item_card.dart';
 import 'package:quittle/widgets/settings_view.dart';
 import 'package:provider/provider.dart';
+import 'package:workmanager/workmanager.dart';
+import 'package:timezone/timezone.dart' as tz;
 
 class AddictionsScreen extends StatefulWidget {
   static const routeName = '/addictions';
@@ -21,7 +30,52 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
   Future<void> _fetchData() async {
     await Provider.of<AddictionsProvider>(context, listen: false)
         .fetchAddictions();
-    await Provider.of<SettingsProvider>(context, listen: false).fetchSettings();
+    return Provider.of<SettingsProvider>(context, listen: false)
+        .fetchSettings();
+  }
+
+  _setProgNotifTasks(List<Addiction> addictions) {
+    if (Provider.of<SettingsProvider>(context, listen: false)
+        .receiveProgressNotifs) {
+      for (var addiction in addictions) {
+        if (addiction.level < getAchievementDurations.length - 1) {
+          Workmanager.registerPeriodicTask(
+            addiction.id,
+            'progress-notification',
+            inputData: {
+              'id': addiction.id,
+              'locale': AppLocalizations.of(context).localeName,
+            },
+            frequency: Duration(minutes: 15),
+            existingWorkPolicy: ExistingWorkPolicy.replace,
+          );
+        } else {
+          Workmanager.cancelByUniqueName(addiction.id);
+        }
+      }
+    }
+  }
+
+  void _setDailyQuoteNotification() {
+    final today = DateTime.now();
+    final tomorrowMorning =
+        DateTime(today.year, today.month, (today.day + 1), 9, 0, 0);
+    final timeTillTomorrowMorning = tomorrowMorning.difference(today);
+    if (Provider.of<SettingsProvider>(context, listen: false)
+        .receiveQuoteNotifs) {
+      Workmanager.registerPeriodicTask(
+        'quote-notification',
+        'quote-notification',
+        inputData: {
+          'locale': AppLocalizations.of(context).localeName,
+        },
+        initialDelay: timeTillTomorrowMorning,
+        frequency: Duration(days: 1),
+        existingWorkPolicy: ExistingWorkPolicy.keep,
+      );
+    } else {
+      Workmanager.cancelByUniqueName('quote-notification');
+    }
   }
 
   @override
@@ -80,8 +134,11 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
                 child: Text(local.genericErrorMessage.capitalizeFirstLetter()),
               );
             }
+            _setDailyQuoteNotification();
             return Consumer<AddictionsProvider>(
-              builder: (ctx, addictionsData, child) => RefreshIndicator(
+                builder: (ctx, addictionsData, child) {
+              _setProgNotifTasks(addictionsData.addictions);
+              return RefreshIndicator(
                 onRefresh: () async {
                   await addictionsData.fetchAddictions();
                 },
@@ -124,8 +181,8 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
                           ),
                         ),
                       ),
-              ),
-            );
+              );
+            });
           }
         },
       ),

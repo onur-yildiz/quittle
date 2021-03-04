@@ -77,7 +77,6 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
     final local = AppLocalizations.of(context);
     final deviceWidth = MediaQuery.of(context).size.width;
     final inputBackgroundColor = Theme.of(context).canvasColor;
-    final viewInsets = MediaQuery.of(context).viewInsets;
     final buttonHeight = Theme.of(context).buttonTheme.height * 2;
 
     return DefaultTextStyle(
