@@ -8,7 +8,7 @@
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:label="quittle"
-        android:icon="@mipmap/app_icon">
+        android:icon="@mipmap/font_awesome_chain_background">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
