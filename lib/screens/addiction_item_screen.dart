@@ -65,10 +65,10 @@ class _AddictionItemState extends State<AddictionItemScreen> {
       ),
       body: GestureDetector(
         onHorizontalDragEnd: (details) {
-          if (details.primaryVelocity < -1200 &&
+          if (details.primaryVelocity < -400 &&
               _controller.index < tabLength - 1) {
             _controller.jumpToTab(_controller.index + 1);
-          } else if (details.primaryVelocity > 1200 && _controller.index > 0) {
+          } else if (details.primaryVelocity > 400 && _controller.index > 0) {
             _controller.jumpToTab(_controller.index - 1);
           }
         },

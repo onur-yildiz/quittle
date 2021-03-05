@@ -124,7 +124,24 @@ class MyApp extends StatelessWidget {
           hintColor: Colors.blueGrey[700],
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        initialRoute: _initialRoute,
+        // initialRoute: _initialRoute,
+        home: Builder(
+          builder: (context) => FutureBuilder(
+            future: _fetchStartupData(context),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Scaffold(
+                  body: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              } else {
+                _setDailyQuoteNotification(context);
+                return AddictionsScreen();
+              }
+            },
+          ),
+        ),
         routes: {
           CreateAddictionScreen.routeName: (ctx) => CreateAddictionScreen(),
           AddictionsScreen.routeName: (ctx) => AddictionsScreen(),
@@ -132,6 +149,34 @@ class MyApp extends StatelessWidget {
         },
       ),
     );
+  }
+}
+
+Future<void> _fetchStartupData(BuildContext context) async {
+  await Provider.of<AddictionsProvider>(context, listen: false)
+      .fetchAddictions();
+  await Provider.of<SettingsProvider>(context, listen: false).fetchSettings();
+}
+
+void _setDailyQuoteNotification(BuildContext context) {
+  final today = DateTime.now();
+  final tomorrowMorning =
+      DateTime(today.year, today.month, (today.day + 1), 9, 0, 0);
+  final timeTillTomorrowMorning = tomorrowMorning.difference(today);
+  if (Provider.of<SettingsProvider>(context, listen: false)
+      .receiveQuoteNotifs) {
+    Workmanager.registerPeriodicTask(
+      'quote-notification',
+      'quote-notification',
+      inputData: {
+        'locale': AppLocalizations.of(context).localeName,
+      },
+      initialDelay: timeTillTomorrowMorning,
+      frequency: Duration(days: 1),
+      existingWorkPolicy: ExistingWorkPolicy.keep,
+    );
+  } else {
+    Workmanager.cancelByUniqueName('quote-notification');
   }
 }
 

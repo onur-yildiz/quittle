@@ -21,13 +21,6 @@ class AddictionsScreen extends StatefulWidget {
 class _AddictionsScreenState extends State<AddictionsScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
-  Future<void> _fetchData() async {
-    await Provider.of<AddictionsProvider>(context, listen: false)
-        .fetchAddictions();
-    return Provider.of<SettingsProvider>(context, listen: false)
-        .fetchSettings();
-  }
-
   _setProgNotifTasks(List<Addiction> addictions) {
     if (Provider.of<SettingsProvider>(context, listen: false)
         .receiveProgressNotifs) {
@@ -41,7 +34,7 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
               'locale': AppLocalizations.of(context).localeName,
             },
             frequency: Duration(minutes: 15),
-            existingWorkPolicy: ExistingWorkPolicy.replace,
+            existingWorkPolicy: ExistingWorkPolicy.keep,
           );
         } else {
           Workmanager.cancelByUniqueName(addiction.id);
@@ -50,31 +43,8 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
     }
   }
 
-  void _setDailyQuoteNotification() {
-    final today = DateTime.now();
-    final tomorrowMorning =
-        DateTime(today.year, today.month, (today.day + 1), 9, 0, 0);
-    final timeTillTomorrowMorning = tomorrowMorning.difference(today);
-    if (Provider.of<SettingsProvider>(context, listen: false)
-        .receiveQuoteNotifs) {
-      Workmanager.registerPeriodicTask(
-        'quote-notification',
-        'quote-notification',
-        inputData: {
-          'locale': AppLocalizations.of(context).localeName,
-        },
-        initialDelay: timeTillTomorrowMorning,
-        frequency: Duration(days: 1),
-        existingWorkPolicy: ExistingWorkPolicy.keep,
-      );
-    } else {
-      Workmanager.cancelByUniqueName('quote-notification');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    final local = AppLocalizations.of(context);
     final deviceSize = MediaQuery.of(context).size;
     return Scaffold(
       key: _scaffoldKey,
@@ -115,69 +85,53 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
         ),
       ),
       drawer: SettingsView(),
-      body: FutureBuilder(
-        future: _fetchData(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          } else {
-            if (snapshot.error != null) {
-              return Center(
-                child: Text(local.genericErrorMessage.capitalizeFirstLetter()),
-              );
-            }
-            _setDailyQuoteNotification();
-            return Consumer<AddictionsProvider>(
-                builder: (ctx, addictionsData, child) {
-              _setProgNotifTasks(addictionsData.addictions);
-              return RefreshIndicator(
-                onRefresh: () async {
-                  await addictionsData.fetchAddictions();
-                },
-                child: addictionsData.addictions.length > 0
-                    ? ListView.builder(
-                        itemCount: addictionsData.addictions.length,
-                        itemBuilder: (ctx, index) {
-                          return AddictionItem(
-                            addictionData: addictionsData.addictions[index],
-                          );
-                        },
-                      )
-                    : InkWell(
-                        onTap: () {
-                          Navigator.of(context)
-                              .pushNamed(CreateAddictionScreen.routeName);
-                        },
-                        splashColor: Theme.of(context).accentColor,
-                        child: Container(
-                          height: deviceSize.height,
-                          width: deviceSize.width,
-                          child: Center(
-                            child: SizedBox.fromSize(
-                              size: Size.square(deviceSize.width * .5),
-                              child: FloatingActionButton(
-                                heroTag: 'newAddiction',
-                                elevation: 0,
-                                backgroundColor: Theme.of(context).primaryColor,
-                                foregroundColor: Theme.of(context).canvasColor,
-                                child: Icon(
-                                  Icons.add,
-                                  size: Theme.of(context)
-                                      .textTheme
-                                      .headline1
-                                      .fontSize,
-                                ),
-                                onPressed: null,
-                              ),
+      body: Consumer<AddictionsProvider>(
+        builder: (ctx, addictionsData, child) {
+          _setProgNotifTasks(addictionsData.addictions);
+          return RefreshIndicator(
+            onRefresh: () async {
+              await addictionsData.fetchAddictions();
+            },
+            child: addictionsData.addictions.length > 0
+                ? ListView.builder(
+                    itemCount: addictionsData.addictions.length,
+                    itemBuilder: (ctx, index) {
+                      return AddictionItem(
+                        addictionData: addictionsData.addictions[index],
+                      );
+                    },
+                  )
+                : InkWell(
+                    onTap: () {
+                      Navigator.of(context)
+                          .pushNamed(CreateAddictionScreen.routeName);
+                    },
+                    splashColor: Theme.of(context).accentColor,
+                    child: Container(
+                      height: deviceSize.height,
+                      width: deviceSize.width,
+                      child: Center(
+                        child: SizedBox.fromSize(
+                          size: Size.square(deviceSize.width * .5),
+                          child: FloatingActionButton(
+                            heroTag: 'newAddiction',
+                            elevation: 0,
+                            backgroundColor: Theme.of(context).primaryColor,
+                            foregroundColor: Theme.of(context).canvasColor,
+                            child: Icon(
+                              Icons.add,
+                              size: Theme.of(context)
+                                  .textTheme
+                                  .headline1
+                                  .fontSize,
                             ),
+                            onPressed: null,
                           ),
                         ),
                       ),
-              );
-            });
-          }
+                    ),
+                  ),
+          );
         },
       ),
     );
