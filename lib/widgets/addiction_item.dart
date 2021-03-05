@@ -13,21 +13,27 @@ class AddictionItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          AddictionProgress(
-            addictionData: args.data,
-          ),
-          AddictionDetails(
-            addictionData: args.data,
-          ),
-          PersonalNotesView(
-            addictionData: args.data,
-          ),
-        ],
+    return Container(
+      color: Theme.of(context).accentColor,
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              color: Theme.of(context).canvasColor,
+              child: AddictionProgress(
+                addictionData: args.data,
+              ),
+            ),
+            AddictionDetails(
+              addictionData: args.data,
+            ),
+            PersonalNotesView(
+              addictionData: args.data,
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -45,7 +45,7 @@ class _AddictionDetailsState extends State<AddictionDetails> {
 
     return DefaultTextStyle(
       style: TextStyle(
-        color: Theme.of(context).hintColor,
+        color: Theme.of(context).canvasColor,
         fontWeight: FontWeight.bold,
       ),
       child: Padding(

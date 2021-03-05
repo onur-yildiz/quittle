@@ -121,7 +121,7 @@ class MyApp extends StatelessWidget {
           buttonColor: Color.fromRGBO(247, 244, 243, 1),
           canvasColor: Color.fromRGBO(247, 244, 243, 1),
           cardColor: Color.fromRGBO(220, 220, 220, 1),
-          hintColor: Colors.blueGrey[700],
+          hintColor: Colors.blueGrey[800],
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         // initialRoute: _initialRoute,

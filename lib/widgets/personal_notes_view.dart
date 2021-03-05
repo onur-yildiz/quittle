@@ -31,43 +31,38 @@ class _PersonalNotesViewState extends State<PersonalNotesView> {
               widget.addictionData.id,
             ),
             builder: (_, snapshot) {
-              return snapshot.connectionState == ConnectionState.waiting
+              return snapshot.error != null
                   ? Center(
-                      child: CircularProgressIndicator(),
+                      child: Text(
+                          local.genericErrorMessage.capitalizeFirstLetter()),
                     )
-                  : snapshot.error != null
-                      ? Center(
-                          child: Text(local.genericErrorMessage
-                              .capitalizeFirstLetter()),
-                        )
-                      : Consumer<AddictionsProvider>(
-                          builder: (_, addictionsData, _child) =>
-                              widget.addictionData.personalNotes.length == 0
-                                  ? Padding(
-                                      padding: const EdgeInsets.only(top: 16.0),
-                                      child: Divider(
-                                        thickness: 1,
-                                        height: 0,
+                  : Consumer<AddictionsProvider>(
+                      builder: (_, addictionsData, _child) =>
+                          widget.addictionData.personalNotes.length == 0
+                              ? Padding(
+                                  padding: const EdgeInsets.only(top: 16.0),
+                                  child: Divider(
+                                    thickness: 1,
+                                    height: 0,
+                                  ),
+                                )
+                              : ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: BouncingScrollPhysics(),
+                                  itemCount:
+                                      widget.addictionData.personalNotes.length,
+                                  itemBuilder: (_, index) {
+                                    return Padding(
+                                      padding: const EdgeInsets.only(top: 8.0),
+                                      child: Note(
+                                        data: widget.addictionData
+                                                .personalNotesDateSorted[
+                                            index], // todo date sort ascend descend button
                                       ),
-                                    )
-                                  : ListView.builder(
-                                      shrinkWrap: true,
-                                      physics: BouncingScrollPhysics(),
-                                      itemCount: widget
-                                          .addictionData.personalNotes.length,
-                                      itemBuilder: (_, index) {
-                                        return Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 8.0),
-                                          child: Note(
-                                            data: widget.addictionData
-                                                    .personalNotesDateSorted[
-                                                index], // todo date sort ascend descend button
-                                          ),
-                                        );
-                                      },
-                                    ),
-                        );
+                                    );
+                                  },
+                                ),
+                    );
             },
           ),
         ),
@@ -89,6 +84,7 @@ class _PersonalNotesViewState extends State<PersonalNotesView> {
               },
             );
           },
+          backgroundColor: Theme.of(context).primaryColor,
           child: Icon(
             Icons.add,
             color: Colors.white,

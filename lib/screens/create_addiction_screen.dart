@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:quittle/extensions/string_extension.dart';
@@ -40,10 +41,12 @@ class AddictionCard extends StatefulWidget {
   final statusBarHeight;
 }
 
-class _AddictionCardState extends State<AddictionCard> {
+class _AddictionCardState extends State<AddictionCard>
+    with SingleTickerProviderStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey();
   String _consumptionType;
-  FocusNode focusNode;
+  FocusNode _focusNode;
+  AnimationController _dpAnimController;
   var addictionData = {
     'name': '',
     'quit_date': DateTime.now().toString(),
@@ -56,15 +59,31 @@ class _AddictionCardState extends State<AddictionCard> {
   void _selectDate(context, DateTime currentlyPicked) async {
     DateTime date = await showDatePicker(
       context: context,
+      builder: (context, child) {
+        _dpAnimController.forward();
+        return FadeScaleTransition(
+          animation: _dpAnimController,
+          child: child,
+        );
+      },
       initialDate: DateTime.now(),
       firstDate: DateTime.now().subtract(Duration(days: 900)),
       lastDate: DateTime.now(),
     );
+    _dpAnimController.reset();
     if (date != null) {
       TimeOfDay time = await showTimePicker(
         context: context,
+        builder: (context, child) {
+          _dpAnimController.forward();
+          return FadeScaleTransition(
+            animation: _dpAnimController,
+            child: child,
+          );
+        },
         initialTime: TimeOfDay.now(),
       );
+      _dpAnimController.reset();
       if (time != null) {
         if (date.isSameDate(DateTime.now())) {
           if (time.asDuration.inSeconds <=
@@ -120,13 +139,19 @@ class _AddictionCardState extends State<AddictionCard> {
 
   @override
   void initState() {
-    focusNode = new FocusNode();
+    _dpAnimController = AnimationController(
+      value: 0.0,
+      duration: const Duration(milliseconds: 200),
+      vsync: this,
+    );
+    _focusNode = new FocusNode();
     super.initState();
   }
 
   @override
   void dispose() {
-    focusNode.dispose();
+    _dpAnimController.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -135,9 +160,7 @@ class _AddictionCardState extends State<AddictionCard> {
     final local = AppLocalizations.of(context);
     final deviceSize = MediaQuery.of(context).size;
 
-    return AnimatedContainer(
-      duration: Duration(milliseconds: 20000),
-      curve: Curves.fastOutSlowIn,
+    return Container(
       margin: EdgeInsets.zero,
       color: Theme.of(context).cardColor,
       child: Form(
@@ -155,7 +178,7 @@ class _AddictionCardState extends State<AddictionCard> {
                   data: addictionData,
                   inputName: local.addictionName.capitalizeWords(),
                   inputType: TextInputType.name,
-                  focusNode: focusNode,
+                  focusNode: _focusNode,
                   inputAction: TextInputAction.done,
                 ),
                 SizedBox(
@@ -232,7 +255,7 @@ class _AddictionCardState extends State<AddictionCard> {
                           color: Theme.of(context).canvasColor,
                           borderRadius: BorderRadius.circular(5),
                           child: InkWell(
-                            focusNode: focusNode,
+                            focusNode: _focusNode,
                             borderRadius: BorderRadius.circular(5),
                             splashColor: Theme.of(context).highlightColor,
                             onTap: () {

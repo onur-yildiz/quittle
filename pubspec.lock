@@ -168,6 +168,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.3"
+  liquid_progress_indicator:
+    dependency: "direct main"
+    description:
+      name: liquid_progress_indicator
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.2"
   matcher:
     dependency: transitive
     description:
@@ -245,6 +252,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.25.0"
+  shrink_sidemenu:
+    dependency: "direct main"
+    description:
+      name: shrink_sidemenu
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0+3"
   sky_engine:
     dependency: transitive
     description: flutter

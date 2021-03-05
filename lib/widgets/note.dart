@@ -18,7 +18,7 @@ class Note extends StatelessWidget {
         DateFormat.yMMMd(local.localeName).format(DateTime.parse(data.date));
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
+        color: Theme.of(context).canvasColor,
         borderRadius: BorderRadius.circular(5.0),
         border: Border.all(
           color: Theme.of(context).highlightColor,
