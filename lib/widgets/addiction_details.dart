@@ -21,11 +21,14 @@ class _AddictionDetailsState extends State<AddictionDetails> {
   double notUsedCount;
   Duration abstinenceTime;
   String quitDateFormatted;
+  double dailySavings = 0;
 
   @override
   void initState() {
     notUsedCount = widget.addictionData.notUsedCount;
     abstinenceTime = widget.addictionData.abstinenceTime;
+    dailySavings =
+        widget.addictionData.dailyConsumption * widget.addictionData.unitCost;
     super.initState();
   }
 
@@ -80,6 +83,38 @@ class _AddictionDetailsState extends State<AddictionDetails> {
                           : widget.addictionData.dailyConsumption.toString()) +
                       ' ' +
                       consumptionType,
+                ),
+              ],
+            ),
+            Divider(),
+            Text('future savings'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('daily'),
+                Text(
+                  NumberFormat.simpleCurrency(locale: local.localeName)
+                      .format(dailySavings),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('next week'),
+                Text(
+                  NumberFormat.simpleCurrency(locale: local.localeName)
+                      .format(dailySavings * 7),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('next month'),
+                Text(
+                  NumberFormat.simpleCurrency(locale: local.localeName)
+                      .format(dailySavings * 30),
                 ),
               ],
             ),
