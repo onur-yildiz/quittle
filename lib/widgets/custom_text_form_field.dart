@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 
 class CustomTextFormField extends StatelessWidget {
-  const CustomTextFormField({
-    Key key,
-    @required this.valKey,
-    @required this.data,
-    @required this.inputName,
-    this.focusNode,
-    this.inputType,
-    this.validator,
-    this.inputAction,
-    this.backgroundColor,
-  }) : super(key: key);
+  const CustomTextFormField(
+      {Key key,
+      @required this.valKey,
+      @required this.data,
+      @required this.inputName,
+      this.focusNode,
+      this.inputType,
+      this.validator,
+      this.inputAction,
+      this.backgroundColor,
+      this.onSubmit})
+      : super(key: key);
 
   final String valKey;
   final Map<String, Object> data;
@@ -21,10 +22,17 @@ class CustomTextFormField extends StatelessWidget {
   final FocusNode focusNode;
   final TextInputAction inputAction;
   final Color backgroundColor;
+  final Function onSubmit;
 
   @override
   Widget build(BuildContext context) {
+    if (onSubmit == null && inputAction == TextInputAction.done)
+      throw 'Error: onSubmit == null && inputAction == TextInputAction.done. Provide an onSubmit function.';
+
     return TextFormField(
+      onFieldSubmitted: (_) {
+        onSubmit();
+      },
       focusNode: focusNode,
       key: ValueKey(valKey),
       decoration: InputDecoration(
