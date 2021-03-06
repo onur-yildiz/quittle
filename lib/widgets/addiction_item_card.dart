@@ -23,13 +23,14 @@ class _AddictionItemState extends State<AddictionItem> {
     return Container(
       margin: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(30),
         border: Border.all(
           width: 0,
           style: BorderStyle.none,
         ),
         color: Theme.of(context).accentColor,
       ),
+      padding: const EdgeInsets.only(bottom: 4),
       child: OpenContainer(
         openColor: Theme.of(context).accentColor,
         closedColor: Theme.of(context).accentColor,
