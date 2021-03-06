@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:quittle/extensions/string_extension.dart';
 import 'package:quittle/models/addiction.dart';
+import 'package:quittle/models/personal_note.dart';
 import 'package:quittle/providers/addictions_provider.dart';
 import 'package:quittle/widgets/personal_note_create.dart';
 import 'package:quittle/widgets/note.dart';
@@ -39,11 +40,12 @@ class _PersonalNotesViewState extends State<PersonalNotesView> {
                   : Consumer<AddictionsProvider>(
                       builder: (_, addictionsData, _child) =>
                           widget.addictionData.personalNotes.length == 0
-                              ? Padding(
-                                  padding: const EdgeInsets.only(top: 16.0),
-                                  child: Divider(
-                                    thickness: 1,
-                                    height: 0,
+                              ? Note(
+                                  data: PersonalNote(
+                                    title: 'your journey begins',
+                                    text:
+                                        'here you can take notes. you can keep your motivations, memories etc. keep record of your journey becoming free of your bad habit/addiction!',
+                                    date: DateTime.now().toString(),
                                   ),
                                 )
                               : ListView.builder(

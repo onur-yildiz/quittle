@@ -31,21 +31,31 @@ class Note extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Wrap(
-            alignment: WrapAlignment.spaceBetween,
+          Flex(
+            direction: Axis.horizontal,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                data.title,
-                style: TextStyle(
-                  color: Theme.of(context).hintColor,
-                  fontWeight: FontWeight.bold,
+              Flexible(
+                flex: 2,
+                fit: FlexFit.tight,
+                child: Text(
+                  data.title,
+                  style: TextStyle(
+                    color: Theme.of(context).hintColor,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-              Text(
-                quitDateFormatted,
-                style: TextStyle(
-                  color: Theme.of(context).hintColor,
-                  fontWeight: FontWeight.bold,
+              Flexible(
+                flex: 3,
+                fit: FlexFit.tight,
+                child: Text(
+                  quitDateFormatted,
+                  textAlign: TextAlign.right,
+                  style: TextStyle(
+                    color: Theme.of(context).hintColor,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ],
