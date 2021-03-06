@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
 import 'package:quittle/extensions/string_extension.dart';
-import 'package:quittle/helpers/db_helper.dart';
 import 'package:quittle/models/addiction.dart';
 import 'package:quittle/models/gift.dart';
 import 'package:quittle/providers/addictions_provider.dart';
