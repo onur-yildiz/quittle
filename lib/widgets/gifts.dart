@@ -44,19 +44,15 @@ class _GiftsState extends State<Gifts> {
     return _tiles;
   }
 
-  void _onReorder(int oldIndex, int newIndex) async {
-    if (_tiles.elementAt(oldIndex).runtimeType == AddGiftButton ||
-        newIndex == _tiles.length - 1) {
-      return;
-    }
-    Widget row = _tiles.removeAt(oldIndex);
-    _tiles.insert(newIndex, row);
-    await DBHelper.switchGiftOrders(
-      'gifts',
-      'sort_order',
-      oldIndex,
-      newIndex,
-    );
+  void _onReorder(int oldIndex, int newIndex) {
+    setState(() {
+      if (_tiles.elementAt(oldIndex).runtimeType == AddGiftButton ||
+          newIndex == _tiles.length - 1) {
+        return;
+      }
+      Provider.of<AddictionsProvider>(context, listen: false)
+          .reorderGifts(oldIndex, newIndex, widget.id);
+    });
   }
 
   @override
