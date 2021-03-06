@@ -31,6 +31,7 @@ class CustomTextFormField extends StatelessWidget {
 
     return TextFormField(
       onFieldSubmitted: (_) {
+        if (inputAction != TextInputAction.done) return;
         onSubmit();
       },
       focusNode: focusNode,
