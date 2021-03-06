@@ -8,6 +8,8 @@ import 'package:quittle/models/addiction.dart';
 import 'package:quittle/util/progress_constants.dart';
 import 'package:quittle/extensions/duration_extension.dart';
 
+const _refreshInterval = Duration(seconds: 30);
+
 class Achievements extends StatefulWidget {
   final Addiction data;
 
@@ -23,17 +25,13 @@ class _AchievementsState extends State<Achievements> {
   int maxAchLevel;
   List localizedAchDurations;
   int achLevel;
-  Timer timer;
   double percentage;
 
   @override
   void initState() {
     maxAchLevel = achievementDurations.length - 1;
-    // there is 9 levels, 6 achievements converting level to achLevel by -3 without using another var in addition
-    //TODO add achLevel to addition model
-    achLevel =
-        (widget.data.level - 3).clamp(0, achievementDurations.length - 1);
-    percentage = achievementDurations[achLevel].inMinutes /
+    achLevel = widget.data.achievementLevel;
+    percentage = widget.data.abstinenceTime.inMinutes /
         achievementDurations.last.inMinutes;
     localizedAchDurations = List.filled(achievementDurations.length, '');
     Future.delayed(Duration.zero, () {
@@ -41,19 +39,13 @@ class _AchievementsState extends State<Achievements> {
         _getLocalizedAchievementDurations(AppLocalizations.of(context));
       });
     });
-    timer = Timer.periodic(Duration(days: 1), (timer) {
+    Timer.periodic(_refreshInterval, (timer) {
       setState(() {
-        percentage = achievementDurations[achLevel].inMinutes /
+        percentage = widget.data.abstinenceTime.inMinutes /
             achievementDurations.last.inMinutes;
       });
     });
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    timer.cancel();
-    super.dispose();
   }
 
   double getVerticalPosition(double height, int level) {
