@@ -93,56 +93,36 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      // bottomNavigationBar: Builder(
-      //   builder: (context) => BottomAppBar(
-      //     child: Row(
-      //       mainAxisAlignment: MainAxisAlignment.start,
-      //       children: [
-      //         IconButton(
-      //           onPressed: () {
-      //             Scaffold.of(context).openDrawer();
-      //           },
-      //           color: Theme.of(context).primaryColor,
-      //           tooltip: 'Menu',
-      //           icon: Icon(Icons.menu),
-      //         ),
-      //       ],
-      //     ),
-      //   ),
-      // ),
       drawer: SettingsView(),
       body: Consumer<AddictionsProvider>(
         builder: (ctx, addictionsData, child) {
           _setProgNotifTasks(addictionsData.addictions);
           return addictionsData.addictions.length > 0
-              ? ReorderableListView(
-                  children: [
-                    for (Addiction addiction in addictionsData.addictions)
-                      Dismissible(
-                        key: ValueKey(Uuid().v1()),
-                        child: AddictionItem(
+              ? Theme(
+                  data: Theme.of(context).copyWith(
+                    canvasColor: Colors.transparent,
+                    shadowColor: Colors.black26,
+                  ),
+                  child: ReorderableListView(
+                    padding: const EdgeInsets.all(8.0),
+                    children: [
+                      for (Addiction addiction in addictionsData.addictions)
+                        AddictionItem(
                           addictionData: addiction,
+                          key: ValueKey(addiction.id),
                         ),
-                      ),
-                  ],
-                  onReorder: (oldIndex, newIndex) {
-                    setState(() {
-                      if (newIndex > oldIndex) {
-                        newIndex--;
-                      }
-                      Provider.of<AddictionsProvider>(context, listen: false)
-                          .reorderAddictions(oldIndex, newIndex);
-                    });
-                  },
+                    ],
+                    onReorder: (oldIndex, newIndex) {
+                      setState(() {
+                        if (newIndex > oldIndex) {
+                          newIndex--;
+                        }
+                        Provider.of<AddictionsProvider>(context, listen: false)
+                            .reorderAddictions(oldIndex, newIndex);
+                      });
+                    },
+                  ),
                 )
-              //  ListView.builder(
-              //     itemCount: addictionsData.addictions.length,
-              //     itemBuilder: (ctx, index) {
-              //       return AddictionItem(
-              //         addictionData: addictionsData.addictions[index],
-              //       );
-              //     },
-              //   )
               : InkWell(
                   onTap: pushCreateAddictionScreen,
                   child: Container(
