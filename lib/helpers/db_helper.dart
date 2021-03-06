@@ -9,7 +9,7 @@ class DBHelper {
       path.join(dbPath, 'user.db'),
       onCreate: (db, version) async {
         await db.execute(
-            'CREATE TABLE addictions(id TEXT PRIMARY KEY, name TEXT, quit_date TEXT, consumption_type INTEGER, daily_consumption REAL, unit_cost REAL, level INTEGER)');
+            'CREATE TABLE addictions(id TEXT PRIMARY KEY, name TEXT, quit_date TEXT, consumption_type INTEGER, daily_consumption REAL, unit_cost REAL, level INTEGER, achievement_level INTEGER, sort_order INTEGER)');
         await db.execute(
             'CREATE TABLE settings(id INTEGER, currency TEXT, allow_progress_notification INTEGER, allow_quote_notification INTEGER)');
         await db.execute(
@@ -41,25 +41,63 @@ class DBHelper {
         .rawUpdate('UPDATE $table SET $column = ? WHERE id = ?', [data, id]);
   }
 
-  //? maybe a more generalized version of this function
-  static Future<void> switchGiftOrders(
+  static Future<void> reorder(
     String table,
     String column,
+    int oldIndex,
+    int newIndex, [
+    String groupingColStr = '',
+    String groupingCol = '',
+  ]) async {
+    final db = await DBHelper.database();
+
+    String groupingQuery = '';
+    if (groupingCol != '') {
+      groupingQuery = ' AND $groupingCol = "$groupingColStr"';
+    }
+    await db.rawUpdate(
+      'UPDATE $table SET $column = ? WHERE $column = ?' + groupingQuery,
+      [-1, oldIndex],
+    );
+    if (oldIndex < newIndex) {
+      await db.rawUpdate(
+        'UPDATE $table SET $column = $column + ? WHERE $column > ? AND $column <= ?' +
+            groupingQuery,
+        [-1, oldIndex, newIndex],
+      );
+    } else {
+      await db.rawUpdate(
+        'UPDATE $table SET $column = $column + ? WHERE $column < ? AND $column >= ?' +
+            groupingQuery,
+        [1, oldIndex, newIndex],
+      );
+    }
+    await db.rawUpdate(
+      'UPDATE $table SET $column = ? WHERE $column = ?' + groupingQuery,
+      [newIndex, -1],
+    );
+  }
+
+  static Future<void> reorderGroupedBy(
+    String table,
+    String column,
+    String groupingColVal,
+    String groupingCol,
     int oldIndex,
     int newIndex,
   ) async {
     final db = await DBHelper.database();
     await db.rawUpdate(
-      'UPDATE $table SET $column = ? WHERE $column = ?',
-      [-1, oldIndex],
+      'UPDATE $table SET $column = ? WHERE $column = ? AND $groupingCol = ?',
+      [-1, oldIndex, groupingColVal],
     );
     await db.rawUpdate(
-      'UPDATE $table SET $column = ? WHERE $column = ?',
-      [oldIndex, newIndex],
+      'UPDATE $table SET $column = ? WHERE $column = ? AND $groupingCol = ?',
+      [oldIndex, newIndex, groupingColVal],
     );
     return db.rawUpdate(
-      'UPDATE $table SET $column = ? WHERE $column = ?',
-      [newIndex, -1],
+      'UPDATE $table SET $column = ? WHERE $column = ? AND $groupingCol = ?',
+      [newIndex, -1, groupingColVal],
     );
   }
 
