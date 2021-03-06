@@ -54,9 +54,11 @@ class _AddictionCardState extends State<AddictionCard>
     'daily_consumption': 1.0,
     'unit_cost': 1.0,
     'level': 0,
+    'achievement_level': 0,
   };
 
   void _selectDate(context, DateTime currentlyPicked) async {
+    //pick date
     DateTime date = await showDatePicker(
       context: context,
       builder: (context, child) {
@@ -71,6 +73,8 @@ class _AddictionCardState extends State<AddictionCard>
       lastDate: DateTime.now(),
     );
     _dpAnimController.reset();
+
+    // check if datepicker canceled
     if (date != null) {
       TimeOfDay time = await showTimePicker(
         context: context,
@@ -84,7 +88,11 @@ class _AddictionCardState extends State<AddictionCard>
         initialTime: TimeOfDay.now(),
       );
       _dpAnimController.reset();
+
+      // check if timepicker canceled
       if (time != null) {
+        // if date is today, check if picked time is in future
+        // if it is, cancel and reset the date.
         if (date.isSameDate(DateTime.now())) {
           if (time.asDuration.inSeconds <=
               TimeOfDay.now().asDuration.inSeconds) {
@@ -99,29 +107,28 @@ class _AddictionCardState extends State<AddictionCard>
               );
             date = date.add(TimeOfDay.now().asDuration);
           }
-        } else {
+        } else // if date is not today, add picked time
           date = date.add(time.asDuration);
-        }
-      } else {
+      } else // if time = null (canceled)
         date = currentlyPicked;
-      }
-    } else {
+    } else // if date = null (canceled)
       date = currentlyPicked;
-    }
+
+    addictionData['quit_date'] = date.toString();
+    Duration quitDuration = DateTime.now().difference(date);
     setState(() {
-      addictionData['quit_date'] = date.toString();
-      int levelCount = -1;
-      Duration quitDuration = DateTime.now().difference(date);
-      for (Duration duration in levelDurations) {
-        if (quitDuration.inSeconds >= duration.inSeconds) {
-          levelCount = levelCount + 1;
-        }
-      }
-      addictionData['level'] = levelCount;
+      int temp = levelDurations
+          .indexWhere((element) => quitDuration.inSeconds < element.inSeconds);
+      addictionData['level'] =
+          temp == -1 ? levelDurations.length - 1 : temp - 1;
+      temp = achievementDurations
+          .indexWhere((element) => quitDuration.inSeconds < element.inSeconds);
+      addictionData['achievement_level'] =
+          temp == -1 ? achievementDurations.length - 1 : temp - 1;
     });
   }
 
-  void trySubmit(BuildContext ctx) async {
+  void trySubmit() async {
     final isValid = _formKey.currentState.validate();
     FocusScope.of(context).unfocus();
 
@@ -130,7 +137,7 @@ class _AddictionCardState extends State<AddictionCard>
       final newAddiction =
           await Provider.of<AddictionsProvider>(context, listen: false)
               .createAddiction(addictionData);
-      Navigator.of(ctx).popAndPushNamed(
+      Navigator.of(context).popAndPushNamed(
         AddictionItemScreen.routeName,
         arguments: AddictionItemScreenArgs(newAddiction),
       );
@@ -178,8 +185,7 @@ class _AddictionCardState extends State<AddictionCard>
                   data: addictionData,
                   inputName: local.addictionName.capitalizeWords(),
                   inputType: TextInputType.name,
-                  focusNode: _focusNode,
-                  inputAction: TextInputAction.done,
+                  inputAction: TextInputAction.next,
                 ),
                 SizedBox(
                   width: deviceSize.width,
@@ -199,6 +205,7 @@ class _AddictionCardState extends State<AddictionCard>
                             splashColor: Theme.of(context).highlightColor,
                             onTap: () {
                               setState(() {
+                                FocusScope.of(context).unfocus();
                                 _selectDate(
                                   context,
                                   DateTime.parse(addictionData['quit_date']),
@@ -284,6 +291,7 @@ class _AddictionCardState extends State<AddictionCard>
                                           ),
                                           onPressed: () {
                                             setState(() {
+                                              FocusScope.of(context).unfocus();
                                               addictionData[
                                                   'consumption_type'] = 0;
                                               _consumptionType = local.quantity;
@@ -407,7 +415,7 @@ class _AddictionCardState extends State<AddictionCard>
                   data: addictionData,
                   inputName: local.unitCost.capitalizeWords(),
                   inputType: TextInputType.number,
-                  // onSubmit: () => trySubmit(context),
+                  onSubmit: trySubmit,
                   validator: (value) {
                     if (double.tryParse(value) == null) {
                       return local.pleaseEnterANumber.capitalizeFirstLetter();
@@ -420,7 +428,7 @@ class _AddictionCardState extends State<AddictionCard>
                   inputAction: TextInputAction.done,
                 ),
                 ElevatedButton(
-                  onPressed: () => trySubmit(context),
+                  onPressed: trySubmit,
                   child: Container(
                     width: deviceSize.width,
                     height: deviceSize.height * .1,
