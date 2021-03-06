@@ -5,7 +5,7 @@ import 'package:quittle/models/addiction.dart';
 import 'package:quittle/providers/addictions_provider.dart';
 import 'package:quittle/providers/settings_provider.dart';
 import 'package:quittle/screens/create_addiction_screen.dart';
-import 'package:quittle/util/achievement_constants.dart';
+import 'package:quittle/util/progress_constants.dart';
 import 'package:quittle/widgets/addiction_item_card.dart';
 import 'package:quittle/widgets/settings_view.dart';
 import 'package:provider/provider.dart';
@@ -27,7 +27,7 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
     if (Provider.of<SettingsProvider>(context, listen: false)
         .receiveProgressNotifs) {
       for (var addiction in addictions) {
-        if (addiction.level < getAchievementDurations.length - 1) {
+        if (addiction.level < levelDurations.length - 1) {
           Workmanager.registerPeriodicTask(
             addiction.id,
             'progress-notification',
@@ -131,70 +131,65 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
           body: Consumer<AddictionsProvider>(
             builder: (ctx, addictionsData, child) {
               _setProgNotifTasks(addictionsData.addictions);
-              return RefreshIndicator(
-                onRefresh: () async {
-                  await addictionsData.fetchAddictions();
-                },
-                child: addictionsData.addictions.length > 0
-                    ? ListView.builder(
-                        itemCount: addictionsData.addictions.length,
-                        itemBuilder: (ctx, index) {
-                          return AddictionItem(
-                            addictionData: addictionsData.addictions[index],
-                          );
-                        },
-                      )
-                    : InkWell(
-                        onTap: pushCreateAddictionScreen,
-                        child: Container(
-                          height: deviceSize.height,
-                          width: deviceSize.width,
-                          child: Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              Center(
-                                child: SizedBox.fromSize(
-                                  size: Size.square(deviceSize.width * .5),
-                                  child: FloatingActionButton(
-                                    heroTag: 'newAddiction',
-                                    elevation: 0,
-                                    backgroundColor:
-                                        Theme.of(context).primaryColor,
-                                    foregroundColor:
-                                        Theme.of(context).canvasColor,
-                                    child: Icon(
-                                      Icons.add,
-                                      size: Theme.of(context)
-                                          .textTheme
-                                          .headline1
-                                          .fontSize,
-                                    ),
-                                    onPressed: null,
+              return addictionsData.addictions.length > 0
+                  ? ListView.builder(
+                      itemCount: addictionsData.addictions.length,
+                      itemBuilder: (ctx, index) {
+                        return AddictionItem(
+                          addictionData: addictionsData.addictions[index],
+                        );
+                      },
+                    )
+                  : InkWell(
+                      onTap: pushCreateAddictionScreen,
+                      child: Container(
+                        height: deviceSize.height,
+                        width: deviceSize.width,
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Center(
+                              child: SizedBox.fromSize(
+                                size: Size.square(deviceSize.width * .5),
+                                child: FloatingActionButton(
+                                  heroTag: 'newAddiction',
+                                  elevation: 0,
+                                  backgroundColor:
+                                      Theme.of(context).primaryColor,
+                                  foregroundColor:
+                                      Theme.of(context).canvasColor,
+                                  child: Icon(
+                                    Icons.add,
+                                    size: Theme.of(context)
+                                        .textTheme
+                                        .headline1
+                                        .fontSize,
+                                  ),
+                                  onPressed: null,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Text(
+                                  'Quittle',
+                                  style: TextStyle(
+                                    fontSize: Theme.of(context)
+                                        .textTheme
+                                        .headline2
+                                        .fontSize,
+                                    color: Theme.of(context).primaryColor,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Align(
-                                  alignment: Alignment.bottomCenter,
-                                  child: Text(
-                                    'Quittle',
-                                    style: TextStyle(
-                                      fontSize: Theme.of(context)
-                                          .textTheme
-                                          .headline2
-                                          .fontSize,
-                                      color: Theme.of(context).primaryColor,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
+                            )
+                          ],
                         ),
                       ),
-              );
+                    );
             },
           ),
         ),

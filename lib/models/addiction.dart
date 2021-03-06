@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:quittle/util/achievement_constants.dart';
+import 'package:quittle/util/progress_constants.dart';
 import 'package:quittle/models/personal_note.dart';
 import 'package:quittle/models/gift.dart';
 
@@ -14,7 +14,6 @@ class Addiction {
   final double unitCost;
   List<PersonalNote> personalNotes;
   List<Gift> gifts;
-  List<Duration> achievements;
   int level;
 
   Addiction({
@@ -27,9 +26,7 @@ class Addiction {
     this.personalNotes,
     this.gifts,
     this.level,
-  }) {
-    this.achievements = getAchievementDurations;
-  }
+  });
 
   DateTime get quitDateTime {
     return DateTime.parse(quitDate);

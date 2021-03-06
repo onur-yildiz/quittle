@@ -15,10 +15,11 @@ import 'package:quittle/screens/addictions_screen.dart';
 import 'package:quittle/screens/create_addiction_screen.dart';
 import 'package:quittle/util/custom_localizations.dart';
 import 'package:quittle/util/quotes_constants.dart';
+import 'package:quittle/widgets/playground.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:workmanager/workmanager.dart';
-import 'package:quittle/util/achievement_constants.dart';
+import 'package:quittle/util/progress_constants.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -197,7 +198,7 @@ void callbackDispatcher() {
         );
         final nextLevel = addiction.level + 1;
         if (addiction.abstinenceTime.inSeconds >=
-            getAchievementDurations[nextLevel].inSeconds) {
+            levelDurations[nextLevel].inSeconds) {
           await DBHelper.update(
             'addictions',
             'level',

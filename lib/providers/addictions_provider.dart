@@ -22,6 +22,8 @@ class AddictionsProvider with ChangeNotifier {
       dailyConsumption: data['daily_consumption'],
       unitCost: data['unit_cost'],
       level: data['level'],
+      personalNotes: [],
+      gifts: [],
     );
     _addictions.add(newAddiction);
 

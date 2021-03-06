@@ -1,7 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
 import 'package:quittle/models/addiction.dart';
-import 'package:sleek_circular_slider/sleek_circular_slider.dart';
+import 'package:quittle/util/progress_constants.dart';
+import 'package:quittle/extensions/duration_extension.dart';
 
 class Achievements extends StatefulWidget {
   final Addiction data;
@@ -15,243 +20,273 @@ class Achievements extends StatefulWidget {
 }
 
 class _AchievementsState extends State<Achievements> {
-  List formattedDurations;
-
-  void _getLocalizedAchievementDurations(AppLocalizations local) {
-    formattedDurations[0] = 'a new start!';
-    for (var i = 1; i < widget.data.achievements.length; i++) {
-      if (widget.data.achievements[i].inDays < 30) {
-        formattedDurations[i] =
-            ('${widget.data.achievements[i].inDays} ${local.day(widget.data.achievements[i].inDays)}');
-      } else if (widget.data.achievements[i].inDays < 360) {
-        final int inMonths = (widget.data.achievements[i].inDays / 30).floor();
-        formattedDurations[i] = ('$inMonths ${local.month(inMonths)}');
-      } else {
-        final int inYears = (widget.data.achievements[i].inDays / 360).floor();
-        formattedDurations[i] = ('$inYears ${local.year(inYears)}');
-      }
-    }
-  }
+  int maxAchLevel;
+  List localizedAchDurations;
+  int achLevel;
+  Timer timer;
+  double percentage;
 
   @override
   void initState() {
-    formattedDurations = List.filled(widget.data.achievements.length, '');
+    maxAchLevel = achievementDurations.length - 1;
+    // there is 9 levels, 6 achievements converting level to achLevel by -3 without using another var in addition
+    //TODO add achLevel to addition model
+    achLevel =
+        (widget.data.level - 3).clamp(0, achievementDurations.length - 1);
+    percentage = achievementDurations[achLevel].inMinutes /
+        achievementDurations.last.inMinutes;
+    localizedAchDurations = List.filled(achievementDurations.length, '');
     Future.delayed(Duration.zero, () {
       setState(() {
         _getLocalizedAchievementDurations(AppLocalizations.of(context));
       });
     });
+    timer = Timer.periodic(Duration(days: 1), (timer) {
+      setState(() {
+        percentage = achievementDurations[achLevel].inMinutes /
+            achievementDurations.last.inMinutes;
+      });
+    });
     super.initState();
   }
 
-  Map<String, Object> _getTileAttr(int itemLevel) {
-    final currentLevel = widget.data.level;
-    if (itemLevel == 0) {
-      return {
-        'tileColor': Colors.green,
-        'icon': Icons.radio_button_checked,
-        'iconColor': Colors.white,
-      };
-    } else if (itemLevel <= currentLevel) {
-      return {
-        'tileColor': Colors.green,
-        'icon': Icons.check,
-        'iconColor': Colors.white,
-      };
-    } else {
-      final diff = itemLevel - currentLevel;
-      final tileColor = Colors.amber
-          .withGreen((Colors.amber.green - (diff * 20)).clamp(0, 255));
-      return {
-        'tileColor': tileColor,
-        'icon': Icons.lock_clock,
-        'iconColor': Colors.black,
-      };
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
+  }
+
+  double getVerticalPosition(double height, int level) {
+    double pos = 0.0;
+    for (var i = 0; i < level; i++) {
+      pos += ((achievementDurations[(i + 1)].inDays -
+                  achievementDurations[(i)].inDays) /
+              30) *
+          height;
+    }
+    return pos;
+  }
+
+  void _getLocalizedAchievementDurations(AppLocalizations local) {
+    localizedAchDurations[0] = 'a new start!';
+    for (var i = 1; i < achievementDurations.length; i++) {
+      if (achievementDurations[i].inDays < 30) {
+        localizedAchDurations[i] =
+            ('${achievementDurations[i].inDays} ${local.day(achievementDurations[i].inDays)}');
+      } else if (achievementDurations[i].inDays < 360) {
+        final int inMonths = (achievementDurations[i].inDays / 30).floor();
+        localizedAchDurations[i] = ('$inMonths ${local.month(inMonths)}');
+      } else {
+        final int inYears = (achievementDurations[i].inDays / 360).floor();
+        localizedAchDurations[i] = ('$inYears ${local.year(inYears)}');
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    // final local = AppLocalizations.of(context);
-    final currentLevel = widget.data.level;
+    final deviceSize = MediaQuery.of(context).size;
 
-    return ListView.builder(
-      itemCount: widget.data.achievements.length,
-      itemBuilder: (context, index) {
-        final tileAttr = _getTileAttr(index);
-        return (currentLevel + 1 == index)
-            ? ListTile(
-                tileColor: tileAttr['tileColor'],
-                contentPadding: EdgeInsets.all(
-                    Theme.of(context).textTheme.headline4.fontSize),
-                title: Center(
-                  child: Text(
-                    formattedDurations[index],
-                    style: TextStyle(
-                      fontSize: Theme.of(context).textTheme.headline4.fontSize,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                subtitle: Padding(
-                  padding: EdgeInsets.all(
-                      Theme.of(context).textTheme.headline1.fontSize / 2),
-                  child: FittedBox(
-                    fit: BoxFit.cover,
-                    child: SleekCircularSlider(
-                      innerWidget: (percentage) => Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            percentage.toStringAsFixed(0),
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: Theme.of(context)
-                                  .textTheme
-                                  .headline5
-                                  .fontSize,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            '%',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1
-                                  .fontSize,
-                            ),
-                          ),
-                        ],
+    final double tileHeight = deviceSize.width;
+    double totalHeight = 0.0;
+    List achievementHeights = [];
+    for (var i = 0; i < maxAchLevel; i++) {
+      achievementHeights.add(
+        tileHeight *
+            (achievementDurations[i + 1] - achievementDurations[i]).in30s,
+      );
+      totalHeight += achievementHeights[i];
+    }
+
+    // LiquidLinearProgressIndicator is not used exclusively because when height grows waves get too steep,
+    //so an AnimatedContainer is used as a progress bar and LiquidLinearProgressIndicator is put to the top of the bar to give liquid effect.
+    return Scaffold(
+      body: SingleChildScrollView(
+        reverse: true,
+        child: Stack(
+          children: [
+            AnimatedPositioned(
+              duration: Duration(seconds: 1),
+              // TODO make a custom liquidprogressindicator that eliminates the need of the AnimatedContainer
+              // LiquidLinearProgressIndicator has an unremovable border -.17 overlaps it (Pixel 4)
+              bottom: totalHeight * percentage - .17,
+              child: Container(
+                width: deviceSize.width,
+                height: tileHeight * .2,
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    LiquidLinearProgressIndicator(
+                      value: .8,
+                      valueColor: AlwaysStoppedAnimation(
+                        Theme.of(context).accentColor.withOpacity(.5),
                       ),
-                      appearance: CircularSliderAppearance(
-                        animationEnabled: true,
-                        infoProperties: InfoProperties(
-                          mainLabelStyle: TextStyle(
-                            color: Colors.white,
-                            fontSize:
-                                Theme.of(context).textTheme.headline6.fontSize,
-                            fontWeight: FontWeight.bold,
+                      backgroundColor: Colors.transparent,
+                      direction: Axis.vertical,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Column(
+              children: [
+                Container(
+                  height: tileHeight,
+                  width: deviceSize.width,
+                  child: Center(
+                    child: FaIcon(
+                      FontAwesomeIcons.checkCircle,
+                      color: percentage == 1.0
+                          ? Colors.amber
+                          : Theme.of(context).highlightColor,
+                      size: tileHeight / 2,
+                    ),
+                  ),
+                ),
+                Container(
+                  height: totalHeight,
+                  child: Stack(
+                    alignment: Alignment.bottomCenter,
+                    children: [
+                      AnimatedContainer(
+                        duration: Duration(seconds: 1),
+                        height: totalHeight * percentage,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              Theme.of(context).accentColor,
+                              Theme.of(context).accentColor.withOpacity(.5),
+                            ],
+                            stops: [percentage.clamp(.0, .8), 1],
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter,
                           ),
                         ),
-                        customWidths: CustomSliderWidths(
-                          trackWidth:
-                              Theme.of(context).textTheme.bodyText1.fontSize,
-                          handlerSize: 0,
-                          progressBarWidth:
-                              Theme.of(context).textTheme.bodyText1.fontSize,
-                        ),
-                        customColors: CustomSliderColors(
-                          progressBarColors: [
-                            Theme.of(context).accentColor,
-                            Theme.of(context).accentColor.withOpacity(.5),
-                          ],
-                          trackColor: Theme.of(context).canvasColor,
-                          hideShadow: true,
-                        ),
                       ),
-                      min: 0,
-                      max: 100,
-                      initialValue: (widget.data.abstinenceTime.inSeconds /
-                                  widget.data.achievements[index].inSeconds)
-                              .clamp(0.0, 1.0) *
-                          100,
-                    ),
+                      ...List<Widget>.generate(
+                        maxAchLevel,
+                        (index) => Positioned(
+                          bottom: getVerticalPosition(tileHeight, index),
+                          child: Trophy(
+                            title: localizedAchDurations[index + 1],
+                            // subtitle: localizedAchDurations[index + 1],
+                            level: index + 1,
+                            height: achievementHeights[index],
+                            trophySize: Theme.of(context)
+                                    .textTheme
+                                    .headline3
+                                    .fontSize *
+                                (index + 1).clamp(0.0, deviceSize.width * .5),
+                            active: index + 1 <= achLevel ? true : false,
+                          ),
+                        ),
+                      ).reversed
+                    ],
                   ),
                 ),
-              )
-            : ListTile(
-                tileColor: tileAttr['tileColor'],
-                contentPadding: EdgeInsets.all(
-                  Theme.of(context).textTheme.headline4.fontSize,
-                ),
-                title: Center(
-                  child: Text(
-                    formattedDurations[index],
-                    style: TextStyle(
-                      fontSize: Theme.of(context).textTheme.headline4.fontSize,
-                      fontWeight: FontWeight.bold,
-                      color: tileAttr['iconColor'],
-                    ),
-                  ),
-                ),
-                subtitle: Padding(
-                  padding: EdgeInsets.all(
-                      Theme.of(context).textTheme.headline1.fontSize / 2),
-                  child: Icon(
-                    tileAttr['icon'],
-                    size: Theme.of(context).textTheme.headline1.fontSize,
-                    color: tileAttr['iconColor'],
-                  ),
-                ),
-              );
-      },
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
 
-// ListView(
-//       children: [
-//         ListTile(
-//           tileColor: Colors.green,
-//           contentPadding:
-//               EdgeInsets.all(Theme.of(context).textTheme.headline4.fontSize),
-//           title: Center(
-//             child: Text('Achievement 1'),
-//           ),
-//           subtitle: Icon(
-//             Icons.check,
-//             size: Theme.of(context).textTheme.headline1.fontSize,
-//           ),
-//         ),
-//         ListTile(
-//           tileColor: Colors.amber,
-//           contentPadding:
-//               EdgeInsets.all(Theme.of(context).textTheme.headline4.fontSize),
-//           title: Center(
-//             child: Text('Achievement 2'),
-//           ),
-//           subtitle: Icon(
-//             Icons.timelapse,
-//             size: Theme.of(context).textTheme.headline1.fontSize,
-//           ),
-//         ),
-//         ListTile(
-//           tileColor: Colors.orange,
-//           contentPadding:
-//               EdgeInsets.all(Theme.of(context).textTheme.headline4.fontSize),
-//           title: Center(
-//             child: Text('Achievement 3'),
-//           ),
-//           subtitle: Icon(
-//             Icons.lock_clock,
-//             size: Theme.of(context).textTheme.headline1.fontSize,
-//           ),
-//         ),
-//         ListTile(
-//           tileColor: Colors.red,
-//           contentPadding:
-//               EdgeInsets.all(Theme.of(context).textTheme.headline4.fontSize),
-//           title: Center(
-//             child: Text('Achievement 4'),
-//           ),
-//           subtitle: Icon(
-//             Icons.lock_clock,
-//             size: Theme.of(context).textTheme.headline1.fontSize,
-//           ),
-//         ),
-//         ListTile(
-//           tileColor: Colors.red[900],
-//           contentPadding:
-//               EdgeInsets.all(Theme.of(context).textTheme.headline4.fontSize),
-//           title: Center(
-//             child: Text('Achievement 5'),
-//           ),
-//           subtitle: Icon(
-//             Icons.lock_clock,
-//             size: Theme.of(context).textTheme.headline1.fontSize,
-//           ),
-//         ),
-//       ],
-//     );
+class Trophy extends StatelessWidget {
+  final int level;
+  final double height;
+  final double trophySize;
+  final bool active;
+  final String title;
+  final String subtitle;
+
+  Trophy({
+    this.level = 1,
+    this.height = 100,
+    this.trophySize = 60,
+    this.active = true,
+    this.title = '',
+    this.subtitle = '',
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final color = active ? Colors.amber : Theme.of(context).highlightColor;
+    final stars = List<FaIcon>.filled(
+      level,
+      FaIcon(
+        FontAwesomeIcons.solidStar,
+        color: color,
+        size: trophySize * .25,
+      ),
+    );
+
+    final bool isTitleOverflowed = trophySize / title.length <
+        Theme.of(context).textTheme.bodyText1.fontSize;
+    final bool isSubtitleOverflowed = trophySize / subtitle.length <
+        Theme.of(context).textTheme.bodyText1.fontSize;
+
+    return Container(
+      height: height,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Stack(
+            alignment: Alignment.topCenter,
+            clipBehavior: Clip.none,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(
+                  top: isTitleOverflowed
+                      ? Theme.of(context).textTheme.bodyText1.fontSize *
+                          (isSubtitleOverflowed ? 2 : 1)
+                      : 0.0,
+                ),
+                child: FaIcon(
+                  FontAwesomeIcons.trophy,
+                  color: color,
+                  size: trophySize,
+                ),
+              ),
+              Positioned(
+                top: isTitleOverflowed ? 0 : trophySize * .25,
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    color: active
+                        ? Colors.amber
+                        : Theme.of(context).hintColor.withOpacity(.5),
+                  ),
+                ),
+              ),
+              Positioned(
+                top: isSubtitleOverflowed
+                    ? Theme.of(context).textTheme.bodyText1.fontSize
+                    : trophySize * .4,
+                child: Text(
+                  subtitle,
+                  style: TextStyle(
+                    color: active
+                        ? Colors.amber
+                        : Theme.of(context).hintColor.withOpacity(.5),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            width: trophySize,
+            child: Wrap(
+              alignment: WrapAlignment.center,
+              direction: Axis.horizontal,
+              children: [
+                ...stars,
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

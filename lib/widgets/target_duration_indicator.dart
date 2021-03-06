@@ -17,6 +17,7 @@ class TargetDurationIndicator extends StatefulWidget {
 }
 
 class _TargetDurationIndicatorState extends State<TargetDurationIndicator> {
+  Timer timer;
   Duration updatedDuration;
   String targetUnit = '';
   int targetValue = 0;
@@ -82,7 +83,7 @@ class _TargetDurationIndicatorState extends State<TargetDurationIndicator> {
           setValues(updatedDuration, local);
         });
       }
-      Timer.periodic(
+      timer = Timer.periodic(
         Duration(seconds: refreshInterval),
         (timer) {
           if (mounted) {
@@ -91,13 +92,17 @@ class _TargetDurationIndicatorState extends State<TargetDurationIndicator> {
                   updatedDuration + Duration(seconds: refreshInterval);
               setValues(updatedDuration, local);
             });
-          } else {
-            timer.cancel();
           }
         },
       );
     });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
   }
 
   @override

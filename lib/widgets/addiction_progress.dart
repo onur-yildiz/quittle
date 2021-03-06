@@ -3,7 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:quittle/extensions/string_extension.dart';
 import 'package:quittle/models/addiction.dart';
 import 'package:quittle/providers/settings_provider.dart';
-import 'package:quittle/util/achievement_constants.dart';
+import 'package:quittle/util/progress_constants.dart';
 import 'package:quittle/widgets/target_duration_indicator.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -47,7 +47,7 @@ class AddictionProgress extends StatelessWidget {
                           (addictionData.level + 1).toString(),
                     ),
                     Text(
-                      getAchievementNames(local.localeName)[addictionData.level]
+                      getLevelNames(local.localeName)[addictionData.level]
                           .capitalizeWords(),
                     )
                   ],

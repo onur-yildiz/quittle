@@ -14,6 +14,7 @@ class DurationCounter extends StatefulWidget {
 }
 
 class _DurationCounterState extends State<DurationCounter> {
+  Timer timer;
   String durationAsString = '';
   Duration updatedDuration;
 
@@ -30,17 +31,21 @@ class _DurationCounterState extends State<DurationCounter> {
     updatedDuration = widget.duration;
     durationAsString = durationString(updatedDuration);
 
-    Timer.periodic(Duration(seconds: 1), (timer) {
+    timer = Timer.periodic(Duration(seconds: 1), (timer) {
       if (mounted) {
         setState(() {
           updatedDuration = updatedDuration + Duration(seconds: 1);
           durationAsString = durationString(updatedDuration);
         });
-      } else {
-        timer.cancel();
       }
     });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
   }
 
   @override

@@ -2,7 +2,7 @@ import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:quittle/extensions/string_extension.dart';
-import 'package:quittle/util/achievement_constants.dart';
+import 'package:quittle/util/progress_constants.dart';
 import 'package:quittle/models/addiction_item_screen_args.dart';
 import 'package:quittle/providers/addictions_provider.dart';
 import 'package:quittle/screens/addiction_item_screen.dart';
@@ -112,7 +112,7 @@ class _AddictionCardState extends State<AddictionCard>
       addictionData['quit_date'] = date.toString();
       int levelCount = -1;
       Duration quitDuration = DateTime.now().difference(date);
-      for (Duration duration in getAchievementDurations) {
+      for (Duration duration in levelDurations) {
         if (quitDuration.inSeconds >= duration.inSeconds) {
           levelCount = levelCount + 1;
         }
