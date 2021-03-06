@@ -105,7 +105,7 @@ class AddictionProgress extends StatelessWidget {
               ),
             ],
           ),
-          TargetDurationIndicator(duration: addictionData.abstinenceTime),
+          TargetDurationIndicator(data: addictionData),
         ],
       ),
     );

@@ -2,14 +2,18 @@ import 'dart:async';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:flutter/material.dart';
+import 'package:quittle/models/addiction.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
+import 'package:quittle/extensions/duration_extension.dart';
+
+const _refreshInterval = Duration(seconds: 30);
 
 class TargetDurationIndicator extends StatefulWidget {
   TargetDurationIndicator({
-    @required this.duration,
+    @required this.data,
   });
 
-  final Duration duration;
+  final Addiction data;
 
   @override
   _TargetDurationIndicatorState createState() =>
@@ -17,92 +21,75 @@ class TargetDurationIndicator extends StatefulWidget {
 }
 
 class _TargetDurationIndicatorState extends State<TargetDurationIndicator> {
-  Timer timer;
   Duration updatedDuration;
   String targetUnit = '';
   int targetValue = 0;
   double percentage = 0.0;
-  final int refreshInterval = 15;
-
-  // final daysInMonth = DateTimeRange(
-  //   start: DateTime(
-  //     DateTime.now().year,
-  //     DateTime.now().month,
-  //   ),
-  //   end: DateTime(
-  //     DateTime.now().year,
-  //     DateTime.now().month + 1,
-  //   ),
-  // ).duration.inDays;
 
   void setValues(Duration time, [AppLocalizations local]) {
     if (time.inHours < 24) {
       if (time.inHours < 1) {
         targetValue = 1;
         targetUnit = local.hour(1);
-        percentage = time.inMinutes / 60;
+        percentage = time.inMinutes / Duration.minutesPerHour;
       } else {
         targetValue = 24;
         targetUnit = local.hour(targetValue);
-        percentage = time.inMinutes.remainder(Duration.minutesPerDay) /
-            Duration.minutesPerDay;
+        percentage = time.inMinutes / Duration.minutesPerDay;
       }
     } else if (time.inDays < 30) {
-      if (time.inDays < 7) {
+      if (time.inDays < 3) {
+        targetValue = 3;
+        targetUnit = local.day(targetValue);
+        percentage = time.inMinutes / (3 * Duration.minutesPerDay);
+      } else if (time.inDays < 7) {
         targetValue = 1;
         targetUnit = local.week(targetValue);
-        percentage = (time.inDays % 7) * 24 / (7 * 24);
+        percentage = time.inMinutes / (7 * Duration.minutesPerDay);
       } else {
         targetValue = 1;
         targetUnit = local.month(targetValue);
-        percentage = (time.inDays % 30) * 24 / (30 * 24);
+        percentage = time.inMinutes / (30 * Duration.minutesPerDay);
       }
     } else if (time.inDays ~/ 30 < 12) {
-      targetValue = (time.inDays ~/ 30) + 1;
+      targetValue = (time.inDays / 30).ceil();
       targetUnit = local.month(targetValue);
-      percentage = time.inDays / (targetValue * 30);
+      percentage = time.inMinutes / (targetValue * 30 * Duration.minutesPerDay);
     } else {
       targetValue = (time.inDays ~/ 360) + 1;
       if (time.inDays / 360 < 1) {
         targetUnit = local.year(targetValue);
-        percentage = time.inDays / 360;
+        percentage = time.inMinutes / 360 * Duration.minutesPerDay;
       } else {
         targetUnit = local.year(targetValue);
-        percentage = time.inDays / (360 * targetValue);
+        percentage =
+            time.inMinutes / (360 * Duration.minutesPerDay * targetValue);
       }
     }
-  } // TODO: do better, can be better
+  }
 
   @override
   void initState() {
-    updatedDuration = widget.duration;
+    AppLocalizations local;
     Future.delayed(Duration.zero, () {
-      final local = AppLocalizations.of(context);
       if (mounted) {
+        local = AppLocalizations.of(context);
         setState(() {
-          setValues(updatedDuration, local);
+          setValues(widget.data.abstinenceTime, local);
         });
       }
-      timer = Timer.periodic(
-        Duration(seconds: refreshInterval),
+      Timer.periodic(
+        _refreshInterval,
         (timer) {
           if (mounted) {
             setState(() {
-              updatedDuration =
-                  updatedDuration + Duration(seconds: refreshInterval);
-              setValues(updatedDuration, local);
+              setValues(widget.data.abstinenceTime, local);
             });
           }
         },
       );
     });
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    timer.cancel();
-    super.dispose();
   }
 
   @override
