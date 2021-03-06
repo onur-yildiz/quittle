@@ -40,10 +40,11 @@ class _AchievementsState extends State<Achievements> {
       });
     });
     Timer.periodic(_refreshInterval, (timer) {
-      setState(() {
-        percentage = widget.data.abstinenceTime.inMinutes /
-            achievementDurations.last.inMinutes;
-      });
+      if (mounted)
+        setState(() {
+          percentage = widget.data.abstinenceTime.inMinutes /
+              achievementDurations.last.inMinutes;
+        });
     });
     super.initState();
   }
