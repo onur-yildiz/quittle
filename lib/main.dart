@@ -67,7 +67,7 @@ void main() async {
   }
 
   const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('app_icon');
+      AndroidInitializationSettings('font_awesome_chain');
 
   final InitializationSettings initializationSettings = InitializationSettings(
     android: initializationSettingsAndroid,
@@ -175,6 +175,13 @@ void _setDailyQuoteNotification(BuildContext context) {
       initialDelay: timeTillTomorrowMorning,
       frequency: Duration(days: 1),
       existingWorkPolicy: ExistingWorkPolicy.keep,
+      constraints: Constraints(
+        requiresDeviceIdle: false,
+        requiresBatteryNotLow: false,
+        requiresCharging: false,
+        requiresStorageNotLow: false,
+        networkType: NetworkType.not_required,
+      ),
     );
   } else {
     Workmanager.cancelByUniqueName('quote-notification');
@@ -219,7 +226,6 @@ void callbackDispatcher() {
         final quoteList = quotes[inputData['locale']];
         Random random = new Random(DateTime.now().millisecondsSinceEpoch);
         int rndi = random.nextInt(quoteList.length);
-        print(rndi);
         showQuoteNotification(
           quoteOfTheDayLocs[inputData['locale']],
           quoteList[rndi]['quote'],
@@ -233,8 +239,11 @@ void callbackDispatcher() {
 
 void showProgressNotification(
     String notificationTitle, String notificationBody) {
-  final androidDetails = AndroidNotificationDetails('quitAllProgress',
-      'progressNotifications', 'quitAllProgressNotifications');
+  final androidDetails = AndroidNotificationDetails(
+    'quitAllProgress',
+    'progressNotifications',
+    'quitAllProgressNotifications',
+  );
   final genNotDetails = NotificationDetails(
     android: androidDetails,
   );
@@ -247,8 +256,12 @@ void showProgressNotification(
 }
 
 void showQuoteNotification(String notificationTitle, String notificationBody) {
-  final androidDetails = AndroidNotificationDetails('quitAllProgress',
-      'progressNotifications', 'quitAllProgressNotifications');
+  final androidDetails = AndroidNotificationDetails(
+    'quitAllProgress',
+    'progressNotifications',
+    'quitAllProgressNotifications',
+    styleInformation: BigTextStyleInformation(''),
+  );
   final genNotDetails = NotificationDetails(
     android: androidDetails,
   );
