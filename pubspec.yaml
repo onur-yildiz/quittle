@@ -40,7 +40,6 @@ dependencies:
   url_launcher: ^6.0.2
   font_awesome_flutter: ^8.11.0
   animations: ^2.0.0
-  shrink_sidemenu: ^1.0.0+3
   liquid_progress_indicator: ^0.3.2
 
   

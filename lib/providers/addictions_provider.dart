@@ -22,10 +22,11 @@ class AddictionsProvider with ChangeNotifier {
       dailyConsumption: data['daily_consumption'],
       unitCost: data['unit_cost'],
       level: data['level'],
+      achievementLevel: data['achievement_level'],
+      sortOrder: _addictions.length,
       personalNotes: [],
       gifts: [],
     );
-    _addictions.add(newAddiction);
 
     await DBHelper.insert(
       'addictions',
@@ -37,8 +38,12 @@ class AddictionsProvider with ChangeNotifier {
         'daily_consumption': data['daily_consumption'],
         'unit_cost': data['unit_cost'],
         'level': data['level'],
+        'achievement_level': data['achievement_level'],
+        'sort_order': _addictions.length,
       },
     );
+
+    _addictions.add(newAddiction);
     notifyListeners();
     return newAddiction;
   }
@@ -62,16 +67,42 @@ class AddictionsProvider with ChangeNotifier {
           dailyConsumption: addiction['daily_consumption'],
           unitCost: addiction['unit_cost'],
           level: addiction['level'],
+          achievementLevel: addiction['achievement_level'],
+          sortOrder: addiction['sort_order'],
           personalNotes: [],
           gifts: [],
         );
 
         loadedAddictions.add(temp);
-
-        _addictions = loadedAddictions;
       },
     );
+    loadedAddictions.sort((a, b) {
+      // print('${a.sortOrder} vs ${b.sortOrder}');
+      return a.sortOrder.compareTo(b.sortOrder);
+    });
+    // loadedAddictions.forEach((element) {
+    //   print('${element.name} ${element.sortOrder}');
+    // });
+    _addictions = loadedAddictions;
     notifyListeners();
+  }
+
+  Future<void> deleteAddiction(String id) async {
+    await DBHelper.delete('addictions', id);
+    notifyListeners();
+  }
+
+  void reorderAddictions(int oldIndex, int newIndex) async {
+    Addiction temp = _addictions.removeAt(oldIndex);
+    _addictions.insert(newIndex, temp);
+    await DBHelper.reorder(
+      'addictions',
+      'sort_order',
+      oldIndex,
+      newIndex,
+    );
+    // ...
+    // add a code that reverts the reorder if db fails
   }
 
   void createNote(Map<String, dynamic> data, String id) async {
@@ -171,6 +202,23 @@ class AddictionsProvider with ChangeNotifier {
     addiction.gifts = loadedGifts;
   }
 
+  Future<void> reorderGifts(int oldIndex, int newIndex, String id) async {
+    final addiction = _addictions.firstWhere((addiction) => addiction.id == id);
+    final temp = addiction.gifts.removeAt(oldIndex);
+    addiction.gifts.insert(newIndex, temp);
+    await DBHelper.reorder(
+      'gifts',
+      'sort_order',
+      oldIndex,
+      newIndex,
+      id,
+      'addiction_id',
+    );
+    notifyListeners();
+    // ...
+    // add a code that reverts the reorder if db fails
+  }
+
   void buyGift(Gift gift) async {
     // final addiction = _addictions.firstWhere((addiction) => addiction.id == id);
     gift.count = gift.count + 1;
@@ -183,5 +231,3 @@ class AddictionsProvider with ChangeNotifier {
     notifyListeners();
   }
 }
-
-// TODO fix bought number of gifts not saving
