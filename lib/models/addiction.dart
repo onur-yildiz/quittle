@@ -15,6 +15,8 @@ class Addiction {
   List<PersonalNote> personalNotes;
   List<Gift> gifts;
   int level;
+  int achievementLevel;
+  int sortOrder;
 
   Addiction({
     @required this.id,
@@ -26,6 +28,8 @@ class Addiction {
     this.personalNotes,
     this.gifts,
     this.level,
+    this.achievementLevel,
+    this.sortOrder,
   });
 
   DateTime get quitDateTime {
