@@ -47,7 +47,7 @@ class ReceivedNotification {
 }
 
 String selectedNotificationPayload;
-String _initialRoute;
+// String _initialRoute;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -60,11 +60,11 @@ void main() async {
   final NotificationAppLaunchDetails notificationAppLaunchDetails =
       await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
 
-  _initialRoute = AddictionsScreen.routeName;
-  if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {
-    selectedNotificationPayload = notificationAppLaunchDetails.payload;
-    _initialRoute = AddictionItemScreen.routeName;
-  }
+  // _initialRoute = AddictionsScreen.routeName;
+  // if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {
+  //   selectedNotificationPayload = notificationAppLaunchDetails.payload;
+  //   _initialRoute = AddictionItemScreen.routeName;
+  // }
 
   const AndroidInitializationSettings initializationSettingsAndroid =
       AndroidInitializationSettings('font_awesome_chain');
@@ -121,7 +121,7 @@ class MyApp extends StatelessWidget {
           accentColor: Color.fromRGBO(46, 105, 153, 1), // 74, 111, 134
           buttonColor: Color.fromRGBO(247, 244, 243, 1),
           canvasColor: Color.fromRGBO(247, 244, 243, 1),
-          cardColor: Color.fromRGBO(220, 220, 220, 1),
+          cardColor: Color.fromRGBO(230, 230, 230, 1),
           hintColor: Colors.blueGrey[800],
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
