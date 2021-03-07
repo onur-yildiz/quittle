@@ -7,6 +7,8 @@ import 'package:quittle/widgets/currency_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:googleapis/drive/v3.dart' as drive;
+import 'package:google_sign_in/google_sign_in.dart' as signIn;
 
 class SettingsView extends StatefulWidget {
   @override
@@ -148,6 +150,21 @@ class _SettingsViewState extends State<SettingsView> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
+                            ListTile(
+                              dense: true,
+                              onTap: () async {
+                                final googleSignIn =
+                                    signIn.GoogleSignIn.standard(
+                                        scopes: [drive.DriveApi.driveScope]);
+                                final signIn.GoogleSignInAccount account =
+                                    await googleSignIn.signIn();
+                                print("User account $account");
+                              },
+                              contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 0, horizontal: 8),
+                              leading: FaIcon(FontAwesomeIcons.googleDrive),
+                              title: Text('save to google drive'),
+                            ),
                             Divider(),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
