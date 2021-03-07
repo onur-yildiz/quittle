@@ -1,13 +1,18 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:provider/provider.dart';
 import 'package:quittle/models/addiction.dart';
 import 'package:quittle/models/addiction_item_screen_args.dart';
-import 'package:quittle/providers/addictions_provider.dart';
 import 'package:quittle/screens/addiction_item_screen.dart';
-import 'package:quittle/screens/create_addiction_screen.dart';
 import 'package:quittle/widgets/addiction_progress.dart';
+import 'dart:ui' as ui;
+import 'package:path_provider/path_provider.dart';
+import 'package:share/share.dart';
 import 'package:uuid/uuid.dart';
 
 class AddictionItemCard extends StatefulWidget {
@@ -25,6 +30,23 @@ class AddictionItemCard extends StatefulWidget {
 }
 
 class _AddictionItemCardState extends State<AddictionItemCard> {
+  GlobalKey _cardKey = GlobalKey();
+
+  _share() async {
+    RenderRepaintBoundary boundary = _cardKey.currentContext.findRenderObject();
+    ui.Image image = await boundary.toImage();
+    ByteData byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+    Uint8List pngBytes = byteData.buffer.asUint8List();
+    final directory = (await getApplicationDocumentsDirectory()).path;
+    File imgFile = File('$directory/screenshot_shared.png');
+    imgFile.writeAsBytes(pngBytes);
+    Share.shareFiles(
+      ['$directory/screenshot_shared.png'],
+      text: 'Check out my progress!',
+      subject: 'My progress',
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -73,7 +95,7 @@ class _AddictionItemCardState extends State<AddictionItemCard> {
               caption: 'Share',
               color: Theme.of(context).accentColor,
               icon: Icons.share,
-              onTap: () {},
+              onTap: _share,
             ),
           ],
           secondaryActions: [
@@ -89,48 +111,51 @@ class _AddictionItemCardState extends State<AddictionItemCard> {
               // },
             ),
           ],
-          child: Material(
-            type: MaterialType.card,
-            shape: RoundedRectangleBorder(
-              side: BorderSide(
-                width: 1,
-                color: Theme.of(context).highlightColor,
+          child: RepaintBoundary(
+            key: _cardKey,
+            child: Material(
+              type: MaterialType.card,
+              shape: RoundedRectangleBorder(
+                side: BorderSide(
+                  width: 1,
+                  color: Theme.of(context).highlightColor,
+                ),
               ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Flex(
-                    direction: Axis.horizontal,
-                    children: [
-                      Flexible(
-                        flex: 1,
-                        child: Center(
-                          child: Text(
-                            widget.addictionData.name.toUpperCase(),
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: Theme.of(context)
-                                  .textTheme
-                                  .headline5
-                                  .fontSize,
-                              color: Theme.of(context).primaryColor,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Flex(
+                      direction: Axis.horizontal,
+                      children: [
+                        Flexible(
+                          flex: 1,
+                          child: Center(
+                            child: Text(
+                              widget.addictionData.name.toUpperCase(),
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: Theme.of(context)
+                                    .textTheme
+                                    .headline5
+                                    .fontSize,
+                                color: Theme.of(context).primaryColor,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      Spacer(
-                        flex: 1,
-                      )
-                    ],
-                  ),
-                  AddictionProgress(
-                    addictionData: widget.addictionData,
-                  )
-                ],
+                        Spacer(
+                          flex: 1,
+                        )
+                      ],
+                    ),
+                    AddictionProgress(
+                      addictionData: widget.addictionData,
+                    )
+                  ],
+                ),
               ),
             ),
           ),

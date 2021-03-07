@@ -101,7 +101,7 @@ class _AddictionDetailsState extends State<AddictionDetails> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('next week'),
+                Text('weekly'),
                 Text(
                   NumberFormat.simpleCurrency(locale: local.localeName)
                       .format(dailySavings * 7),
@@ -111,7 +111,7 @@ class _AddictionDetailsState extends State<AddictionDetails> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('next month'),
+                Text('monthly'),
                 Text(
                   NumberFormat.simpleCurrency(locale: local.localeName)
                       .format(dailySavings * 30),
@@ -126,7 +126,7 @@ class _AddictionDetailsState extends State<AddictionDetails> {
                 Text(
                   widget.addictionData.consumptionType == 1
                       ? widget.addictionData.notUsedCount.toStringAsFixed(0)
-                      : widget.addictionData.notUsedCount.toString() +
+                      : widget.addictionData.notUsedCount.toStringAsFixed(1) +
                           ' ' +
                           consumptionType,
                 ),

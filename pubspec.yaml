@@ -43,6 +43,8 @@ dependencies:
   liquid_progress_indicator: ^0.3.2
   confetti: ^0.5.5
   flutter_slidable: ^0.5.7
+  share: ^2.0.0
+  path_provider: ^2.0.1
 
   
 
