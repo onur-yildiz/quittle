@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CustomTextFormField extends StatelessWidget {
   const CustomTextFormField(
@@ -11,7 +12,8 @@ class CustomTextFormField extends StatelessWidget {
       this.validator,
       this.inputAction,
       this.backgroundColor,
-      this.onSubmit})
+      this.onSubmit,
+      this.maxLength})
       : super(key: key);
 
   final String valKey;
@@ -23,6 +25,7 @@ class CustomTextFormField extends StatelessWidget {
   final TextInputAction inputAction;
   final Color backgroundColor;
   final Function onSubmit;
+  final int maxLength;
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +71,10 @@ class CustomTextFormField extends StatelessWidget {
       keyboardType: inputType,
       validator: validator,
       textInputAction: inputAction,
+      maxLength: maxLength,
+      maxLengthEnforcement: MaxLengthEnforcement.enforced,
+      buildCounter: (context, {currentLength, isFocused, maxLength}) =>
+          Container(),
       textCapitalization: TextCapitalization.sentences,
       onEditingComplete: () => inputAction == TextInputAction.done
           ? FocusScope.of(context).unfocus()

@@ -408,6 +408,7 @@ class _AddictionCardState extends State<AddictionCard>
                       return null;
                     }
                   },
+                  maxLength: 10,
                   inputAction: TextInputAction.next,
                 ),
                 CustomTextFormField(
@@ -425,6 +426,7 @@ class _AddictionCardState extends State<AddictionCard>
                       return null;
                     }
                   },
+                  maxLength: 10,
                   inputAction: TextInputAction.done,
                 ),
                 ElevatedButton(
