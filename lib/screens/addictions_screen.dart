@@ -52,6 +52,40 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
     }
   }
 
+  void _onDelete(String id) async {
+    final removedAddiction =
+        await Provider.of<AddictionsProvider>(context, listen: false)
+            .deleteAddiction(id);
+    setState(() {
+      ScaffoldMessenger.of(context)
+        ..removeCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: Text(
+              '${removedAddiction.name} deleted.',
+            ),
+            action: SnackBarAction(
+              label: 'Undo',
+              onPressed: () {
+                Provider.of<AddictionsProvider>(context, listen: false)
+                    .insertAddiction(removedAddiction);
+              },
+            ),
+          ),
+        );
+    });
+  }
+
+  void _onReorder(int oldIndex, int newIndex) {
+    setState(() {
+      if (newIndex > oldIndex) {
+        newIndex--;
+      }
+      Provider.of<AddictionsProvider>(context, listen: false)
+          .reorderAddictions(oldIndex, newIndex);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
@@ -104,74 +138,63 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
                     shadowColor: Colors.black26,
                   ),
                   child: ReorderableListView(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     children: [
                       for (Addiction addiction in addictionsData.addictions)
-                        AddictionItem(
+                        AddictionItemCard(
                           addictionData: addiction,
+                          onDelete: _onDelete,
                           key: ValueKey(addiction.id),
                         ),
                     ],
-                    onReorder: (oldIndex, newIndex) {
-                      setState(() {
-                        if (newIndex > oldIndex) {
-                          newIndex--;
-                        }
-                        Provider.of<AddictionsProvider>(context, listen: false)
-                            .reorderAddictions(oldIndex, newIndex);
-                      });
-                    },
+                    onReorder: _onReorder,
                   ),
                 )
-              : InkWell(
-                  onTap: pushCreateAddictionScreen,
-                  child: Container(
-                    height: deviceSize.height,
-                    width: deviceSize.width,
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Center(
-                          child: SizedBox.fromSize(
-                            size: Size.square(deviceSize.width * .5),
-                            child: FloatingActionButton(
-                              heroTag: 'newAddiction',
-                              elevation: 0,
-                              backgroundColor: Theme.of(context).primaryColor,
-                              foregroundColor: Theme.of(context).canvasColor,
-                              child: Icon(
-                                Icons.add,
-                                size: Theme.of(context)
-                                    .textTheme
-                                    .headline1
-                                    .fontSize,
-                              ),
-                              onPressed: null,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Text(
-                              'Quittle',
-                              style: TextStyle(
-                                fontSize: Theme.of(context)
-                                    .textTheme
-                                    .headline2
-                                    .fontSize,
-                                color: Theme.of(context).primaryColor,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
+              : child;
+        },
+        child: InkWell(
+          onTap: pushCreateAddictionScreen,
+          child: Container(
+            height: deviceSize.height,
+            width: deviceSize.width,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Center(
+                  child: SizedBox.fromSize(
+                    size: Size.square(deviceSize.width * .5),
+                    child: FloatingActionButton(
+                      heroTag: 'newAddiction',
+                      elevation: 0,
+                      backgroundColor: Theme.of(context).primaryColor,
+                      foregroundColor: Theme.of(context).canvasColor,
+                      child: Icon(
+                        Icons.add,
+                        size: Theme.of(context).textTheme.headline1.fontSize,
+                      ),
+                      onPressed: null,
                     ),
                   ),
-                );
-        },
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Text(
+                      'Quittle',
+                      style: TextStyle(
+                        fontSize:
+                            Theme.of(context).textTheme.headline2.fontSize,
+                        color: Theme.of(context).primaryColor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

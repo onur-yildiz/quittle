@@ -55,6 +55,17 @@ class _GiftsState extends State<Gifts> {
   }
 
   @override
+  void initState() {
+    Future.delayed(Duration.zero, () {
+      setState(() {
+        Provider.of<AddictionsProvider>(context, listen: false)
+            .fetchGifts(widget.id);
+      });
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final local = AppLocalizations.of(context);
     final deviceSize = MediaQuery.of(context).size;
@@ -62,84 +73,75 @@ class _GiftsState extends State<Gifts> {
         Provider.of<SettingsProvider>(context, listen: false).currency;
 
     return SingleChildScrollView(
-      child: FutureBuilder(
-        future: Provider.of<AddictionsProvider>(context).fetchGifts(widget.id),
-        builder: (_, snapshot) => snapshot.error != null
-            ? Center(
-                child: Text(
-                  local.genericErrorMessage.capitalizeFirstLetter(),
-                ),
-              )
-            : Consumer<AddictionsProvider>(builder: (_, addictionsData, _ch) {
-                final addictionData = addictionsData.addictions
-                    .firstWhere((addiction) => addiction.id == widget.id);
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: ReorderableWrap(
-                    direction: Axis.horizontal,
-                    scrollDirection: Axis.vertical,
-                    alignment: WrapAlignment.start,
-                    padding: EdgeInsets.symmetric(
-                      horizontal: deviceSize.width * .02,
-                    ),
-                    maxMainAxisCount: 2,
-                    spacing: deviceSize.width * .0399,
-                    runSpacing: deviceSize.width * .04,
-                    children: _getTiles(addictionData ?? []),
-                    onReorder: _onReorder,
-                    needsLongPressDraggable: true,
-                    header: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                local.available.capitalizeWords() + ' ',
-                                style: TextStyle(
-                                  color: Theme.of(context).hintColor,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                NumberFormat.simpleCurrency(
-                                  name: currency,
-                                ).format(addictionData.availableMoney),
-                                style: TextStyle(
-                                  color: Colors.green[800],
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                local.spent.capitalizeWords() + ' ',
-                                style: TextStyle(
-                                  color: Theme.of(context).hintColor,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                NumberFormat.simpleCurrency(
-                                  name: currency,
-                                ).format(addictionData.totalSpent),
-                                style: TextStyle(
-                                  color: Colors.green[800],
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
+      child: Consumer<AddictionsProvider>(builder: (_, addictionsData, _ch) {
+        final addictionData = addictionsData.addictions
+            .firstWhere((addiction) => addiction.id == widget.id);
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 8.0),
+          child: ReorderableWrap(
+            direction: Axis.horizontal,
+            scrollDirection: Axis.vertical,
+            alignment: WrapAlignment.start,
+            padding: EdgeInsets.symmetric(
+              horizontal: deviceSize.width * .02,
+            ),
+            maxMainAxisCount: 2,
+            spacing: deviceSize.width * .0399,
+            runSpacing: deviceSize.width * .04,
+            children: _getTiles(addictionData ?? []),
+            onReorder: _onReorder,
+            needsLongPressDraggable: true,
+            header: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        local.available.capitalizeWords() + ' ',
+                        style: TextStyle(
+                          color: Theme.of(context).hintColor,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
+                      Text(
+                        NumberFormat.simpleCurrency(
+                          name: currency,
+                        ).format(addictionData.availableMoney),
+                        style: TextStyle(
+                          color: Colors.green[800],
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
-                );
-              }),
-      ),
+                  Row(
+                    children: [
+                      Text(
+                        local.spent.capitalizeWords() + ' ',
+                        style: TextStyle(
+                          color: Theme.of(context).hintColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        NumberFormat.simpleCurrency(
+                          name: currency,
+                        ).format(addictionData.totalSpent),
+                        style: TextStyle(
+                          color: Colors.green[800],
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      }),
     );
   }
 }

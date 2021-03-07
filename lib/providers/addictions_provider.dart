@@ -12,6 +12,30 @@ class AddictionsProvider with ChangeNotifier {
     return [..._addictions];
   }
 
+  void insertAddiction(Addiction addiction) async {
+    if (addiction.sortOrder == _addictions.length)
+      _addictions.add(addiction);
+    else
+      _addictions.insert(addiction.sortOrder, addiction);
+
+    notifyListeners();
+    await DBHelper.insert(
+      'addictions',
+      {
+        'id': addiction.id,
+        'name': addiction.name,
+        'quit_date': addiction.quitDate,
+        'consumption_type': addiction.consumptionType,
+        'daily_consumption': addiction.dailyConsumption,
+        'unit_cost': addiction.unitCost,
+        'level': addiction.level,
+        'achievement_level': addiction.achievementLevel,
+        'sort_order': _addictions.length,
+      },
+    );
+    reorderAddictions(_addictions.length, addiction.sortOrder);
+  }
+
   Future<Addiction> createAddiction(Map<String, dynamic> data) async {
     data['id'] = Uuid().v1();
     final newAddiction = Addiction(
@@ -77,24 +101,34 @@ class AddictionsProvider with ChangeNotifier {
       },
     );
     loadedAddictions.sort((a, b) {
-      // print('${a.sortOrder} vs ${b.sortOrder}');
       return a.sortOrder.compareTo(b.sortOrder);
     });
-    // loadedAddictions.forEach((element) {
-    //   print('${element.name} ${element.sortOrder}');
-    // });
     _addictions = loadedAddictions;
     notifyListeners();
   }
 
-  Future<void> deleteAddiction(String id) async {
-    await DBHelper.delete('addictions', id);
+  //! gifts and notes are not deleted from db but user see them in app
+  Future<Addiction> deleteAddiction(String id) async {
+    final addiction = _addictions.firstWhere((addiction) => addiction.id == id);
+    _addictions.remove(addiction);
     notifyListeners();
+    final temp = _addictions.where((a) => a.sortOrder > addiction.sortOrder);
+    temp.forEach((a) async {
+      a.sortOrder--;
+      await DBHelper.update('addictions', 'sort_order', a.id, a.sortOrder);
+    });
+    await DBHelper.delete('addictions', id);
+    return addiction;
+    // ...
+    // add a code that reverts the delete if db fails
   }
 
   void reorderAddictions(int oldIndex, int newIndex) async {
-    Addiction temp = _addictions.removeAt(oldIndex);
-    _addictions.insert(newIndex, temp);
+    // if reverting a delete, skip (see insertAddiction func.)
+    if (oldIndex != _addictions.length) {
+      Addiction temp = _addictions.removeAt(oldIndex);
+      _addictions.insert(newIndex, temp);
+    }
     await DBHelper.reorder(
       'addictions',
       'sort_order',
@@ -170,14 +204,6 @@ class AddictionsProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void deleteGift(Gift gift) async {
-    final Addiction addiction =
-        _addictions.firstWhere((addiction) => addiction.id == gift.addictionId);
-    addiction.gifts.remove(gift);
-    await DBHelper.delete('gifts', gift.id);
-    notifyListeners();
-  }
-
   Future<void> fetchGifts(String id) async {
     final List<Gift> loadedGifts = [];
     final addiction = _addictions.firstWhere((addiction) => addiction.id == id);
@@ -202,6 +228,20 @@ class AddictionsProvider with ChangeNotifier {
     addiction.gifts = loadedGifts;
   }
 
+  void deleteGift(Gift gift) async {
+    final addiction =
+        _addictions.firstWhere((addiction) => addiction.id == gift.addictionId);
+    addiction.gifts.remove(gift);
+    notifyListeners();
+    final temp =
+        addiction.gifts.where((g) => g.sortOrder > addiction.sortOrder);
+    temp.forEach((g) async {
+      g.sortOrder--;
+      await DBHelper.update('gifts', 'sort_order', g.id, g.sortOrder);
+    });
+    await DBHelper.delete('gifts', gift.id);
+  }
+
   Future<void> reorderGifts(int oldIndex, int newIndex, String id) async {
     final addiction = _addictions.firstWhere((addiction) => addiction.id == id);
     final temp = addiction.gifts.removeAt(oldIndex);
@@ -214,7 +254,6 @@ class AddictionsProvider with ChangeNotifier {
       id,
       'addiction_id',
     );
-    notifyListeners();
     // ...
     // add a code that reverts the reorder if db fails
   }

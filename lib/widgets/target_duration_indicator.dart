@@ -11,9 +11,11 @@ const _refreshInterval = Duration(seconds: 30);
 class TargetDurationIndicator extends StatefulWidget {
   TargetDurationIndicator({
     @required this.data,
+    @required this.local,
   });
 
   final Addiction data;
+  final AppLocalizations local;
 
   @override
   _TargetDurationIndicatorState createState() =>
@@ -22,9 +24,9 @@ class TargetDurationIndicator extends StatefulWidget {
 
 class _TargetDurationIndicatorState extends State<TargetDurationIndicator> {
   Duration updatedDuration;
-  String targetUnit = '';
-  int targetValue = 0;
-  double percentage = 0.0;
+  String targetUnit;
+  int targetValue;
+  double percentage;
 
   void setValues(Duration time, [AppLocalizations local]) {
     if (time.inHours < 24) {
@@ -70,25 +72,17 @@ class _TargetDurationIndicatorState extends State<TargetDurationIndicator> {
 
   @override
   void initState() {
-    AppLocalizations local;
-    Future.delayed(Duration.zero, () {
-      if (mounted) {
-        local = AppLocalizations.of(context);
-        setState(() {
-          setValues(widget.data.abstinenceTime, local);
-        });
-      }
-      Timer.periodic(
-        _refreshInterval,
-        (timer) {
-          if (mounted) {
-            setState(() {
-              setValues(widget.data.abstinenceTime, local);
-            });
-          }
-        },
-      );
-    });
+    setValues(widget.data.abstinenceTime, widget.local);
+    Timer.periodic(
+      _refreshInterval,
+      (timer) {
+        if (mounted) {
+          setState(() {
+            setValues(widget.data.abstinenceTime, widget.local);
+          });
+        }
+      },
+    );
     super.initState();
   }
 
@@ -121,6 +115,7 @@ class _TargetDurationIndicatorState extends State<TargetDurationIndicator> {
           ],
           trackColor: Theme.of(context).accentColor.withAlpha(100),
         ),
+        animationEnabled: false,
       ),
       min: 0,
       max: 100,
