@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -27,23 +28,50 @@ class _AchievementsState extends State<Achievements> {
   int achLevel;
   double percentage;
 
+  initialAnimation() {
+    final targetPercentage = (widget.data.abstinenceTime.inMinutes /
+            achievementDurations.last.inMinutes)
+        .clamp(0.0, 1.0);
+    final targetLevel = widget.data.achievementLevel;
+    int nextAchLevel = 1;
+    Timer.periodic(Duration(milliseconds: 100), (timer) {
+      if (percentage < targetPercentage && mounted) {
+        setState(() {
+          percentage += .01;
+          if ((achievementDurations[nextAchLevel].inMinutes /
+                      achievementDurations.last.inMinutes) <=
+                  percentage &&
+              achLevel < targetLevel) {
+            achLevel = nextAchLevel;
+            nextAchLevel++;
+          }
+        });
+      } else {
+        percentage.clamp(0.0, 1.0);
+        timer.cancel();
+      }
+    });
+  }
+
   @override
   void initState() {
+    percentage = 0.0;
+    achLevel = 0;
     maxAchLevel = achievementDurations.length - 1;
-    achLevel = widget.data.achievementLevel;
-    percentage = widget.data.abstinenceTime.inMinutes /
-        achievementDurations.last.inMinutes;
+    initialAnimation();
     localizedAchDurations = List.filled(achievementDurations.length, '');
     Future.delayed(Duration.zero, () {
       setState(() {
         _getLocalizedAchievementDurations(AppLocalizations.of(context));
       });
     });
+
     Timer.periodic(_refreshInterval, (timer) {
       if (mounted)
         setState(() {
-          percentage = widget.data.abstinenceTime.inMinutes /
-              achievementDurations.last.inMinutes;
+          percentage = (widget.data.abstinenceTime.inMinutes /
+                  achievementDurations.last.inMinutes)
+              .clamp(0.0, 1.0);
         });
     });
     super.initState();
@@ -99,7 +127,7 @@ class _AchievementsState extends State<Achievements> {
         child: Stack(
           children: [
             AnimatedPositioned(
-              duration: Duration(seconds: 1),
+              duration: Duration(milliseconds: 100),
               // TODO make a custom liquidprogressindicator that eliminates the need of the AnimatedContainer
               // LiquidLinearProgressIndicator has an unremovable border -.17 overlaps it (Pixel 4)
               bottom: totalHeight * percentage - .17,
@@ -129,7 +157,7 @@ class _AchievementsState extends State<Achievements> {
                   child: Center(
                     child: FaIcon(
                       FontAwesomeIcons.checkCircle,
-                      color: percentage == 1.0
+                      color: achLevel == maxAchLevel
                           ? Colors.amber
                           : Theme.of(context).highlightColor,
                       size: tileHeight / 2,
@@ -142,7 +170,7 @@ class _AchievementsState extends State<Achievements> {
                     alignment: Alignment.bottomCenter,
                     children: [
                       AnimatedContainer(
-                        duration: Duration(seconds: 1),
+                        duration: Duration(milliseconds: 100),
                         height: totalHeight * percentage,
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
@@ -186,7 +214,7 @@ class _AchievementsState extends State<Achievements> {
   }
 }
 
-class Trophy extends StatelessWidget {
+class Trophy extends StatefulWidget {
   final int level;
   final double height;
   final double trophySize;
@@ -204,81 +232,128 @@ class Trophy extends StatelessWidget {
   });
 
   @override
+  _TrophyState createState() => _TrophyState();
+}
+
+class _TrophyState extends State<Trophy> {
+  ConfettiController _confettiController;
+  bool _isPlayed = false;
+
+  @override
+  void initState() {
+    _confettiController = ConfettiController(
+      duration: Duration(seconds: 1),
+    );
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _confettiController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(covariant Trophy oldWidget) {
+    if (widget.active && !_isPlayed) {
+      _confettiController.play();
+      // _isPlayed = true;
+    }
+
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final color = active ? Colors.amber : Theme.of(context).highlightColor;
+    final color =
+        widget.active ? Colors.amber : Theme.of(context).highlightColor;
     final stars = List<FaIcon>.filled(
-      level,
+      widget.level,
       FaIcon(
         FontAwesomeIcons.solidStar,
         color: color,
-        size: trophySize * .25,
+        size: widget.trophySize * .25,
       ),
     );
 
-    final bool isTitleOverflowed = trophySize / title.length <
+    final bool isTitleOverflowed = widget.trophySize / widget.title.length <
         Theme.of(context).textTheme.bodyText1.fontSize;
-    final bool isSubtitleOverflowed = trophySize / subtitle.length <
-        Theme.of(context).textTheme.bodyText1.fontSize;
+    final bool isSubtitleOverflowed =
+        widget.trophySize / widget.subtitle.length <
+            Theme.of(context).textTheme.bodyText1.fontSize;
 
-    return Container(
-      height: height,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Stack(
-            alignment: Alignment.topCenter,
-            clipBehavior: Clip.none,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(
-                  top: isTitleOverflowed
-                      ? Theme.of(context).textTheme.bodyText1.fontSize *
-                          (isSubtitleOverflowed ? 2 : 1)
-                      : 0.0,
-                ),
-                child: FaIcon(
-                  FontAwesomeIcons.trophy,
-                  color: color,
-                  size: trophySize,
-                ),
-              ),
-              Positioned(
-                top: isTitleOverflowed ? 0 : trophySize * .25,
-                child: Text(
-                  title,
-                  style: TextStyle(
-                    color: active
-                        ? Colors.amber
-                        : Theme.of(context).hintColor.withOpacity(.5),
-                  ),
-                ),
-              ),
-              Positioned(
-                top: isSubtitleOverflowed
-                    ? Theme.of(context).textTheme.bodyText1.fontSize
-                    : trophySize * .4,
-                child: Text(
-                  subtitle,
-                  style: TextStyle(
-                    color: active
-                        ? Colors.amber
-                        : Theme.of(context).hintColor.withOpacity(.5),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(
-            width: trophySize,
-            child: Wrap(
-              alignment: WrapAlignment.center,
-              direction: Axis.horizontal,
+    return ConfettiWidget(
+      confettiController: _confettiController,
+      blastDirectionality: BlastDirectionality.explosive,
+      colors: [
+        Theme.of(context).primaryColor,
+        Colors.amber,
+      ],
+      numberOfParticles: widget.level,
+      particleDrag: .1,
+      gravity: .4,
+      child: Container(
+        height: widget.height,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Stack(
+              alignment: Alignment.topCenter,
+              clipBehavior: Clip.none,
               children: [
-                ...stars,
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: isTitleOverflowed
+                        ? Theme.of(context).textTheme.bodyText1.fontSize *
+                            (isSubtitleOverflowed ? 2 : 1)
+                        : 0.0,
+                  ),
+                  child: FaIcon(
+                    FontAwesomeIcons.trophy,
+                    color: color,
+                    size: widget.trophySize,
+                  ),
+                ),
+                Positioned(
+                  top: isTitleOverflowed ? 0 : widget.trophySize * .25,
+                  child: Text(
+                    widget.title,
+                    style: TextStyle(
+                      color: !widget.active
+                          ? Theme.of(context).hintColor.withOpacity(.5)
+                          : isTitleOverflowed
+                              ? Colors.amber
+                              : Theme.of(context).accentColor,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: isSubtitleOverflowed
+                      ? Theme.of(context).textTheme.bodyText1.fontSize
+                      : widget.trophySize * .4,
+                  child: Text(
+                    widget.subtitle,
+                    style: TextStyle(
+                      color: widget.active
+                          ? Colors.amber
+                          : Theme.of(context).hintColor.withOpacity(.5),
+                    ),
+                  ),
+                ),
               ],
             ),
-          ),
-        ],
+            SizedBox(
+              width: widget.trophySize,
+              child: Wrap(
+                alignment: WrapAlignment.center,
+                direction: Axis.horizontal,
+                children: [
+                  ...stars,
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

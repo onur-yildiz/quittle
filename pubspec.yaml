@@ -41,6 +41,7 @@ dependencies:
   font_awesome_flutter: ^8.11.0
   animations: ^2.0.0
   liquid_progress_indicator: ^0.3.2
+  confetti: ^0.5.5
 
   
 
