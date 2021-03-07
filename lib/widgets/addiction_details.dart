@@ -118,6 +118,20 @@ class _AddictionDetailsState extends State<AddictionDetails> {
                 ),
               ],
             ),
+            Divider(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('not used total'),
+                Text(
+                  widget.addictionData.consumptionType == 1
+                      ? widget.addictionData.notUsedCount.toStringAsFixed(0)
+                      : widget.addictionData.notUsedCount.toString() +
+                          ' ' +
+                          consumptionType,
+                ),
+              ],
+            ),
           ],
         ),
       ),
