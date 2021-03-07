@@ -52,7 +52,7 @@ class _AddictionItemCardState extends State<AddictionItemCard> {
     return Container(
       margin: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(30),
+        borderRadius: BorderRadius.circular(10),
         border: Border.all(
           width: 0,
           style: BorderStyle.none,
@@ -63,13 +63,13 @@ class _AddictionItemCardState extends State<AddictionItemCard> {
       child: OpenContainer(
         closedColor: Theme.of(context).accentColor,
         closedShape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(10),
           side: BorderSide(
             width: 3,
             color: Theme.of(context).highlightColor,
           ),
         ),
-        transitionDuration: Duration(milliseconds: 350),
+        transitionDuration: Duration(milliseconds: 250),
         openBuilder: (context, action) => AddictionItemScreen(),
         routeSettings: RouteSettings(
           arguments: AddictionItemScreenArgs(widget.addictionData),

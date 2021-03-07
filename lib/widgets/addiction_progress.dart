@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:quittle/extensions/string_extension.dart';
@@ -22,7 +24,6 @@ class AddictionProgress extends StatelessWidget {
     final consumptionType = (addictionData.consumptionType == 1)
         ? local.hour(addictionData.notUsedCount.toInt())
         : local.times(addictionData.notUsedCount.toInt());
-
     return Padding(
       padding: const EdgeInsets.only(top: 16.0),
       child: Row(
@@ -92,8 +93,7 @@ class AddictionProgress extends StatelessWidget {
                               NumberFormat.simpleCurrency(
                                 name: settings.currency,
                               ).format(
-                                addictionData.unitCost *
-                                    addictionData.notUsedCount,
+                                addictionData.totalSaved,
                               ),
                               style: TextStyle(
                                 color: Colors.green[800],

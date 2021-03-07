@@ -126,7 +126,7 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
                 );
         },
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       drawer: SettingsView(),
       body: Consumer<AddictionsProvider>(
         builder: (ctx, addictionsData, child) {

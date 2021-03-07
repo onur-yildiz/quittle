@@ -8,7 +8,7 @@ import 'package:quittle/extensions/duration_extension.dart';
 
 const _refreshInterval = Duration(seconds: 30);
 
-class TargetDurationIndicator extends StatefulWidget {
+class TargetDurationIndicator extends StatelessWidget {
   TargetDurationIndicator({
     @required this.data,
     @required this.local,
@@ -18,17 +18,12 @@ class TargetDurationIndicator extends StatefulWidget {
   final AppLocalizations local;
 
   @override
-  _TargetDurationIndicatorState createState() =>
-      _TargetDurationIndicatorState();
-}
+  Widget build(BuildContext context) {
+    final Duration time = data.abstinenceTime;
+    String targetUnit;
+    int targetValue;
+    double percentage;
 
-class _TargetDurationIndicatorState extends State<TargetDurationIndicator> {
-  Duration updatedDuration;
-  String targetUnit;
-  int targetValue;
-  double percentage;
-
-  void setValues(Duration time, [AppLocalizations local]) {
     if (time.inHours < 24) {
       if (time.inHours < 1) {
         targetValue = 1;
@@ -68,26 +63,7 @@ class _TargetDurationIndicatorState extends State<TargetDurationIndicator> {
             time.inMinutes / (360 * Duration.minutesPerDay * targetValue);
       }
     }
-  }
 
-  @override
-  void initState() {
-    setValues(widget.data.abstinenceTime, widget.local);
-    Timer.periodic(
-      _refreshInterval,
-      (timer) {
-        if (mounted) {
-          setState(() {
-            setValues(widget.data.abstinenceTime, widget.local);
-          });
-        }
-      },
-    );
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return SleekCircularSlider(
       appearance: CircularSliderAppearance(
         infoProperties: InfoProperties(

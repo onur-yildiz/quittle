@@ -42,14 +42,16 @@ class Addiction {
 
   double get notUsedCount {
     if (consumptionType == 0) {
-      return (dailyConsumption / Duration.hoursPerDay) * abstinenceTime.inHours;
+      return (dailyConsumption / Duration.secondsPerDay) *
+          abstinenceTime.inSeconds;
     }
-    return ((dailyConsumption / Duration.hoursPerDay) * abstinenceTime.inHours)
+    return ((dailyConsumption / Duration.secondsPerDay) *
+            abstinenceTime.inSeconds)
         .floorToDouble();
   }
 
   double get totalSaved {
-    return notUsedCount * dailyConsumption;
+    return notUsedCount * unitCost;
   }
 
   double get totalSpent {

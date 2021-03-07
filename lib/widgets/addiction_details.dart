@@ -6,7 +6,7 @@ import 'package:quittle/models/addiction.dart';
 import 'package:quittle/widgets/duration_counter.dart';
 import 'package:intl/intl.dart';
 
-class AddictionDetails extends StatefulWidget {
+class AddictionDetails extends StatelessWidget {
   const AddictionDetails({
     @required this.addictionData,
   });
@@ -14,30 +14,15 @@ class AddictionDetails extends StatefulWidget {
   final Addiction addictionData;
 
   @override
-  _AddictionDetailsState createState() => _AddictionDetailsState();
-}
-
-class _AddictionDetailsState extends State<AddictionDetails> {
-  double notUsedCount;
-  Duration abstinenceTime;
-  String quitDateFormatted;
-  double dailySavings = 0;
-
-  @override
-  void initState() {
-    notUsedCount = widget.addictionData.notUsedCount;
-    abstinenceTime = widget.addictionData.abstinenceTime;
-    dailySavings =
-        widget.addictionData.dailyConsumption * widget.addictionData.unitCost;
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final double notUsedCount = addictionData.notUsedCount;
+    final Duration abstinenceTime = addictionData.abstinenceTime;
+    final double dailySavings =
+        addictionData.dailyConsumption * addictionData.unitCost;
     final local = AppLocalizations.of(context);
-    quitDateFormatted = DateFormat.yMMMd(local.localeName)
-        .format(widget.addictionData.quitDateTime);
-    final consumptionType = ((widget.addictionData.consumptionType == 1)
+    final String quitDateFormatted =
+        DateFormat.yMMMd(local.localeName).format(addictionData.quitDateTime);
+    final consumptionType = ((addictionData.consumptionType == 1)
             ? local.hour(
                 notUsedCount.toInt(),
               )
@@ -77,10 +62,9 @@ class _AddictionDetailsState extends State<AddictionDetails> {
               children: [
                 Text(local.dailyUse.capitalizeWords()),
                 Text(
-                  (widget.addictionData.dailyConsumption % 1 == 0
-                          ? widget.addictionData.dailyConsumption
-                              .toStringAsFixed(0)
-                          : widget.addictionData.dailyConsumption.toString()) +
+                  (addictionData.dailyConsumption % 1 == 0
+                          ? addictionData.dailyConsumption.toStringAsFixed(0)
+                          : addictionData.dailyConsumption.toString()) +
                       ' ' +
                       consumptionType,
                 ),
@@ -124,9 +108,9 @@ class _AddictionDetailsState extends State<AddictionDetails> {
               children: [
                 Text('not used total'),
                 Text(
-                  widget.addictionData.consumptionType == 1
-                      ? widget.addictionData.notUsedCount.toStringAsFixed(0)
-                      : widget.addictionData.notUsedCount.toStringAsFixed(1) +
+                  addictionData.consumptionType == 1
+                      ? addictionData.notUsedCount.toStringAsFixed(0)
+                      : addictionData.notUsedCount.toStringAsFixed(1) +
                           ' ' +
                           consumptionType,
                 ),

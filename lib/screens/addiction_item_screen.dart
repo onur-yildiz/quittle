@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:quittle/models/addiction_item_screen_args.dart';
@@ -6,6 +8,8 @@ import 'package:quittle/widgets/gifts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:quittle/widgets/achievements.dart';
+
+const _refreshInterval = Duration(seconds: 60);
 
 class AddictionItemScreen extends StatefulWidget {
   static const routeName = '/addiction-item';
@@ -20,6 +24,18 @@ class _AddictionItemState extends State<AddictionItemScreen> {
   final tabLength = 3;
 
   @override
+  void initState() {
+    Timer.periodic(_refreshInterval, (timer) {
+      if (mounted) {
+        setState(() {});
+      } else {
+        timer.cancel();
+      }
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final AddictionItemScreenArgs args =
         ModalRoute.of(context).settings.arguments;
@@ -27,7 +43,7 @@ class _AddictionItemState extends State<AddictionItemScreen> {
     List<Widget> _buildScreens() {
       return [
         AddictionItem(args: args),
-        Gifts(id: args.data.id),
+        Gifts(data: args.data),
         Achievements(data: args.data),
         // Playground(),
       ];

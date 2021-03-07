@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
@@ -12,10 +14,10 @@ import 'package:provider/provider.dart';
 import 'package:reorderables/reorderables.dart';
 
 class Gifts extends StatefulWidget {
-  final String id;
+  final Addiction data;
 
   Gifts({
-    this.id,
+    this.data,
   });
 
   @override
@@ -50,7 +52,7 @@ class _GiftsState extends State<Gifts> {
         return;
       }
       Provider.of<AddictionsProvider>(context, listen: false)
-          .reorderGifts(oldIndex, newIndex, widget.id);
+          .reorderGifts(oldIndex, newIndex, widget.data.id);
     });
   }
 
@@ -59,9 +61,10 @@ class _GiftsState extends State<Gifts> {
     Future.delayed(Duration.zero, () {
       setState(() {
         Provider.of<AddictionsProvider>(context, listen: false)
-            .fetchGifts(widget.id);
+            .fetchGifts(widget.data.id);
       });
     });
+
     super.initState();
   }
 
@@ -74,8 +77,6 @@ class _GiftsState extends State<Gifts> {
 
     return SingleChildScrollView(
       child: Consumer<AddictionsProvider>(builder: (_, addictionsData, _ch) {
-        final addictionData = addictionsData.addictions
-            .firstWhere((addiction) => addiction.id == widget.id);
         return Padding(
           padding: const EdgeInsets.only(bottom: 8.0),
           child: ReorderableWrap(
@@ -88,7 +89,7 @@ class _GiftsState extends State<Gifts> {
             maxMainAxisCount: 2,
             spacing: deviceSize.width * .0399,
             runSpacing: deviceSize.width * .04,
-            children: _getTiles(addictionData ?? []),
+            children: _getTiles(widget.data),
             onReorder: _onReorder,
             needsLongPressDraggable: true,
             header: Padding(
@@ -108,7 +109,7 @@ class _GiftsState extends State<Gifts> {
                       Text(
                         NumberFormat.simpleCurrency(
                           name: currency,
-                        ).format(addictionData.availableMoney),
+                        ).format(widget.data.availableMoney),
                         style: TextStyle(
                           color: Colors.green[800],
                           fontWeight: FontWeight.bold,
@@ -128,7 +129,7 @@ class _GiftsState extends State<Gifts> {
                       Text(
                         NumberFormat.simpleCurrency(
                           name: currency,
-                        ).format(addictionData.totalSpent),
+                        ).format(widget.data.totalSpent),
                         style: TextStyle(
                           color: Colors.green[800],
                           fontWeight: FontWeight.bold,
@@ -146,7 +147,7 @@ class _GiftsState extends State<Gifts> {
   }
 }
 
-class GiftCard extends StatelessWidget {
+class GiftCard extends StatefulWidget {
   const GiftCard({
     Key key,
     @required this.gift,
@@ -158,13 +159,33 @@ class GiftCard extends StatelessWidget {
   final double availableMoney;
   final double dailyGain;
 
-  Path drawSquare(double size) {
-    final path = Path();
-    path.lineTo(size, 0);
-    path.lineTo(size, size);
-    path.lineTo(0, size);
-    path.lineTo(0, 0);
-    return path;
+  @override
+  _GiftCardState createState() => _GiftCardState();
+}
+
+class _GiftCardState extends State<GiftCard> {
+  double percentage;
+
+  @override
+  void initState() {
+    percentage = (widget.availableMoney / widget.gift.price).clamp(0.0, 1.0);
+    // Timer.periodic(Duration(seconds: 2), (timer) {
+    //   if (mounted) {
+    //     setState(() {
+    //       print('AAA');
+    //       percentage =
+    //           (widget.availableMoney / widget.gift.price).clamp(0.0, 1.0);
+    //     });
+    //   } else
+    //     timer.cancel();
+    // });
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant GiftCard oldWidget) {
+    percentage = (widget.availableMoney / widget.gift.price).clamp(0.0, 1.0);
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -176,10 +197,10 @@ class GiftCard extends StatelessWidget {
         Provider.of<SettingsProvider>(context, listen: false).currency;
     final giftPrice = NumberFormat.compactSimpleCurrency(
       name: currency,
-    ).format(gift.price);
-    final daysLeft = ((gift.price - availableMoney) / dailyGain);
+    ).format(widget.gift.price);
+    final daysLeft =
+        ((widget.gift.price - widget.availableMoney) / widget.dailyGain);
     final daysLeftClamped = daysLeft.clamp(1, 365);
-    final percentage = (availableMoney / gift.price).clamp(0.0, 1.0);
 
     _deleteDialog() {
       showDialog(
@@ -203,7 +224,7 @@ class GiftCard extends StatelessWidget {
             TextButton(
               onPressed: () {
                 Provider.of<AddictionsProvider>(context, listen: false)
-                    .deleteGift(gift);
+                    .deleteGift(widget.gift);
                 Navigator.of(context).pop();
               },
               child: Text(
@@ -218,188 +239,195 @@ class GiftCard extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(5),
       clipBehavior: Clip.hardEdge,
-      child: Stack(
-        children: [
-          LiquidCustomProgressIndicator(
-            direction: Axis.vertical,
-            shapePath: drawSquare(deviceSize.width * .46),
-            backgroundColor: Colors.black38,
-            value: percentage,
-            valueColor: AlwaysStoppedAnimation(
-              Theme.of(context).accentColor,
+      child: ColoredBox(
+        color: Theme.of(context).highlightColor,
+        child: Stack(
+          children: [
+            Positioned(
+              bottom: 0,
+              child: AnimatedContainer(
+                  duration: Duration(milliseconds: 1000),
+                  height: (deviceSize.width * .46) * percentage,
+                  width: deviceSize.width * .46,
+                  color: Theme.of(context).accentColor),
             ),
-            center: Material(
-              // type: MaterialType.transparency,
-              color: Colors.transparent,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5),
-                side: BorderSide(
-                  width: 8,
-                  color: Theme.of(context).highlightColor,
-                ),
-              ),
-              child: InkWell(
-                onTap: () => showDialog(
-                  context: context,
-                  builder: (context) => new AlertDialog(
-                    title: Text(
-                      availableMoney >= gift.price
-                          ? local
-                              .purchaseGiftMsg(giftPrice, gift.name)
-                              .capitalizeFirstLetter()
-                          : 'Not enough money available.', //TODO localize
-                    ), //'Purchase \"${widget.gift.name}\" for $giftPrice'
-                    actions: [
-                      availableMoney >= gift.price
-                          ? TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Text(
-                                materialLocal.cancelButtonLabel,
-                              ),
-                            )
-                          : null,
-                      TextButton(
-                        onPressed: () {
-                          if (availableMoney >= gift.price) {
-                            Provider.of<AddictionsProvider>(context,
-                                    listen: false)
-                                .buyGift(gift);
-                          }
-                          Navigator.of(context).pop();
-                        },
-                        child: Text(
-                          materialLocal.okButtonLabel,
-                        ),
-                      ),
-                    ],
+            SizedBox(
+              height: deviceSize.width * .46,
+              width: deviceSize.width * .46,
+              child: Material(
+                type: MaterialType.transparency,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5),
+                  side: BorderSide(
+                    width: 8,
+                    color: Theme.of(context).highlightColor,
                   ),
                 ),
-                child: DefaultTextStyle(
-                  style: TextStyle(
-                    // fontWeight: FontWeight.bold,
-                    color: Theme.of(context).cardColor,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Flex(
-                      mainAxisSize: MainAxisSize.max,
-                      direction: Axis.vertical,
-                      children: [
-                        Flexible(
-                          flex: 6,
-                          fit: FlexFit.tight,
-                          child: Text(
-                            gift.name,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        Flexible(
-                          flex: 6,
-                          fit: FlexFit.tight,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Text(
-                                (percentage * 100).toStringAsFixed(2),
-                                style: TextStyle(
-                                  fontWeight:
-                                      percentage == 1 ? FontWeight.w900 : null,
-                                  fontSize: Theme.of(context)
-                                      .textTheme
-                                      .headline6
-                                      .fontSize,
+                child: InkWell(
+                  onTap: () => showDialog(
+                    context: context,
+                    builder: (context) => new AlertDialog(
+                      title: Text(
+                        widget.availableMoney >= widget.gift.price
+                            ? local
+                                .purchaseGiftMsg(giftPrice, widget.gift.name)
+                                .capitalizeFirstLetter()
+                            : 'Not enough money available.', //TODO localize
+                      ), //'Purchase \"${widget.gift.name}\" for $giftPrice'
+                      actions: [
+                        widget.availableMoney >= widget.gift.price
+                            ? TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text(
+                                  materialLocal.cancelButtonLabel,
                                 ),
-                              ),
-                              Text(
-                                '%',
-                                style: TextStyle(
-                                  fontWeight:
-                                      percentage == 1 ? FontWeight.w900 : null,
-                                  fontSize: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1
-                                      .fontSize,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Flexible(
-                          flex: 2,
-                          fit: FlexFit.tight,
+                              )
+                            : null,
+                        TextButton(
+                          onPressed: () {
+                            if (widget.availableMoney >= widget.gift.price) {
+                              Provider.of<AddictionsProvider>(context,
+                                      listen: false)
+                                  .buyGift(widget.gift);
+                            }
+                            Navigator.of(context).pop();
+                          },
                           child: Text(
-                            giftPrice.toString(),
-                            style: TextStyle(
-                              color: Colors.green,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        Flexible(
-                          flex: 2,
-                          fit: FlexFit.tight,
-                          child: Text(
-                            (daysLeft < 1 ? '>' : '') +
-                                daysLeftClamped.toStringAsFixed(0) +
-                                (daysLeft > 365 ? '+' : '') +
-                                ' ' +
-                                local.daysLeft(
-                                  daysLeftClamped.toInt(),
-                                ),
-                          ),
-                        ),
-                        Flexible(
-                          flex: 2,
-                          fit: FlexFit.tight,
-                          child: Center(
-                            child: Text(
-                              gift.count.toString() +
-                                  ' Purchased', //TODO localize
-                            ),
-                          ),
-                        ),
-                        Flexible(
-                          flex: 2,
-                          child: Icon(
-                            Icons.drag_handle_rounded,
-                            color: Theme.of(context).highlightColor,
+                            materialLocal.okButtonLabel,
                           ),
                         ),
                       ],
                     ),
                   ),
-                ),
-              ),
-            ),
-          ),
-          Positioned(
-            top: 0,
-            right: 0,
-            child: Material(
-              type: MaterialType.circle,
-              color: Colors.transparent,
-              child: InkWell(
-                splashColor: Theme.of(context).errorColor,
-                customBorder: CircleBorder(),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Icon(
-                    Icons.delete,
-                    color: Theme.of(context).errorColor.withOpacity(.8),
-                    size: Theme.of(context).textTheme.headline6.fontSize,
+                  child: DefaultTextStyle(
+                    style: TextStyle(
+                      // fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Flex(
+                        mainAxisSize: MainAxisSize.max,
+                        direction: Axis.vertical,
+                        children: [
+                          Flexible(
+                            flex: 6,
+                            fit: FlexFit.tight,
+                            child: Text(
+                              widget.gift.name,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          Flexible(
+                            flex: 6,
+                            fit: FlexFit.tight,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Text(
+                                  (percentage * 100).toStringAsFixed(2),
+                                  style: TextStyle(
+                                    fontWeight: percentage == 1
+                                        ? FontWeight.w900
+                                        : null,
+                                    fontSize: Theme.of(context)
+                                        .textTheme
+                                        .headline6
+                                        .fontSize,
+                                  ),
+                                ),
+                                Text(
+                                  '%',
+                                  style: TextStyle(
+                                    fontWeight: percentage == 1
+                                        ? FontWeight.w900
+                                        : null,
+                                    fontSize: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        .fontSize,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Flexible(
+                            flex: 2,
+                            fit: FlexFit.tight,
+                            child: Text(
+                              giftPrice.toString(),
+                              style: TextStyle(
+                                color: Colors.green,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          Flexible(
+                            flex: 2,
+                            fit: FlexFit.tight,
+                            child: Text(
+                              (daysLeft < 1 ? '>' : '') +
+                                  daysLeftClamped.toStringAsFixed(0) +
+                                  (daysLeft > 365 ? '+' : '') +
+                                  ' ' +
+                                  local.daysLeft(
+                                    daysLeftClamped.toInt(),
+                                  ),
+                            ),
+                          ),
+                          Flexible(
+                            flex: 2,
+                            fit: FlexFit.tight,
+                            child: Center(
+                              child: Text(
+                                widget.gift.count.toString() +
+                                    ' Purchased', //TODO localize
+                              ),
+                            ),
+                          ),
+                          Flexible(
+                            flex: 2,
+                            child: Icon(
+                              Icons.drag_handle_rounded,
+                              color: Theme.of(context).highlightColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
-                onLongPress: _deleteDialog,
-                onTap: _deleteDialog,
               ),
             ),
-          ),
-        ],
+            Positioned(
+              top: 0,
+              right: 0,
+              child: Material(
+                type: MaterialType.circle,
+                color: Colors.transparent,
+                child: InkWell(
+                  splashColor: Theme.of(context).errorColor,
+                  customBorder: CircleBorder(),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(
+                      Icons.delete,
+                      color: Theme.of(context).errorColor.withOpacity(.8),
+                      size: Theme.of(context).textTheme.headline6.fontSize,
+                    ),
+                  ),
+                  onLongPress: _deleteDialog,
+                  onTap: _deleteDialog,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

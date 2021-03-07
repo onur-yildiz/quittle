@@ -66,14 +66,14 @@ class _AchievementsState extends State<Achievements> {
       });
     });
 
-    Timer.periodic(_refreshInterval, (timer) {
-      if (mounted)
-        setState(() {
-          percentage = (widget.data.abstinenceTime.inMinutes /
-                  achievementDurations.last.inMinutes)
-              .clamp(0.0, 1.0);
-        });
-    });
+    // Timer.periodic(_refreshInterval, (timer) {
+    //   if (mounted)
+    //     setState(() {
+    //       percentage = (widget.data.abstinenceTime.inMinutes /
+    //               achievementDurations.last.inMinutes)
+    //           .clamp(0.0, 1.0);
+    //     });
+    // });
     super.initState();
   }
 
@@ -102,6 +102,14 @@ class _AchievementsState extends State<Achievements> {
         localizedAchDurations[i] = ('$inYears ${local.year(inYears)}');
       }
     }
+  }
+
+  @override
+  void didUpdateWidget(covariant Achievements oldWidget) {
+    percentage = (widget.data.abstinenceTime.inMinutes /
+            achievementDurations.last.inMinutes)
+        .clamp(0.0, 1.0);
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
