@@ -15,7 +15,6 @@ import 'package:quittle/screens/addictions_screen.dart';
 import 'package:quittle/screens/create_addiction_screen.dart';
 import 'package:quittle/util/custom_localizations.dart';
 import 'package:quittle/util/quotes_constants.dart';
-import 'package:quittle/widgets/playground.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:workmanager/workmanager.dart';
@@ -156,10 +155,10 @@ class MyApp extends StatelessWidget {
 Future<void> _fetchStartupData(BuildContext context) async {
   await Provider.of<AddictionsProvider>(context, listen: false)
       .fetchAddictions();
-  await Provider.of<SettingsProvider>(context, listen: false).fetchSettings();
+  await Provider.of<SettingsProvider>(context, listen: false).loadPrefs();
 }
 
-void _setDailyQuoteNotification(BuildContext context) {
+void _setDailyQuoteNotification(BuildContext context) async {
   final today = DateTime.now();
   final tomorrowMorning =
       DateTime(today.year, today.month, (today.day + 1), 9, 0, 0);

@@ -7,8 +7,6 @@ import 'package:quittle/widgets/currency_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:googleapis/drive/v3.dart' as drive;
-import 'package:google_sign_in/google_sign_in.dart' as signIn;
 
 class SettingsView extends StatefulWidget {
   @override
@@ -19,20 +17,27 @@ class _SettingsViewState extends State<SettingsView> {
   bool _progressCheck = false;
   bool _quoteCheck = false;
   SettingsProvider settings;
+  String currency;
 
   @override
   void initState() {
     settings = Provider.of<SettingsProvider>(context, listen: false);
     _progressCheck = settings.receiveProgressNotifs;
     _quoteCheck = settings.receiveQuoteNotifs;
+    currency = settings.currency;
 
     super.initState();
+  }
+
+  void _updateCurrency(String newCurrency) {
+    setState(() {
+      currency = newCurrency;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final local = AppLocalizations.of(context);
-    final currencyName = Provider.of<SettingsProvider>(context).currency;
 
     return Drawer(
         child: LayoutBuilder(
@@ -119,15 +124,16 @@ class _SettingsViewState extends State<SettingsView> {
                           dense: true,
                           onTap: () => showDialog(
                             context: context,
-                            builder: (context) => CurrencyPicker(),
+                            builder: (context) =>
+                                CurrencyPicker(onUpdate: _updateCurrency),
                           ),
                           contentPadding: const EdgeInsets.symmetric(
                               vertical: 24, horizontal: 8),
                           leading: FaIcon(FontAwesomeIcons.moneyBillWave),
                           title: Text(local.currency.capitalizeWords()),
                           trailing: Text(
-                            '$currencyName (${NumberFormat.simpleCurrency(
-                              name: currencyName,
+                            '$currency (${NumberFormat.simpleCurrency(
+                              name: currency,
                             ).currencySymbol})',
                             style: TextStyle(
                               color: Theme.of(context).accentColor,
@@ -150,22 +156,6 @@ class _SettingsViewState extends State<SettingsView> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            ListTile(
-                              dense: true,
-                              onTap: () async {
-                                final googleSignIn =
-                                    signIn.GoogleSignIn.standard(
-                                        scopes: [drive.DriveApi.driveScope]);
-                                final signIn.GoogleSignInAccount account =
-                                    await googleSignIn.signIn();
-                                print("User account $account");
-                              },
-                              contentPadding: const EdgeInsets.symmetric(
-                                  vertical: 0, horizontal: 8),
-                              leading: FaIcon(FontAwesomeIcons.googleDrive),
-                              title: Text('save to google drive'),
-                            ),
-                            Divider(),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -224,7 +214,6 @@ class _SettingsViewState extends State<SettingsView> {
                                             ],
                                             applicationLegalese:
                                                 'App icon is a modified version of font awesome link icon',
-                                            // applicationIcon: ,
                                           ),
                                         );
                                       },

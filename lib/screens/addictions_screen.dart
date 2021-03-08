@@ -10,7 +10,6 @@ import 'package:quittle/util/progress_constants.dart';
 import 'package:quittle/widgets/addiction_item_card.dart';
 import 'package:quittle/widgets/settings_view.dart';
 import 'package:provider/provider.dart';
-import 'package:uuid/uuid.dart';
 import 'package:workmanager/workmanager.dart';
 
 class AddictionsScreen extends StatefulWidget {
@@ -23,7 +22,7 @@ class AddictionsScreen extends StatefulWidget {
 class _AddictionsScreenState extends State<AddictionsScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
-  _setProgNotifTasks(List<Addiction> addictions) {
+  _setProgNotifTasks(List<Addiction> addictions) async {
     if (Provider.of<SettingsProvider>(context, listen: false)
         .receiveProgressNotifs) {
       for (var addiction in addictions) {

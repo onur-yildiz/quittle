@@ -47,6 +47,8 @@ dependencies:
   path_provider: ^2.0.1
   googleapis: ^2.0.0
   google_sign_in: ^5.0.0
+  shared_preferences: ^2.0.3
+
 
   
 

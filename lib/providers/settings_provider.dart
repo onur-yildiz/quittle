@@ -1,82 +1,52 @@
 import 'package:flutter/material.dart';
-import 'package:quittle/helpers/db_helper.dart';
-import 'package:quittle/models/settings.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsProvider with ChangeNotifier {
-  Settings _settings;
+  SharedPreferences _prefs;
 
   String get currency {
-    return _settings.currency;
+    return _prefs.getString('currency');
   }
 
   bool get receiveProgressNotifs {
-    return _settings.receiveProgressNotifs;
+    return _prefs.getBool('allowProgressNotif');
   }
 
   bool get receiveQuoteNotifs {
-    return _settings.receiveQuoteNotifs;
+    return _prefs.getBool('allowQuoteNotif');
   }
 
-  Future<void> fetchSettings() async {
-    final settings = await DBHelper.getData('settings');
-
-    if (settings != null && settings.length != 0) {
-      _settings = Settings(
-        currency: settings[0]['currency'],
-        receiveProgressNotifs:
-            settings[0]['allow_progress_notification'] == 0 ? false : true,
-        receiveQuoteNotifs:
-            settings[0]['allow_quote_notification'] == 0 ? false : true,
-      );
-    } else {
-      _settings = Settings();
-      final progressFlag = _settings.receiveProgressNotifs ? 1 : 0;
-      final quoteFlag = _settings.receiveQuoteNotifs ? 1 : 0;
-      await DBHelper.insert(
-        'settings',
-        {
-          'id': 'v1',
-          'currency': _settings.currency,
-          'allow_progress_notification': progressFlag,
-          'allow_quote_notification': quoteFlag,
-        },
-      );
+  Future<void> _initPrefs() async {
+    if (_prefs == null) {
+      _prefs = await SharedPreferences.getInstance();
     }
+  }
+
+  Future<void> loadPrefs() async {
+    await _initPrefs();
+    _prefs.getBool('allowProgressNotif') ??
+        await _prefs.setBool('allowProgressNotif', true);
+    _prefs.getString('allowQuoteNotif') ??
+        await _prefs.setBool('allowQuoteNotif', true);
+    _prefs.getString('currency') ?? await _prefs.setString('currency', 'USD');
     notifyListeners();
   }
 
   void updateCurrency(String newCurrency) async {
-    await DBHelper.update(
-      'settings',
-      'currency',
-      'v1',
-      newCurrency,
-    );
-    _settings.currency = newCurrency;
+    await _initPrefs();
+    await _prefs.setString('currency', newCurrency);
     notifyListeners();
   }
 
   void allowQuoteNotif(bool isAllowed) async {
-    int flag = isAllowed ? 1 : 0;
-    await DBHelper.update(
-      'settings',
-      'allow_quote_notification',
-      'v1',
-      flag,
-    );
-    _settings.receiveQuoteNotifs = isAllowed;
+    await _initPrefs();
+    await _prefs.setBool('allowQuoteNotif', isAllowed);
     notifyListeners();
   }
 
   void allowProgressNotif(bool isAllowed) async {
-    int flag = isAllowed ? 1 : 0;
-    await DBHelper.update(
-      'settings',
-      'allow_progress_notification',
-      'v1',
-      flag,
-    );
-    _settings.receiveProgressNotifs = isAllowed;
+    await _initPrefs();
+    await _prefs.setBool('allowProgressNotif', isAllowed);
     notifyListeners();
   }
 }

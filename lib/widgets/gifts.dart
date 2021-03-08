@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
 import 'package:quittle/extensions/string_extension.dart';
 import 'package:quittle/models/addiction.dart';
 import 'package:quittle/models/gift.dart';
@@ -26,6 +25,7 @@ class Gifts extends StatefulWidget {
 
 class _GiftsState extends State<Gifts> {
   List<Widget> _tiles;
+  String currency;
 
   List<Widget> _getTiles(Addiction data) {
     _tiles = data.gifts
@@ -64,7 +64,7 @@ class _GiftsState extends State<Gifts> {
             .fetchGifts(widget.data.id);
       });
     });
-
+    currency = Provider.of<SettingsProvider>(context, listen: false).currency;
     super.initState();
   }
 
@@ -72,8 +72,6 @@ class _GiftsState extends State<Gifts> {
   Widget build(BuildContext context) {
     final local = AppLocalizations.of(context);
     final deviceSize = MediaQuery.of(context).size;
-    final currency =
-        Provider.of<SettingsProvider>(context, listen: false).currency;
 
     return SingleChildScrollView(
       child: Consumer<AddictionsProvider>(builder: (_, addictionsData, _ch) {
@@ -165,20 +163,12 @@ class GiftCard extends StatefulWidget {
 
 class _GiftCardState extends State<GiftCard> {
   double percentage;
+  String currency;
 
   @override
   void initState() {
     percentage = (widget.availableMoney / widget.gift.price).clamp(0.0, 1.0);
-    // Timer.periodic(Duration(seconds: 2), (timer) {
-    //   if (mounted) {
-    //     setState(() {
-    //       print('AAA');
-    //       percentage =
-    //           (widget.availableMoney / widget.gift.price).clamp(0.0, 1.0);
-    //     });
-    //   } else
-    //     timer.cancel();
-    // });
+    currency = Provider.of<SettingsProvider>(context, listen: false).currency;
     super.initState();
   }
 
@@ -193,8 +183,6 @@ class _GiftCardState extends State<GiftCard> {
     final local = AppLocalizations.of(context);
     final materialLocal = MaterialLocalizations.of(context);
     final deviceSize = MediaQuery.of(context).size;
-    final currency =
-        Provider.of<SettingsProvider>(context, listen: false).currency;
     final giftPrice = NumberFormat.compactSimpleCurrency(
       name: currency,
     ).format(widget.gift.price);
@@ -246,7 +234,7 @@ class _GiftCardState extends State<GiftCard> {
             Positioned(
               bottom: 0,
               child: AnimatedContainer(
-                  duration: Duration(milliseconds: 1000),
+                  duration: Duration(milliseconds: 250),
                   height: (deviceSize.width * .46) * percentage,
                   width: deviceSize.width * .46,
                   color: Theme.of(context).accentColor),

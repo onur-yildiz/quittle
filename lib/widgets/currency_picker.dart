@@ -4,14 +4,22 @@ import 'package:quittle/providers/settings_provider.dart';
 import 'dart:convert' show json;
 
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CurrencyPicker extends StatefulWidget {
+  final Function onUpdate;
+
+  const CurrencyPicker({
+    this.onUpdate,
+  });
+
   @override
   _CurrencyPickerState createState() => _CurrencyPickerState();
 }
 
 class _CurrencyPickerState extends State<CurrencyPicker> {
   List _currencies = [];
+
   Future<void> getJson() async {
     final String response =
         await rootBundle.loadString('assets/data/currencies.json');
@@ -59,11 +67,12 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
                   ),
                 ),
                 onPressed: () {
-                  setState(() {
-                    Provider.of<SettingsProvider>(context, listen: false)
-                        .updateCurrency(_currencies[index]['code']);
-                    Navigator.of(context).pop();
-                  });
+                  // final prefs = await SharedPreferences.getInstance();
+                  // await prefs.setString('currency', _currencies[index]['code']);
+                  Provider.of<SettingsProvider>(context, listen: false)
+                      .updateCurrency(_currencies[index]['code']);
+                  widget.onUpdate(_currencies[index]['code']);
+                  Navigator.of(context).pop(_currencies[index]['code']);
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
