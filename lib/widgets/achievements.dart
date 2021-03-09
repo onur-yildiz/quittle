@@ -9,8 +9,6 @@ import 'package:quittle/models/addiction.dart';
 import 'package:quittle/util/progress_constants.dart';
 import 'package:quittle/extensions/duration_extension.dart';
 
-const _refreshInterval = Duration(seconds: 30);
-
 class Achievements extends StatefulWidget {
   final Addiction data;
 
@@ -65,15 +63,6 @@ class _AchievementsState extends State<Achievements> {
         _getLocalizedAchievementDurations(AppLocalizations.of(context));
       });
     });
-
-    // Timer.periodic(_refreshInterval, (timer) {
-    //   if (mounted)
-    //     setState(() {
-    //       percentage = (widget.data.abstinenceTime.inMinutes /
-    //               achievementDurations.last.inMinutes)
-    //           .clamp(0.0, 1.0);
-    //     });
-    // });
     super.initState();
   }
 

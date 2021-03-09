@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:quittle/util/progress_constants.dart';
 import 'package:quittle/models/personal_note.dart';
 import 'package:quittle/models/gift.dart';
 

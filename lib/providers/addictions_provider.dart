@@ -259,7 +259,6 @@ class AddictionsProvider with ChangeNotifier {
   }
 
   void buyGift(Gift gift) async {
-    // final addiction = _addictions.firstWhere((addiction) => addiction.id == id);
     gift.count = gift.count + 1;
     await DBHelper.update(
       'gifts',

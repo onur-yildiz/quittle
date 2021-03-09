@@ -1,12 +1,8 @@
-import 'dart:async';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:flutter/material.dart';
 import 'package:quittle/models/addiction.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
-import 'package:quittle/extensions/duration_extension.dart';
-
-const _refreshInterval = Duration(seconds: 30);
 
 class TargetDurationIndicator extends StatelessWidget {
   TargetDurationIndicator({

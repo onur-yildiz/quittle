@@ -148,7 +148,6 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
                 height: buttonHeight,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  // crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Material(
                       type: MaterialType.button,

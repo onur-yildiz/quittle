@@ -4,7 +4,6 @@ import 'package:quittle/providers/settings_provider.dart';
 import 'dart:convert' show json;
 
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class CurrencyPicker extends StatefulWidget {
   final Function onUpdate;

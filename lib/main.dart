@@ -29,8 +29,6 @@ final BehaviorSubject<ReceivedNotification> didReceiveLocalNotificationSubject =
 final BehaviorSubject<String> selectNotificationSubject =
     BehaviorSubject<String>();
 
-// const MethodChannel platform = MethodChannel('flutter_quit_addiction');
-
 class ReceivedNotification {
   ReceivedNotification({
     @required this.id,
@@ -56,9 +54,8 @@ void main() async {
 
   tz.initializeTimeZones();
 
-  final NotificationAppLaunchDetails notificationAppLaunchDetails =
-      await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
-
+  // final NotificationAppLaunchDetails notificationAppLaunchDetails =
+  //     await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
   // _initialRoute = AddictionsScreen.routeName;
   // if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {
   //   selectedNotificationPayload = notificationAppLaunchDetails.payload;
@@ -110,13 +107,10 @@ class MyApp extends StatelessWidget {
         title: 'Quittle',
         theme: ThemeData(
           fontFamily: 'Rubik',
-          // https://coolors.co/3f2333-f7f4f3-564d4a-f24333-ba1b1d //old
-          // https://coolors.co/d7efd7-c8c8c8-f0cf65-e14b51-bd4f6c //now
           primaryColorLight: Color.fromRGBO(230, 86, 81, .8),
           primaryColor: Color.fromRGBO(230, 86, 81, 1),
           primaryColorDark: Color.fromRGBO(182, 85, 81, 1),
           primarySwatch: Colors.red, //TODO custom swatch
-          // accentColor: Color.fromRGBO(147, 181, 198, 1),
           accentColor: Color.fromRGBO(46, 105, 153, 1), // 74, 111, 134
           buttonColor: Color.fromRGBO(247, 244, 243, 1),
           canvasColor: Color.fromRGBO(247, 244, 243, 1),
@@ -271,32 +265,3 @@ void showQuoteNotification(String notificationTitle, String notificationBody) {
     genNotDetails,
   );
 }
-
-// final androidDetails = AndroidNotificationDetails('quitAllProgress',
-//         'progressNotifications', 'quitAllProgressNotifications');
-//     final generalNotificationDetails = NotificationDetails(
-//       android: androidDetails,
-//     );
-
-//     final tomorrow = tz.TZDateTime.now(tz.local).add(Duration(days: 1));
-//     final tomorrowAtMorning = tz.TZDateTime.local(
-//         tomorrow.year, tomorrow.month, tomorrow.day, 9, 0, 0);
-
-//     final locale = AppLocalizations.of(context).localeName;
-//     final quoteList = quotes[locale];
-//     Random random = new Random();
-//     final notificationTitle = quoteOfTheDayLocs[locale];
-//     final notificationBody =
-//         quoteList[random.nextInt(quoteList.length)]['quote'];
-
-//     flutterLocalNotificationsPlugin.zonedSchedule(
-//       3,
-//       notificationTitle,
-//       notificationBody,
-//       tomorrowAtMorning,
-//       generalNotificationDetails,
-//       uiLocalNotificationDateInterpretation:
-//           UILocalNotificationDateInterpretation.absoluteTime,
-//       androidAllowWhileIdle: false,
-//       matchDateTimeComponents: DateTimeComponents.time,
-//     );

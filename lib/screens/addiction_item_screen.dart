@@ -45,7 +45,6 @@ class _AddictionItemState extends State<AddictionItemScreen> {
         AddictionItem(args: args),
         Gifts(data: args.data),
         Achievements(data: args.data),
-        // Playground(),
       ];
     }
 
@@ -95,12 +94,10 @@ class _AddictionItemState extends State<AddictionItemScreen> {
           items: _navBarItems(),
           confineInSafeArea: true,
           backgroundColor: Colors.white,
-          handleAndroidBackButtonPress: true, //pop all or one by one
-          resizeToAvoidBottomInset:
-              true, // This needs to be true if you want to move up the screen when keyboard appears.
+          handleAndroidBackButtonPress: true,
+          resizeToAvoidBottomInset: true,
           stateManagement: true,
-          hideNavigationBarWhenKeyboardShows:
-              true, // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument.
+          hideNavigationBarWhenKeyboardShows: true,
           decoration: NavBarDecoration(
             borderRadius: BorderRadius.circular(0.0),
             colorBehindNavBar: Colors.white,
@@ -108,18 +105,15 @@ class _AddictionItemState extends State<AddictionItemScreen> {
           popAllScreensOnTapOfSelectedTab: true,
           popActionScreens: PopActionScreensType.all,
           itemAnimationProperties: ItemAnimationProperties(
-            // Navigation Bar's items animation properties.
             duration: Duration(milliseconds: 250),
             curve: Curves.ease,
           ),
           screenTransitionAnimation: ScreenTransitionAnimation(
-            // Screen transition animation on change of selected tab.
             animateTabTransition: true,
             curve: Curves.ease,
             duration: Duration(milliseconds: 250),
           ),
-          navBarStyle: NavBarStyle
-              .style4, // Choose the nav bar style with this property.
+          navBarStyle: NavBarStyle.style4,
         ),
       ),
     );

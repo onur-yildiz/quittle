@@ -103,12 +103,6 @@ class _AddictionItemCardState extends State<AddictionItemCard> {
               caption: 'Delete',
               color: Theme.of(context).errorColor,
               icon: Icons.delete,
-              // onTap: () {
-              //   setState(() {
-              //     Provider.of<AddictionsProvider>(context, listen: false)
-              //         .deleteAddiction(widget.addictionData.id);
-              //   });
-              // },
             ),
           ],
           child: RepaintBoundary(

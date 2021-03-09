@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:quittle/extensions/string_extension.dart';
-import 'package:quittle/helpers/db_helper.dart';
 import 'package:quittle/models/addiction.dart';
 import 'package:quittle/providers/addictions_provider.dart';
 import 'package:quittle/providers/settings_provider.dart';
