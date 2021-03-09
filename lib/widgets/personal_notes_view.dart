@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:quittle/extensions/string_extension.dart';
+import 'package:provider/provider.dart';
+
 import 'package:quittle/models/addiction.dart';
 import 'package:quittle/models/personal_note.dart';
 import 'package:quittle/providers/addictions_provider.dart';
 import 'package:quittle/widgets/personal_note_create.dart';
 import 'package:quittle/widgets/note.dart';
-import 'package:provider/provider.dart';
 
 class PersonalNotesView extends StatefulWidget {
   PersonalNotesView({
@@ -34,17 +34,15 @@ class _PersonalNotesViewState extends State<PersonalNotesView> {
             builder: (_, snapshot) {
               return snapshot.error != null
                   ? Center(
-                      child: Text(
-                          local.genericErrorMessage.capitalizeFirstLetter()),
+                      child: Text(local.genericErrorMessage),
                     )
                   : Consumer<AddictionsProvider>(
                       builder: (_, addictionsData, _child) =>
                           widget.addictionData.personalNotes.length == 0
                               ? Note(
                                   data: PersonalNote(
-                                    title: 'your journey begins',
-                                    text:
-                                        'here you can take notes. you can keep your motivations, memories etc. keep record of your journey becoming free of your bad habit/addiction!',
+                                    title: local.yourJourneyBegins,
+                                    text: local.initialNoteMsg,
                                     date: DateTime.now().toString(),
                                   ),
                                 )
@@ -72,7 +70,7 @@ class _PersonalNotesViewState extends State<PersonalNotesView> {
           heroTag: null,
           elevation: 12.0,
           highlightElevation: 8.0,
-          tooltip: local.newNote.capitalizeWords(),
+          tooltip: local.newNote,
           onPressed: () {
             showModalBottomSheet(
               backgroundColor: Colors.transparent,

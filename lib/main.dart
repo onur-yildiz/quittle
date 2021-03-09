@@ -4,20 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:workmanager/workmanager.dart';
+import 'package:provider/provider.dart';
+import 'package:rxdart/subjects.dart';
+
 import 'package:quittle/helpers/db_helper.dart';
 import 'package:quittle/models/addiction.dart';
-import 'package:quittle/screens/addiction_item_screen.dart';
-import 'package:provider/provider.dart';
-
 import 'package:quittle/providers/addictions_provider.dart';
 import 'package:quittle/providers/settings_provider.dart';
+import 'package:quittle/screens/addiction_item_screen.dart';
 import 'package:quittle/screens/addictions_screen.dart';
 import 'package:quittle/screens/create_addiction_screen.dart';
 import 'package:quittle/util/custom_localizations.dart';
 import 'package:quittle/util/quotes_constants.dart';
-import 'package:rxdart/subjects.dart';
-import 'package:timezone/data/latest.dart' as tz;
-import 'package:workmanager/workmanager.dart';
 import 'package:quittle/util/progress_constants.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -140,6 +140,12 @@ class MyApp extends StatelessWidget {
                 ),
                 headline6: TextStyle(
                   color: Colors.grey[300],
+                ),
+                headline5: TextStyle(
+                  color: Colors.grey[300],
+                ),
+                caption: TextStyle(
+                  color: Colors.grey[500],
                 ),
               ),
           visualDensity: VisualDensity.adaptivePlatformDensity,

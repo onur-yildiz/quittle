@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
+import 'package:workmanager/workmanager.dart';
+
 import 'package:quittle/models/addiction.dart';
 import 'package:quittle/providers/addictions_provider.dart';
 import 'package:quittle/providers/settings_provider.dart';
@@ -7,8 +10,6 @@ import 'package:quittle/screens/create_addiction_screen.dart';
 import 'package:quittle/util/progress_constants.dart';
 import 'package:quittle/widgets/addiction_item_card.dart';
 import 'package:quittle/widgets/settings_view.dart';
-import 'package:provider/provider.dart';
-import 'package:workmanager/workmanager.dart';
 
 class AddictionsScreen extends StatefulWidget {
   static const routeName = '/addictions';
@@ -50,6 +51,7 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
   }
 
   void _onDelete(String id) async {
+    final local = AppLocalizations.of(context);
     final removedAddiction =
         await Provider.of<AddictionsProvider>(context, listen: false)
             .deleteAddiction(id);
@@ -62,7 +64,7 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
               '${removedAddiction.name} deleted.',
             ),
             action: SnackBarAction(
-              label: 'Undo',
+              label: local.undo,
               onPressed: () {
                 Provider.of<AddictionsProvider>(context, listen: false)
                     .insertAddiction(removedAddiction);
@@ -86,6 +88,7 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
+    final local = AppLocalizations.of(context);
 
     void pushCreateAddictionScreen() {
       Navigator.of(context).push(
@@ -112,7 +115,7 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
           heroTag: 'newAddiction',
           onPressed: pushCreateAddictionScreen,
           backgroundColor: Theme.of(context).primaryColor,
-          tooltip: 'New',
+          tooltip: local.newMsg,
           child: Icon(Icons.add),
         ),
         builder: (_, addictionsData, child) {
@@ -179,7 +182,7 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
                   child: Align(
                     alignment: Alignment.bottomCenter,
                     child: Text(
-                      'Quittle',
+                      local.appName,
                       style: TextStyle(
                         fontSize:
                             Theme.of(context).textTheme.headline2.fontSize,

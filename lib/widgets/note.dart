@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:quittle/models/personal_note.dart';
 import 'package:intl/intl.dart';
+
+import 'package:quittle/models/personal_note.dart';
 
 class Note extends StatelessWidget {
   final PersonalNote data;

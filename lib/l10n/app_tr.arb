@@ -1,11 +1,11 @@
 {
-  "appName": "quittle",
+  "appName": "Quittle",
   "@appName": {},
 
-  "moneySaved": "tasarruf edilen",
+  "moneySaved": "Tasarruf Edilen",
   "@moneySaved": {},
 
-  "hour": "{count,plural, =0{saat}=1{saat}other{saat}}",
+  "hour": "{count,plural, =0{Saat}=1{Saat}other{Saat}}",
   "@hour": {
     "placeholders": {
       "count": {}
@@ -45,118 +45,119 @@
     }
   },
   
-  "times": "{count,plural, =0{adet}=1{adet}other{adet}}",
+  "times": "{count,plural, =0{Adet}=1{Adet}other{Adet}}",
   "@times": {
     "placeholders": {
     "count": {}
     }
   },
 
-  "level": "seviye",
+  "level": "Seviye",
   "@level": {},
   
-  "details": "detaylar",
+  "details": "Detaylar",
   "@details": {},
 
-  "more": "daha fazla",
+  "more": "Daha Fazla",
   "@more": {},
 
-  "startDate": "başlangıç tarihi",
+  "startDate": "Başlangıç Tarihi",
   "@startDate": {},
 
-  "duration": "süre",
+  "duration": "Süre",
   "@duration": {},
 
-  "dailyUse": "günlük kullanım",
+  "dailyUse": "Günlük Kullanım",
   "@dailyUse": {},
 
-  "savedFor": "tasarruf miktarı",
+  "savedFor": "Tasarruf Miktarı",
   "@savedFor": {},
 
   
-  "price": "fiyat",
+  "price": "Fiyat",
   "@price": {
     "description": ""
   },
 
-  "notes": "notlar",
+  "notes": "Notlar",
   "@notes": {},
 
-  "note": "not",
+  "note": "Not",
   "@note": {},
 
-  "newNote": "yeni not",
+  "newNote": "Yeni Not",
   "@newNote": {},
 
-  "progressNotification": "İlerleyiş bildirimleri",
+  "progressNotification": "İlerleyiş Bildirimleri",
   "@progressNotification": {},
 
-  "progressNotificationDesc": "İlerleyiş bildirimlerini aktif et",
+  "progressNotificationDesc": "İlerleyiş bildirimlerini aktif et.",
   "@progressNotificationDesc": {},
 
-  "quoteOfTheDay": "günün sözü",
+  "quoteOfTheDay": "Günün Sözü",
   "@quoteOfTheDay": {},
 
-  "quoteOfTheDayDesc": "günün sözü bildirimlerini aktif et",
+  "quoteOfTheDayDesc": "Günün sözü bildirimlerini aktif et.",
   "@quoteOfTheDayDesc": {},
 
-  "currency": "para birimi",
+  "currency": "Para Birimi",
   "@currency": {},
 
-  "settings": "ayarlar",
+  "settings": "Ayarlar",
   "@settings": {},
 
-  "addictionName": "kötü alışkanlık adı",
+  "addictionName": "Kötü Alışkanlık",
   "@addictionName": {},
 
-  "date": "tarih",
+  "date": "Tarih",
   "@date": {},
 
-  "consumptionType": "tüketim türü",
+  "consumptionType": "Tüketim Türü",
   "@consumptionType": {},
 
-  "quantity": "adet",
+  "quantity": "Adet",
   "@quantity": {},
 
-  "dailyConsumption": "günlük kullanım",
+  "dailyConsumption": "Günlük Kullanım",
   "@dailyConsumption": {},
 
-  "unitCost": "birim fiyatı",
+  "unitCost": "Birim Fiyatı",
   "@unitCost": {},
 
-  "quitAddiction": "bırak!",
+  "quitAddiction": "Bırak!",
   "@quitAddiction": {},
-  "genericErrorMessage": "bir hata oluştu",
+
+  "genericErrorMessage": "Bir hata oluştu.",
   "@genericErrorMessage": {
     "description": ""
   },
 
-  "pleaseEnterANumber": "lütfen bir sayı girin",
+  "pleaseEnterANumber": "Lütfen bir sayı girin.",
   "@pleaseEnterANumber": {
     "description": ""
   },
 
-  "valueMustBePositive": "girilen değer pozitif olmalıdır",
+  "valueMustBePositive": "Girilen değer pozitif olmalıdır.",
   "@valueMustBePositive": {
     "description": ""
   },
 
-  "title": "başlık",
+  "title": "Başlık",
   "@title": {
     "description": ""
   },
 
-  "save": "kaydet",
+  "save": "Kaydet",
   "@save": {
     "description": ""
   },
 
-  "available": "mevcut",
+  "available": "Mevcut",
   "@available": {
     "description": ""
   },
 
-  "spent": "harcanan",
+  "spent": "Harcanan",
   "@spent": {
     "description": ""
   },
@@ -168,7 +169,7 @@
     }
   },
 
-  "purchaseGiftMsg": "fiyatı {money} olan {item} al ",
+  "purchaseGiftMsg": "{money} fiyatında {item} al",
   "@purchaseGiftMsg": {
     "description": "",
     "placeholders": {
@@ -177,7 +178,7 @@
       }
   },
 
-  "areYouSure": "emin misin?",
+  "areYouSure": "Emin misin?",
   "@areYouSure": {
     "description": ""
   },
@@ -185,5 +186,101 @@
   "deleteGiftWarningMsg": "Bu hediyeye harcanan paranın hepsi iade edilecektir.",
   "@deleteGiftWarningMsg": {
     "description": ""
+  },
+
+  "cantPickFutureTime": "Gelecekteki bir zamanı seçemezsin.",
+  "@cantPickFutureTime": {
+    "description": ""
+  },
+  
+  "notEnoughMoney": "Yeterli para mevcut değil.",
+  "@notEnoughMoney": {
+    "description": ""
+  },
+
+  "purchased": "Alınan",
+  "@purchased": {
+    "description": ""
+  },
+
+  "daily": "Günlük",
+  "@daily": {
+    "description": ""
+  },
+
+  "weekly": "Haftalık",
+  "@weekly": {
+    "description": ""
+  },
+
+  "monthly": "Aylık",
+  "@monthly": {
+    "description": ""
+  },
+
+  "totalNotUsed": "Toplam Kullanılmayan",
+  "@notUsedTotal": {
+    "description": ""
+  },
+
+  "futureSavings": "Gelecek Tasarruflar",
+  "@futureSavings": {
+    "description": ""
+  },
+
+  "yourJourneyBegins": "Yolculuğun Başlıyor!",
+  "@yourJourneyBegins": {
+    "description": ""
+  },
+
+  "initialNoteMsg": "Burada notlar alabilirsin, anıların ve motivasyonların gibi şeyleri kayıt altında tutabilirsin. Kötü alışkanlığından kurtulma yolculuğunu kayıt altında tut!",
+  "@initialNoteMsg": {
+    "description": ""
+  },
+
+  "applicationLegalese": "Uygulama ikonu, FontAwesome'ın \"link\" ikonunun değiştirilmiş halidir.",
+  "@applicationLegalese": {
+    "description": ""
+  },
+
+  "appIcon": "Uygulama İkonu",
+  "@appIcon": {
+    "description": ""
+  },
+
+  "undo": "Geri Al",
+  "@undo": {
+    "description": ""
+  },
+
+  "newMsg": "Yeni",
+  "@newMsg": {
+    "description": ""
+  },
+
+  "shareMsg": "İlerlememe bak!",
+  "@shareMsg": {
+    "description": ""
+  },
+
+  "shareMsgSubject": "İlerleyişim",
+  "@shareMsgSubject": {
+    "description": ""
+  },
+
+  "share": "Paylaş",
+  "@share": {
+    "description": ""
+  },
+
+  "delete": "Sil",
+  "@delete": {
+    "description": ""
+  },
+
+  "licenses": "Lisanslar",
+  "@licenses": {
+    "description": ""
   }
+
 }

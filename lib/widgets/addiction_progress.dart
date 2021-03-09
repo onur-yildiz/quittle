@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:quittle/extensions/string_extension.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+
 import 'package:quittle/models/addiction.dart';
 import 'package:quittle/providers/settings_provider.dart';
 import 'package:quittle/util/progress_constants.dart';
 import 'package:quittle/widgets/target_duration_indicator.dart';
-import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 class AddictionProgress extends StatelessWidget {
   const AddictionProgress({
@@ -44,13 +44,12 @@ class AddictionProgress extends StatelessWidget {
                   child: Column(
                     children: [
                       Text(
-                        local.level.capitalizeWords() +
+                        local.level +
                             ' ' +
                             (addictionData.level + 1).toString(),
                       ),
                       Text(
-                        getLevelNames(local.localeName)[addictionData.level]
-                            .capitalizeWords(),
+                        getLevelNames(local.localeName)[addictionData.level],
                       )
                     ],
                   ),
@@ -71,7 +70,7 @@ class AddictionProgress extends StatelessWidget {
                         ? Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(local.savedFor.capitalizeFirstLetter()),
+                              Text(local.savedFor),
                               Text(
                                 addictionData.consumptionType == 0
                                     ? addictionData.notUsedCount
@@ -90,12 +89,13 @@ class AddictionProgress extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                local.moneySaved.capitalizeWords(),
+                                local.moneySaved,
                               ),
                               Consumer<SettingsProvider>(
                                 builder: (_, settings, _ch) => Text(
                                   NumberFormat.simpleCurrency(
                                     name: settings.currency,
+                                    locale: local.localeName,
                                     decimalDigits: 2,
                                   ).format(
                                     addictionData.totalSaved,

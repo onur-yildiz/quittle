@@ -1,10 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:quittle/extensions/string_extension.dart';
+import 'package:provider/provider.dart';
+
 import 'package:quittle/providers/addictions_provider.dart';
 import 'package:quittle/widgets/custom_text_form_field.dart';
-import 'package:provider/provider.dart';
 
 class CreateGift extends StatefulWidget {
   CreateGift({
@@ -84,7 +83,7 @@ class _CreateGiftNoteState extends State<CreateGift> {
               CustomTextFormField(
                 valKey: 'name',
                 data: giftData,
-                inputName: local.title.capitalizeWords(),
+                inputName: local.title,
                 focusNode: null,
                 inputType: TextInputType.name,
                 backgroundColor: inputBackgroundColor,
@@ -92,15 +91,15 @@ class _CreateGiftNoteState extends State<CreateGift> {
               CustomTextFormField(
                 valKey: 'price',
                 data: giftData,
-                inputName: local.price.capitalizeWords(),
+                inputName: local.price,
                 focusNode: null,
                 inputType: TextInputType.number,
                 backgroundColor: inputBackgroundColor,
                 validator: (value) {
                   if (double.tryParse(value) == null) {
-                    return local.pleaseEnterANumber.capitalizeFirstLetter();
+                    return local.pleaseEnterANumber;
                   } else if (double.parse(value) < 0) {
-                    return local.valueMustBePositive.capitalizeFirstLetter();
+                    return local.valueMustBePositive;
                   } else {
                     return null;
                   }
@@ -124,7 +123,7 @@ class _CreateGiftNoteState extends State<CreateGift> {
                         color: Theme.of(context).primaryColorLight,
                       ),
                       Text(
-                        local.save.capitalizeWords(),
+                        local.save,
                         style: TextStyle(
                           color: Theme.of(context).primaryColorLight,
                           fontWeight: FontWeight.bold,

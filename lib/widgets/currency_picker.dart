@@ -1,9 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:quittle/providers/settings_provider.dart';
 import 'dart:convert' show json;
 
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+
+import 'package:quittle/providers/settings_provider.dart';
 
 class CurrencyPicker extends StatefulWidget {
   final Function onUpdate;
@@ -66,35 +67,16 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
                   ),
                 ),
                 onPressed: () {
-                  // final prefs = await SharedPreferences.getInstance();
-                  // await prefs.setString('currency', _currencies[index]['code']);
                   Provider.of<SettingsProvider>(context, listen: false)
                       .updateCurrency(_currencies[index]['code']);
                   widget.onUpdate(_currencies[index]['code']);
                   Navigator.of(context).pop(_currencies[index]['code']);
                 },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                      flex: 1,
-                      fit: FlexFit.loose,
-                      child: Text(
-                        _currencies[index]['code'],
-                        style: TextStyle(
-                          color: Theme.of(context).accentColor,
-                        ),
-                      ),
-                    ),
-                    Flexible(
-                      flex: 3,
-                      fit: FlexFit.tight,
-                      child: Text(
-                        _currencies[index]['name'], // TODO localization
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
+                child: Text(
+                  _currencies[index]['code'],
+                  style: TextStyle(
+                    color: Theme.of(context).accentColor,
+                  ),
                 ),
               ),
             ),

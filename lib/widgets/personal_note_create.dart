@@ -1,12 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:quittle/extensions/string_extension.dart';
-import 'package:quittle/providers/addictions_provider.dart';
-import 'package:quittle/widgets/custom_text_form_field.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+
+import 'package:quittle/providers/addictions_provider.dart';
+import 'package:quittle/widgets/custom_text_form_field.dart';
 
 class CreatePersonalNote extends StatefulWidget {
   CreatePersonalNote({
@@ -106,7 +105,7 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
               CustomTextFormField(
                 valKey: 'title',
                 data: noteData,
-                inputName: local.title.capitalizeWords(),
+                inputName: local.title,
                 focusNode: null,
                 inputType: TextInputType.name,
                 backgroundColor: inputBackgroundColor,
@@ -131,7 +130,7 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
                       style: BorderStyle.solid,
                     ),
                   ),
-                  hintText: local.note.capitalizeWords(),
+                  hintText: local.note,
                 ),
                 style: TextStyle(
                   color: Theme.of(context).hintColor,
@@ -212,7 +211,7 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
                                 color: Theme.of(context).primaryColor,
                               ),
                               Text(
-                                local.save.capitalizeWords(),
+                                local.save,
                                 style: TextStyle(
                                   color: Theme.of(context).primaryColor,
                                   fontWeight: FontWeight.bold,
