@@ -45,7 +45,7 @@ class TargetDurationIndicator extends StatelessWidget {
         percentage = time.inMinutes / (30 * Duration.minutesPerDay);
       }
     } else if (time.inDays ~/ 30 < 12) {
-      targetValue = (time.inDays / 30).ceil();
+      targetValue = (time.inDays ~/ 30) + 1;
       targetUnit = local.month(targetValue);
       percentage = time.inMinutes / (targetValue * 30 * Duration.minutesPerDay);
     } else {

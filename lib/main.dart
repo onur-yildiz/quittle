@@ -118,6 +118,10 @@ class MyApp extends StatelessWidget {
           hintColor: Colors.blueGrey[800],
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
+        darkTheme: ThemeData(
+          brightness: Brightness.dark,
+        ),
+        themeMode: ThemeMode.system,
         // initialRoute: _initialRoute,
         home: Builder(
           builder: (context) => FutureBuilder(

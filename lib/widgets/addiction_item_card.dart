@@ -34,12 +34,12 @@ class _AddictionItemCardState extends State<AddictionItemCard> {
 
   _share() async {
     RenderRepaintBoundary boundary = _cardKey.currentContext.findRenderObject();
-    ui.Image image = await boundary.toImage();
+    ui.Image image = await boundary.toImage(pixelRatio: 2.0);
     ByteData byteData = await image.toByteData(format: ui.ImageByteFormat.png);
     Uint8List pngBytes = byteData.buffer.asUint8List();
     final directory = (await getApplicationDocumentsDirectory()).path;
     File imgFile = File('$directory/screenshot_shared.png');
-    imgFile.writeAsBytes(pngBytes);
+    await imgFile.writeAsBytes(pngBytes);
     Share.shareFiles(
       ['$directory/screenshot_shared.png'],
       text: 'Check out my progress!',
