@@ -290,10 +290,7 @@ class _GiftCardState extends State<GiftCard> {
                     ),
                   ),
                   child: DefaultTextStyle(
-                    style: TextStyle(
-                      // fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
+                    style: Theme.of(context).textTheme.bodyText1,
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Flex(
@@ -458,7 +455,7 @@ class AddGiftButton extends StatelessWidget {
               child: Icon(
                 Icons.add,
                 size: Theme.of(context).textTheme.headline4.fontSize,
-                color: Theme.of(context).hintColor,
+                // color: Theme.of(context).hintColor,
               ),
             ),
           ),

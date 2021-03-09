@@ -25,7 +25,7 @@ class _PersonalNotesViewState extends State<PersonalNotesView> {
       alignment: Alignment.topCenter,
       children: [
         Padding(
-          padding: const EdgeInsets.only(top: 16.0),
+          padding: const EdgeInsets.only(top: 24.0),
           child: FutureBuilder(
             future: Provider.of<AddictionsProvider>(context, listen: false)
                 .fetchNotes(

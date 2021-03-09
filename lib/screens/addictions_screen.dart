@@ -131,6 +131,7 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
           return addictionsData.addictions.length > 0
               ? Theme(
                   data: Theme.of(context).copyWith(
+                    cardColor: Theme.of(context).canvasColor,
                     canvasColor: Colors.transparent,
                     shadowColor: Colors.black26,
                   ),

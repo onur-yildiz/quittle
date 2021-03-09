@@ -32,10 +32,9 @@ class AddictionDetails extends StatelessWidget {
         .capitalizeWords();
 
     return DefaultTextStyle(
-      style: TextStyle(
-        color: Theme.of(context).canvasColor,
-        fontWeight: FontWeight.bold,
-      ),
+      style: Theme.of(context).textTheme.bodyText2.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Wrap(

@@ -13,8 +13,11 @@ class AddictionItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
     return Container(
-      color: Theme.of(context).accentColor,
+      color: isDark
+          ? Theme.of(context).highlightColor.withOpacity(.1)
+          : Theme.of(context).accentColor,
       child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,

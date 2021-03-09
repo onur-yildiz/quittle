@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -15,22 +14,16 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share/share.dart';
 import 'package:uuid/uuid.dart';
 
-class AddictionItemCard extends StatefulWidget {
-  const AddictionItemCard({
+class AddictionItemCard extends StatelessWidget {
+  AddictionItemCard({
     @required this.addictionData,
     @required this.onDelete,
-    Key key,
+    @required key,
   }) : super(key: key);
 
   final Addiction addictionData;
   final Function onDelete;
-
-  @override
-  _AddictionItemCardState createState() => _AddictionItemCardState();
-}
-
-class _AddictionItemCardState extends State<AddictionItemCard> {
-  GlobalKey _cardKey = GlobalKey();
+  final GlobalKey _cardKey = GlobalKey();
 
   _share() async {
     RenderRepaintBoundary boundary = _cardKey.currentContext.findRenderObject();
@@ -49,6 +42,7 @@ class _AddictionItemCardState extends State<AddictionItemCard> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
     return Container(
       margin: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
@@ -57,11 +51,15 @@ class _AddictionItemCardState extends State<AddictionItemCard> {
           width: 0,
           style: BorderStyle.none,
         ),
-        color: Theme.of(context).accentColor,
+        color: isDark
+            ? Theme.of(context).highlightColor.withOpacity(.1)
+            : Theme.of(context).accentColor,
       ),
       padding: const EdgeInsets.only(bottom: 4),
       child: OpenContainer(
-        closedColor: Theme.of(context).accentColor,
+        closedColor: isDark
+            ? Theme.of(context).highlightColor.withOpacity(.1)
+            : Theme.of(context).accentColor,
         closedShape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
           side: BorderSide(
@@ -72,7 +70,7 @@ class _AddictionItemCardState extends State<AddictionItemCard> {
         transitionDuration: Duration(milliseconds: 250),
         openBuilder: (context, action) => AddictionItemScreen(),
         routeSettings: RouteSettings(
-          arguments: AddictionItemScreenArgs(widget.addictionData),
+          arguments: AddictionItemScreenArgs(addictionData),
         ),
         closedBuilder: (context, action) => Slidable(
           key: ValueKey(Uuid().v1()),
@@ -87,7 +85,7 @@ class _AddictionItemCardState extends State<AddictionItemCard> {
             },
             onDismissed: (actionType) {
               if (actionType == SlideActionType.primary) return;
-              widget.onDelete(widget.addictionData.id);
+              onDelete(addictionData.id);
             },
           ),
           actions: [
@@ -127,7 +125,7 @@ class _AddictionItemCardState extends State<AddictionItemCard> {
                           flex: 1,
                           child: Center(
                             child: Text(
-                              widget.addictionData.name.toUpperCase(),
+                              addictionData.name.toUpperCase(),
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -135,7 +133,8 @@ class _AddictionItemCardState extends State<AddictionItemCard> {
                                     .textTheme
                                     .headline5
                                     .fontSize,
-                                color: Theme.of(context).primaryColor,
+                                color:
+                                    Theme.of(context).textTheme.bodyText1.color,
                               ),
                             ),
                           ),
@@ -146,7 +145,7 @@ class _AddictionItemCardState extends State<AddictionItemCard> {
                       ],
                     ),
                     AddictionProgress(
-                      addictionData: widget.addictionData,
+                      addictionData: addictionData,
                     )
                   ],
                 ),

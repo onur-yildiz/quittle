@@ -73,8 +73,6 @@ class CustomTextFormField extends StatelessWidget {
       textInputAction: inputAction,
       maxLength: maxLength,
       maxLengthEnforcement: MaxLengthEnforcement.enforced,
-      buildCounter: (context, {currentLength, isFocused, maxLength}) =>
-          Container(),
       textCapitalization: TextCapitalization.sentences,
       onEditingComplete: () => inputAction == TextInputAction.done
           ? FocusScope.of(context).unfocus()

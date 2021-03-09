@@ -111,15 +111,38 @@ class MyApp extends StatelessWidget {
           primaryColor: Color.fromRGBO(230, 86, 81, 1),
           primaryColorDark: Color.fromRGBO(182, 85, 81, 1),
           primarySwatch: Colors.red, //TODO custom swatch
-          accentColor: Color.fromRGBO(46, 105, 153, 1), // 74, 111, 134
+          accentColor: Color.fromRGBO(46, 105, 153, 1),
           buttonColor: Color.fromRGBO(247, 244, 243, 1),
           canvasColor: Color.fromRGBO(247, 244, 243, 1),
           cardColor: Color.fromRGBO(230, 230, 230, 1),
           hintColor: Colors.blueGrey[800],
+          textTheme: Theme.of(context).textTheme.copyWith(
+                bodyText2: TextStyle(
+                  color: Colors.grey[200],
+                ),
+              ),
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         darkTheme: ThemeData(
           brightness: Brightness.dark,
+          primaryColorLight: Color.fromRGBO(230, 86, 81, .8),
+          primaryColor: Color.fromRGBO(182, 85, 81, 1),
+          primarySwatch: Colors.red,
+          accentColor: Color.fromRGBO(20, 80, 120, 1),
+          buttonColor: Color.fromRGBO(247, 244, 243, 1),
+          cardColor: Color.fromRGBO(55, 55, 55, 1),
+          textTheme: Theme.of(context).textTheme.copyWith(
+                bodyText1: TextStyle(
+                  color: Colors.grey[400],
+                ),
+                bodyText2: TextStyle(
+                  color: Colors.grey[400],
+                ),
+                headline6: TextStyle(
+                  color: Colors.grey[300],
+                ),
+              ),
+          visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         themeMode: ThemeMode.system,
         // initialRoute: _initialRoute,

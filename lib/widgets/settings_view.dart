@@ -83,10 +83,17 @@ class _SettingsViewState extends State<SettingsView> {
                             contentPadding: const EdgeInsets.symmetric(
                                 vertical: 24, horizontal: 8),
                             title: Text(
-                                local.progressNotification.capitalizeWords()),
-                            subtitle: Text(local.progressNotificationDesc
-                                .capitalizeFirstLetter()),
+                              local.progressNotification.capitalizeWords(),
+                            ),
+                            subtitle: Text(
+                              local.progressNotificationDesc
+                                  .capitalizeFirstLetter(),
+                              style: TextStyle(
+                                color: Theme.of(context).hintColor,
+                              ),
+                            ),
                             value: _progressCheck,
+                            activeColor: Theme.of(context).accentColor,
                             onChanged: (value) {
                               if (mounted) {
                                 setState(() {
@@ -103,10 +110,17 @@ class _SettingsViewState extends State<SettingsView> {
                           CheckboxListTile(
                             contentPadding: const EdgeInsets.symmetric(
                                 vertical: 24, horizontal: 8),
-                            title: Text(local.quoteOfTheDay.capitalizeWords()),
-                            subtitle: Text(local.quoteOfTheDayDesc
-                                .capitalizeFirstLetter()),
+                            title: Text(
+                              local.quoteOfTheDay.capitalizeWords(),
+                            ),
+                            subtitle: Text(
+                              local.quoteOfTheDayDesc.capitalizeFirstLetter(),
+                              style: TextStyle(
+                                color: Theme.of(context).hintColor,
+                              ),
+                            ),
                             value: _quoteCheck,
+                            activeColor: Theme.of(context).accentColor,
                             onChanged: (value) {
                               if (mounted) {
                                 setState(() {
@@ -130,16 +144,26 @@ class _SettingsViewState extends State<SettingsView> {
                             contentPadding: const EdgeInsets.symmetric(
                                 vertical: 24, horizontal: 8),
                             leading: FaIcon(FontAwesomeIcons.moneyBillWave),
-                            title: Text(local.currency.capitalizeWords()),
+                            title: Text(
+                              local.currency.capitalizeWords(),
+                              style: TextStyle(
+                                fontSize: Theme.of(context)
+                                    .textTheme
+                                    .subtitle2
+                                    .fontSize,
+                                color: Theme.of(context).hintColor,
+                              ),
+                            ),
                             trailing: Text(
                               '$currency (${NumberFormat.simpleCurrency(
                                 name: currency,
                               ).currencySymbol})',
                               style: TextStyle(
                                 color: Theme.of(context).accentColor,
+                                fontWeight: FontWeight.bold,
                                 fontSize: Theme.of(context)
                                     .textTheme
-                                    .subtitle2
+                                    .subtitle1
                                     .fontSize,
                               ),
                             ),

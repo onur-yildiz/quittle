@@ -36,11 +36,11 @@ class AddictionProgress extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 DefaultTextStyle(
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).hintColor,
-                    fontSize: Theme.of(context).textTheme.subtitle1.fontSize,
-                  ),
+                  style: Theme.of(context).textTheme.bodyText1.copyWith(
+                        fontSize:
+                            Theme.of(context).textTheme.subtitle1.fontSize,
+                        fontWeight: FontWeight.bold,
+                      ),
                   child: Column(
                     children: [
                       Text(
@@ -59,14 +59,14 @@ class AddictionProgress extends StatelessWidget {
                   color: Colors.transparent,
                   thickness: 0,
                 ),
-                FittedBox(
-                  fit: BoxFit.contain,
-                  child: DefaultTextStyle(
-                    style: TextStyle(
-                      fontSize: Theme.of(context).textTheme.subtitle1.fontSize,
-                      color: Theme.of(context).hintColor,
-                      fontWeight: FontWeight.bold,
-                    ),
+                DefaultTextStyle(
+                  style: Theme.of(context).textTheme.bodyText1.copyWith(
+                        fontSize:
+                            Theme.of(context).textTheme.subtitle1.fontSize,
+                        fontWeight: FontWeight.bold,
+                      ),
+                  child: FittedBox(
+                    fit: BoxFit.contain,
                     child: addictionData.unitCost == 0
                         ? Column(
                             mainAxisAlignment: MainAxisAlignment.center,
