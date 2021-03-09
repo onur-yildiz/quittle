@@ -2,11 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+
 import 'package:quittle/models/addiction_item_screen_args.dart';
 import 'package:quittle/widgets/addiction_item.dart';
 import 'package:quittle/widgets/gifts.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:quittle/widgets/achievements.dart';
 
 const _refreshInterval = Duration(seconds: 60);

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
-import 'package:quittle/extensions/string_extension.dart';
+import 'package:provider/provider.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import 'package:quittle/providers/settings_provider.dart';
 import 'package:quittle/widgets/currency_picker.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class SettingsView extends StatefulWidget {
   @override
@@ -67,7 +67,7 @@ class _SettingsViewState extends State<SettingsView> {
                                 ),
                               ),
                               child: Text(
-                                local.settings.capitalizeWords(),
+                                local.settings,
                                 style: TextStyle(
                                   fontSize: Theme.of(context)
                                       .textTheme
@@ -83,11 +83,10 @@ class _SettingsViewState extends State<SettingsView> {
                             contentPadding: const EdgeInsets.symmetric(
                                 vertical: 24, horizontal: 8),
                             title: Text(
-                              local.progressNotification.capitalizeWords(),
+                              local.progressNotification,
                             ),
                             subtitle: Text(
-                              local.progressNotificationDesc
-                                  .capitalizeFirstLetter(),
+                              local.progressNotificationDesc,
                               style: TextStyle(
                                 color: Theme.of(context).hintColor,
                               ),
@@ -111,10 +110,10 @@ class _SettingsViewState extends State<SettingsView> {
                             contentPadding: const EdgeInsets.symmetric(
                                 vertical: 24, horizontal: 8),
                             title: Text(
-                              local.quoteOfTheDay.capitalizeWords(),
+                              local.quoteOfTheDay,
                             ),
                             subtitle: Text(
-                              local.quoteOfTheDayDesc.capitalizeFirstLetter(),
+                              local.quoteOfTheDayDesc,
                               style: TextStyle(
                                 color: Theme.of(context).hintColor,
                               ),
@@ -145,7 +144,7 @@ class _SettingsViewState extends State<SettingsView> {
                                 vertical: 24, horizontal: 8),
                             leading: FaIcon(FontAwesomeIcons.moneyBillWave),
                             title: Text(
-                              local.currency.capitalizeWords(),
+                              local.currency,
                               style: TextStyle(
                                 fontSize: Theme.of(context)
                                     .textTheme
@@ -157,6 +156,7 @@ class _SettingsViewState extends State<SettingsView> {
                             trailing: Text(
                               '$currency (${NumberFormat.simpleCurrency(
                                 name: currency,
+                                locale: local.localeName,
                               ).currencySymbol})',
                               style: TextStyle(
                                 color: Theme.of(context).accentColor,
@@ -198,20 +198,20 @@ class _SettingsViewState extends State<SettingsView> {
                                           FontAwesomeIcons.infoCircle,
                                           color: Theme.of(context).primaryColor,
                                         ),
-                                        tooltip: 'Licenses',
+                                        tooltip: local.licenses,
                                         onPressed: () {
                                           showDialog(
                                             context: context,
                                             builder: (context) => AboutDialog(
-                                              applicationName: local.appName
-                                                  .capitalizeFirstLetter(),
+                                              applicationName: local.appName,
                                               applicationIcon:
                                                   SizedBox.fromSize(
                                                 size: Size.square(16.0),
                                                 child: Image.asset(
-                                                    'assets/images/font_awesome_chain.png'),
+                                                  'assets/images/font_awesome_chain.png',
+                                                ),
                                               ),
-                                              applicationVersion: '1.0.0+1',
+                                              applicationVersion: '1.0.0',
                                               children: [
                                                 Column(
                                                   crossAxisAlignment:
@@ -224,7 +224,7 @@ class _SettingsViewState extends State<SettingsView> {
                                                             'https://fontawesome.com/license/free');
                                                       },
                                                       child: Text(
-                                                        'Font Awesome Free License',
+                                                        'FontAwesome Free License',
                                                       ),
                                                     ),
                                                     TextButton(
@@ -233,14 +233,14 @@ class _SettingsViewState extends State<SettingsView> {
                                                             'https://fontawesome.com/icons/link?style=solid');
                                                       },
                                                       child: Text(
-                                                        'App Icon',
+                                                        local.appIcon,
                                                       ),
                                                     ),
                                                   ],
                                                 )
                                               ],
                                               applicationLegalese:
-                                                  'App icon is a modified version of font awesome link icon',
+                                                  local.applicationLegalese,
                                             ),
                                           );
                                         },

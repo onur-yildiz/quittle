@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:quittle/extensions/string_extension.dart';
+import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 import 'package:quittle/models/addiction.dart';
+import 'package:quittle/providers/settings_provider.dart';
 import 'package:quittle/widgets/duration_counter.dart';
-import 'package:intl/intl.dart';
 
 class AddictionDetails extends StatelessWidget {
   const AddictionDetails({
@@ -20,16 +21,16 @@ class AddictionDetails extends StatelessWidget {
     final double dailySavings =
         addictionData.dailyConsumption * addictionData.unitCost;
     final local = AppLocalizations.of(context);
+    final currency = Provider.of<SettingsProvider>(context).currency;
     final String quitDateFormatted =
         DateFormat.yMMMd(local.localeName).format(addictionData.quitDateTime);
     final consumptionType = ((addictionData.consumptionType == 1)
-            ? local.hour(
-                notUsedCount.toInt(),
-              )
-            : local.times(
-                notUsedCount.toInt(),
-              ))
-        .capitalizeWords();
+        ? local.hour(
+            notUsedCount.toInt(),
+          )
+        : local.times(
+            notUsedCount.toInt(),
+          ));
 
     return DefaultTextStyle(
       style: Theme.of(context).textTheme.bodyText2.copyWith(
@@ -45,21 +46,21 @@ class AddictionDetails extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(local.startDate.capitalizeWords()),
+                Text(local.startDate),
                 Text(quitDateFormatted),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(local.duration.capitalizeWords()),
+                Text(local.duration),
                 DurationCounter(duration: abstinenceTime),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(local.dailyUse.capitalizeWords()),
+                Text(local.dailyUse),
                 Text(
                   (addictionData.dailyConsumption % 1 == 0
                           ? addictionData.dailyConsumption.toStringAsFixed(0)
@@ -70,34 +71,40 @@ class AddictionDetails extends StatelessWidget {
               ],
             ),
             Divider(),
-            Text('future savings'),
+            Text(local.futureSavings),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('daily'),
+                Text(local.daily),
                 Text(
-                  NumberFormat.simpleCurrency(locale: local.localeName)
-                      .format(dailySavings),
+                  NumberFormat.simpleCurrency(
+                    name: currency,
+                    locale: local.localeName,
+                  ).format(dailySavings),
                 ),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('weekly'),
+                Text(local.weekly),
                 Text(
-                  NumberFormat.simpleCurrency(locale: local.localeName)
-                      .format(dailySavings * 7),
+                  NumberFormat.simpleCurrency(
+                    name: currency,
+                    locale: local.localeName,
+                  ).format(dailySavings * 7),
                 ),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('monthly'),
+                Text(local.monthly),
                 Text(
-                  NumberFormat.simpleCurrency(locale: local.localeName)
-                      .format(dailySavings * 30),
+                  NumberFormat.simpleCurrency(
+                    name: currency,
+                    locale: local.localeName,
+                  ).format(dailySavings * 30),
                 ),
               ],
             ),
@@ -105,7 +112,7 @@ class AddictionDetails extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('not used total'),
+                Text(local.totalNotUsed),
                 Text(
                   addictionData.consumptionType == 1
                       ? addictionData.notUsedCount.toStringAsFixed(0)

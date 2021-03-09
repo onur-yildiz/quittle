@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:quittle/models/addiction_item_screen_args.dart';
 import 'package:quittle/widgets/addiction_details.dart';
 import 'package:quittle/widgets/addiction_progress.dart';

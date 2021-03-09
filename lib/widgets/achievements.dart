@@ -1,13 +1,14 @@
 import 'dart:async';
 
-import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
+import 'package:confetti/confetti.dart';
+
+import 'package:quittle/extensions/duration_extension.dart';
 import 'package:quittle/models/addiction.dart';
 import 'package:quittle/util/progress_constants.dart';
-import 'package:quittle/extensions/duration_extension.dart';
 
 class Achievements extends StatefulWidget {
   final Addiction data;
@@ -78,7 +79,7 @@ class _AchievementsState extends State<Achievements> {
   }
 
   void _getLocalizedAchievementDurations(AppLocalizations local) {
-    localizedAchDurations[0] = 'a new start!';
+    localizedAchDurations[0] = 'A New Start!';
     for (var i = 1; i < achievementDurations.length; i++) {
       if (achievementDurations[i].inDays < 30) {
         localizedAchDurations[i] =

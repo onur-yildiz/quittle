@@ -1,16 +1,16 @@
-import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:quittle/extensions/string_extension.dart';
-import 'package:quittle/util/progress_constants.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:animations/animations.dart';
+
+import 'package:quittle/extensions/datetime_extension.dart';
+import 'package:quittle/extensions/timeofday_extension.dart';
 import 'package:quittle/models/addiction_item_screen_args.dart';
 import 'package:quittle/providers/addictions_provider.dart';
 import 'package:quittle/screens/addiction_item_screen.dart';
+import 'package:quittle/util/progress_constants.dart';
 import 'package:quittle/widgets/custom_text_form_field.dart';
-import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
-import 'package:quittle/extensions/datetime_extension.dart';
-import 'package:quittle/extensions/timeofday_extension.dart';
 
 class CreateAddictionScreen extends StatelessWidget {
   static const routeName = '/create-addiction';
@@ -102,7 +102,9 @@ class _AddictionCardState extends State<AddictionCard>
               ..removeCurrentSnackBar()
               ..showSnackBar(
                 SnackBar(
-                  content: Text('Can\'t pick a future time.'), // TODO localize
+                  content: Text(
+                    AppLocalizations.of(context).cantPickFutureTime,
+                  ),
                 ),
               );
             date = date.add(TimeOfDay.now().asDuration);
@@ -183,7 +185,7 @@ class _AddictionCardState extends State<AddictionCard>
                 CustomTextFormField(
                   valKey: 'name',
                   data: addictionData,
-                  inputName: local.addictionName.capitalizeWords(),
+                  inputName: local.addictionName,
                   inputType: TextInputType.name,
                   inputAction: TextInputAction.next,
                 ),
@@ -221,7 +223,7 @@ class _AddictionCardState extends State<AddictionCard>
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
                                   Text(
-                                    local.date.capitalizeWords(),
+                                    local.date,
                                     style: TextStyle(
                                       fontSize: Theme.of(context)
                                           .textTheme
@@ -303,7 +305,7 @@ class _AddictionCardState extends State<AddictionCard>
                                             color: Theme.of(context).hintColor,
                                           ),
                                           label: Text(
-                                            local.quantity.capitalizeWords(),
+                                            local.quantity,
                                             style: TextStyle(
                                               color:
                                                   Theme.of(context).hintColor,
@@ -336,7 +338,7 @@ class _AddictionCardState extends State<AddictionCard>
                                             color: Theme.of(context).hintColor,
                                           ),
                                           label: Text(
-                                            local.hour(0).capitalizeWords(),
+                                            local.hour(0),
                                             style: TextStyle(
                                               color:
                                                   Theme.of(context).hintColor,
@@ -363,7 +365,7 @@ class _AddictionCardState extends State<AddictionCard>
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    local.consumptionType.capitalizeWords(),
+                                    local.consumptionType,
                                     style: TextStyle(
                                       fontSize: Theme.of(context)
                                           .textTheme
@@ -375,8 +377,8 @@ class _AddictionCardState extends State<AddictionCard>
                                   ),
                                   Text(
                                     _consumptionType != null
-                                        ? _consumptionType.capitalizeWords()
-                                        : local.quantity.capitalizeWords(),
+                                        ? _consumptionType
+                                        : local.quantity,
                                     style: TextStyle(
                                       fontSize: Theme.of(context)
                                           .textTheme
@@ -397,13 +399,13 @@ class _AddictionCardState extends State<AddictionCard>
                 CustomTextFormField(
                   valKey: 'daily_consumption',
                   data: addictionData,
-                  inputName: local.dailyConsumption.capitalizeWords(),
+                  inputName: local.dailyConsumption,
                   inputType: TextInputType.number,
                   validator: (value) {
                     if (double.tryParse(value) == null) {
-                      return local.pleaseEnterANumber.capitalizeFirstLetter();
+                      return local.pleaseEnterANumber;
                     } else if (double.parse(value) < 0) {
-                      return local.valueMustBePositive.capitalizeFirstLetter();
+                      return local.valueMustBePositive;
                     } else {
                       return null;
                     }
@@ -414,14 +416,14 @@ class _AddictionCardState extends State<AddictionCard>
                 CustomTextFormField(
                   valKey: 'unit_cost',
                   data: addictionData,
-                  inputName: local.unitCost.capitalizeWords(),
+                  inputName: local.unitCost,
                   inputType: TextInputType.number,
                   onSubmit: trySubmit,
                   validator: (value) {
                     if (double.tryParse(value) == null) {
-                      return local.pleaseEnterANumber.capitalizeFirstLetter();
+                      return local.pleaseEnterANumber;
                     } else if (double.parse(value) < 0) {
-                      return local.valueMustBePositive.capitalizeFirstLetter();
+                      return local.valueMustBePositive;
                     } else {
                       return null;
                     }
@@ -436,7 +438,7 @@ class _AddictionCardState extends State<AddictionCard>
                     height: deviceSize.height * .1,
                     alignment: Alignment.center,
                     child: Text(
-                      local.quitAddiction.capitalizeWords(),
+                      local.quitAddiction,
                       style: TextStyle(
                         fontSize:
                             Theme.of(context).textTheme.headline6.fontSize,

@@ -1,18 +1,21 @@
 import 'dart:io';
+import 'dart:ui' as ui;
 import 'dart:typed_data';
-import 'package:animations/animations.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:animations/animations.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share/share.dart';
+import 'package:uuid/uuid.dart';
+
 import 'package:quittle/models/addiction.dart';
 import 'package:quittle/models/addiction_item_screen_args.dart';
 import 'package:quittle/screens/addiction_item_screen.dart';
 import 'package:quittle/widgets/addiction_progress.dart';
-import 'dart:ui' as ui;
-import 'package:path_provider/path_provider.dart';
-import 'package:share/share.dart';
-import 'package:uuid/uuid.dart';
 
 class AddictionItemCard extends StatelessWidget {
   AddictionItemCard({
@@ -25,24 +28,28 @@ class AddictionItemCard extends StatelessWidget {
   final Function onDelete;
   final GlobalKey _cardKey = GlobalKey();
 
-  _share() async {
-    RenderRepaintBoundary boundary = _cardKey.currentContext.findRenderObject();
-    ui.Image image = await boundary.toImage(pixelRatio: 2.0);
-    ByteData byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-    Uint8List pngBytes = byteData.buffer.asUint8List();
-    final directory = (await getApplicationDocumentsDirectory()).path;
-    File imgFile = File('$directory/screenshot_shared.png');
-    await imgFile.writeAsBytes(pngBytes);
-    Share.shareFiles(
-      ['$directory/screenshot_shared.png'],
-      text: 'Check out my progress!',
-      subject: 'My progress',
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context);
     final isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
+
+    _share() async {
+      RenderRepaintBoundary boundary =
+          _cardKey.currentContext.findRenderObject();
+      ui.Image image = await boundary.toImage(pixelRatio: 2.0);
+      ByteData byteData =
+          await image.toByteData(format: ui.ImageByteFormat.png);
+      Uint8List pngBytes = byteData.buffer.asUint8List();
+      final directory = (await getApplicationDocumentsDirectory()).path;
+      File imgFile = File('$directory/screenshot_shared.png');
+      await imgFile.writeAsBytes(pngBytes);
+      Share.shareFiles(
+        ['$directory/screenshot_shared.png'],
+        text: local.shareMsg,
+        subject: local.shareMsgSubject,
+      );
+    }
+
     return Container(
       margin: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
@@ -90,7 +97,7 @@ class AddictionItemCard extends StatelessWidget {
           ),
           actions: [
             IconSlideAction(
-              caption: 'Share',
+              caption: local.share,
               color: Theme.of(context).accentColor,
               icon: Icons.share,
               onTap: _share,
@@ -98,7 +105,7 @@ class AddictionItemCard extends StatelessWidget {
           ],
           secondaryActions: [
             IconSlideAction(
-              caption: 'Delete',
+              caption: local.delete,
               color: Theme.of(context).errorColor,
               icon: Icons.delete,
             ),

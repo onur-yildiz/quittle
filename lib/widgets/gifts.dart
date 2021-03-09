@@ -2,15 +2,15 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:quittle/extensions/string_extension.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:reorderables/reorderables.dart';
+
 import 'package:quittle/models/addiction.dart';
 import 'package:quittle/models/gift.dart';
 import 'package:quittle/providers/addictions_provider.dart';
 import 'package:quittle/providers/settings_provider.dart';
 import 'package:quittle/widgets/gifts_create.dart';
-import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
-import 'package:reorderables/reorderables.dart';
 
 class Gifts extends StatefulWidget {
   final Addiction data;
@@ -98,7 +98,7 @@ class _GiftsState extends State<Gifts> {
                   Row(
                     children: [
                       Text(
-                        local.available.capitalizeWords() + ' ',
+                        local.available + ' ',
                         style: TextStyle(
                           color: Theme.of(context).hintColor,
                           fontWeight: FontWeight.bold,
@@ -107,6 +107,7 @@ class _GiftsState extends State<Gifts> {
                       Text(
                         NumberFormat.simpleCurrency(
                           name: currency,
+                          locale: local.localeName,
                         ).format(widget.data.availableMoney),
                         style: TextStyle(
                           color: Colors.green[800],
@@ -118,7 +119,7 @@ class _GiftsState extends State<Gifts> {
                   Row(
                     children: [
                       Text(
-                        local.spent.capitalizeWords() + ' ',
+                        local.spent + ' ',
                         style: TextStyle(
                           color: Theme.of(context).hintColor,
                           fontWeight: FontWeight.bold,
@@ -127,6 +128,7 @@ class _GiftsState extends State<Gifts> {
                       Text(
                         NumberFormat.simpleCurrency(
                           name: currency,
+                          locale: local.localeName,
                         ).format(widget.data.totalSpent),
                         style: TextStyle(
                           color: Colors.green[800],
@@ -185,6 +187,7 @@ class _GiftCardState extends State<GiftCard> {
     final deviceSize = MediaQuery.of(context).size;
     final giftPrice = NumberFormat.compactSimpleCurrency(
       name: currency,
+      locale: local.localeName,
     ).format(widget.gift.price);
     final daysLeft =
         ((widget.gift.price - widget.availableMoney) / widget.dailyGain);
@@ -195,10 +198,10 @@ class _GiftCardState extends State<GiftCard> {
         context: context,
         builder: (context) => new AlertDialog(
           title: Text(
-            local.areYouSure.capitalizeFirstLetter(),
+            local.areYouSure,
           ),
           content: Text(
-            local.deleteGiftWarningMsg.capitalizeFirstLetter(),
+            local.deleteGiftWarningMsg,
           ),
           actions: [
             TextButton(
@@ -257,10 +260,8 @@ class _GiftCardState extends State<GiftCard> {
                     builder: (context) => new AlertDialog(
                       title: Text(
                         widget.availableMoney >= widget.gift.price
-                            ? local
-                                .purchaseGiftMsg(giftPrice, widget.gift.name)
-                                .capitalizeFirstLetter()
-                            : 'Not enough money available.', //TODO localize
+                            ? local.purchaseGiftMsg(giftPrice, widget.gift.name)
+                            : local.notEnoughMoney,
                       ), //'Purchase \"${widget.gift.name}\" for $giftPrice'
                       actions: [
                         widget.availableMoney >= widget.gift.price
@@ -371,7 +372,8 @@ class _GiftCardState extends State<GiftCard> {
                             child: Center(
                               child: Text(
                                 widget.gift.count.toString() +
-                                    ' Purchased', //TODO localize
+                                    ' ' +
+                                    local.purchased,
                               ),
                             ),
                           ),

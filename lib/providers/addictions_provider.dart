@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
+
 import 'package:quittle/helpers/db_helper.dart';
 import 'package:quittle/models/addiction.dart';
 import 'package:quittle/models/gift.dart';
 import 'package:quittle/models/personal_note.dart';
-import 'package:uuid/uuid.dart';
 
 class AddictionsProvider with ChangeNotifier {
   List<Addiction> _addictions = [];
@@ -226,6 +227,7 @@ class AddictionsProvider with ChangeNotifier {
     });
     loadedGifts.sort((a, b) => a.sortOrder.compareTo(b.sortOrder));
     addiction.gifts = loadedGifts;
+    notifyListeners();
   }
 
   void deleteGift(Gift gift) async {

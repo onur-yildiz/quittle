@@ -1,11 +1,12 @@
 {
-  "appName": "quittle",
+  "appName": "Quittle",
   "@appName": {},
 
-  "moneySaved": "money saved",
+  "moneySaved": "Money Saved",
   "@moneySaved": {
     "description": ""
   },
+
   "minute": "{count,plural, =0{minutes}=1{minute}other{minutes}}",
   "@minute": {
     "description": "",
@@ -13,6 +14,7 @@
       "count": {}
     }
   },
+
   "hour": "{count,plural, =0{hours}=1{hour}other{hours}}",
   "@hour": {
     "description": "",
@@ -20,6 +22,7 @@
       "count": {}
     }
   },
+
   "day": "{count,plural, =0{days}=1{day}other{days}}",
   "@day": {
     "description": "",
@@ -27,6 +30,7 @@
       "count": {}
     }
   },
+
   "week": "{count,plural, =0{weeks}=1{week}other{weeks}}",
   "@week": {
     "description": "",
@@ -34,6 +38,7 @@
       "count": {}
     }
   },
+
   "month": "{count,plural, =0{months}=1{month}other{months}}",
   "@month": {
     "description": "",
@@ -41,6 +46,7 @@
       "count": {}
     }
   },
+
   "year": "{count,plural, =0{years}=1{year}other{years}}",
   "@year": {
     "description": "",
@@ -48,6 +54,7 @@
       "count": {}
     }
   },
+
   "times": "{count,plural, =0{times}=1{time}other{times}}",
   "@times": {
     "placeholders": {
@@ -55,129 +62,158 @@
     },
     "description": "count of times X not used"
   },
-  "level": "level",
+
+  "level": "Level",
   "@level": {
     "description": ""
   },
-  "details": "details",
+
+  "details": "Details",
   "@details": {
     "description": ""
   },
-  "more": "more",
+
+  "more": "More",
   "@more": {
     "description": ""
   },
-  "startDate": "start date",
+
+  "startDate": "Start Date",
   "@startDate": {
     "description": ""
   },
-  "duration": "duration",
+
+  "duration": "Duration",
   "@duration": {
     "description": ""
   },
-  "dailyUse": "daily usage",
+
+  "dailyUse": "Daily Usage",
   "@dailyUse": {
     "description": ""
   },
-  "savedFor": "saved for",
+
+  "savedFor": "Saved For",
   "@savedFor": {
     "description": "title for how many times/hours X is not used"
   },
-  "price": "price",
+
+  "price": "Price",
   "@price": {
     "description": ""
   },
-  "note": "note",
+
+  "note": "Note",
   "@note": {
     "description": "note input title"
   },
-  "notes": "notes",
+
+  "notes": "Notes",
   "@notes": {
     "description": ""
   },
-  "newNote": "new note",
+
+  "newNote": "New Note",
   "@newNote": {
     "description": ""
   },
-  "progressNotification": "progress notification",
+
+  "progressNotification": "Progress Notifications",
   "@progressNotification": {
     "description": ""
   },
-  "progressNotificationDesc": "enable push notifications for milestones",
+
+  "progressNotificationDesc": "Enable push notifications for milestones.",
   "@progressNotificationDesc": {
     "description": "enable push notifications for milestones"
   },
-  "quoteOfTheDay": "quote of the day",
+
+  "quoteOfTheDay": "Quote of the Day",
   "@quoteOfTheDay": {
     "description": ""
   },
-  "quoteOfTheDayDesc": "enable push notifications for daily quotes",
+
+  "quoteOfTheDayDesc": "Enable push notifications for daily quotes.",
   "@quoteOfTheDayDesc": {
     "description": "enable push notifications for daily quotes"
   },
-  "currency": "currency",
+
+  "currency": "Currency",
   "@currency": {
     "description": ""
   },
-  "settings": "settings",
+
+  "settings": "Settings",
   "@settings": {
     "description": ""
   },
-  "addictionName": "bad habit",
+
+  "addictionName": "Bad Habit",
   "@addictionName": {
     "description": ""
   },
-  "date": "date",
+
+  "date": "Date",
   "@date": {
     "description": ""
   },
-  "consumptionType": "consumption type",
+
+  "consumptionType": "Consumption Type",
   "@consumptionType": {
     "description": ""
   },
-  "quantity": "quantity",
+
+  "quantity": "Quantity",
   "@quantity": {
     "description": ""
   },
-  "dailyConsumption": "daily consumption",
+
+  "dailyConsumption": "Daily Consumption",
   "@dailyConsumption": {
     "description": ""
   },
-  "unitCost": "unit cost",
+
+  "unitCost": "Unit Cost",
   "@unitCost": {
     "description": ""
   },
-  "quitAddiction": "quit!",
+  
+  "quitAddiction": "Quit!",
   "@quitAddiction": {
     "description": ""
   },
-  "genericErrorMessage": "an error occured",
+
+  "genericErrorMessage": "An error has occured.",
   "@genericErrorMessage": {
     "description": ""
   },
-  "pleaseEnterANumber": "please enter a number",
+
+  "pleaseEnterANumber": "Please enter a number.",
   "@pleaseEnterANumber": {
     "description": ""
   },
-  "valueMustBePositive": "the value must be positive",
+
+  "valueMustBePositive": "The value must be positive.",
   "@valueMustBePositive": {
     "description": ""
   },
-  "title": "title",
+  
+  "title": "Title",
   "@title": {
     "description": ""
   },
-  "save": "save",
+
+  "save": "Save",
   "@save": {
     "description": ""
   },
 
-  "available": "available",
+  "available": "Available",
   "@available": {
     "description": ""
   },
   
-  "spent": "spent",
+  "spent": "Spent",
   "@spent": {
     "description": ""
   },
@@ -198,13 +234,108 @@
       }
   },
 
-  "areYouSure": "are you sure?",
+  "areYouSure": "Are you sure?",
   "@areYouSure": {
     "description": ""
   },
 
   "deleteGiftWarningMsg": "All the money spent on this gift will be returned.",
   "@deleteGiftWarningMsg": {
+    "description": ""
+  },
+
+  "cantPickFutureTime": "Can't pick a future time.",
+  "@cantPickFutureTime": {
+    "description": ""
+  },
+  
+  "notEnoughMoney": "Not enough money available.",
+  "@notEnoughMoney": {
+    "description": ""
+  },
+
+  "purchased": "Purchased",
+  "@purchased": {
+    "description": ""
+  },
+
+  "daily": "Daily",
+  "@daily": {
+    "description": ""
+  },
+
+  "weekly": "Weekly",
+  "@weekly": {
+    "description": ""
+  },
+
+  "monthly": "Monthly",
+  "@monthly": {
+    "description": ""
+  },
+
+  "totalNotUsed": "Total Not Used",
+  "@notUsedTotal": {
+    "description": ""
+  },
+
+  "futureSavings": "Future Savings",
+  "@futureSavings": {
+    "description": ""
+  },
+
+  "yourJourneyBegins": "Your Journey Begins!",
+  "@yourJourneyBegins": {
+    "description": ""
+  },
+
+  "initialNoteMsg": "Here you can take notes, record things like your memories and motivations. Keep record of your journey becoming free of your bad habit!",
+  "@initialNoteMsg": {
+    "description": ""
+  },
+
+  "applicationLegalese": "App icon is a modified version of FontAwesome's link icon.",
+  "@applicationLegalese": {
+    "description": ""
+  },
+
+  "appIcon": "App Icon",
+  "@appIcon": {
+    "description": ""
+  },
+
+  "undo": "Undo",
+  "@undo": {
+    "description": ""
+  },
+
+  "newMsg": "New",
+  "@newMsg": {
+    "description": ""
+  },
+
+  "shareMsg": "Check out my progress!",
+  "@shareMsg": {
+    "description": ""
+  },
+
+  "shareMsgSubject": "My progress",
+  "@shareMsgSubject": {
+    "description": ""
+  },
+
+  "share": "Share",
+  "@share": {
+    "description": ""
+  },
+
+  "delete": "Delete",
+  "@delete": {
+    "description": ""
+  },
+
+  "licenses": "Licenses",
+  "@licenses": {
     "description": ""
   }
 }
