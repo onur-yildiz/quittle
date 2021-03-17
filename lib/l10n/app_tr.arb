@@ -281,6 +281,20 @@
   "licenses": "Lisanslar",
   "@licenses": {
     "description": ""
-  }
+  },
 
+  "overview": "Genel",
+  "@overview": {
+    "description": ""
+  },
+
+  "rewards": "Ödüller",
+  "@rewards": {
+    "description": ""
+  },
+
+  "achievements": "Başarımlar",
+  "@achievements": {
+    "description": ""
+  }
 }

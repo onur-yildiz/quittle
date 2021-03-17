@@ -227,195 +227,221 @@ class _GiftCardState extends State<GiftCard> {
       );
     }
 
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(5),
-      clipBehavior: Clip.hardEdge,
-      child: ColoredBox(
-        color: Theme.of(context).highlightColor,
-        child: Stack(
-          children: [
-            Positioned(
-              bottom: 0,
-              child: AnimatedContainer(
-                  duration: Duration(milliseconds: 250),
-                  height: (deviceSize.width * .46) * percentage,
-                  width: deviceSize.width * .46,
-                  color: Theme.of(context).accentColor),
+    return Stack(
+      children: [
+        SizedBox(
+          height: deviceSize.width * .46,
+          width: deviceSize.width * .46,
+          child: Material(
+            type: MaterialType.transparency,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5),
+              side: BorderSide(
+                width: 8,
+                color: Theme.of(context).highlightColor,
+              ),
             ),
-            SizedBox(
-              height: deviceSize.width * .46,
-              width: deviceSize.width * .46,
-              child: Material(
-                type: MaterialType.transparency,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  side: BorderSide(
-                    width: 8,
-                    color: Theme.of(context).highlightColor,
-                  ),
+            child: InkWell(
+              onTap: () => showDialog(
+                context: context,
+                builder: (context) => new AlertDialog(
+                  title: Text(
+                    widget.availableMoney >= widget.gift.price
+                        ? local.purchaseGiftMsg(giftPrice, widget.gift.name)
+                        : local.notEnoughMoney,
+                  ), //'Purchase \"${widget.gift.name}\" for $giftPrice'
+                  actions: [
+                    widget.availableMoney >= widget.gift.price
+                        ? TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Text(
+                              materialLocal.cancelButtonLabel,
+                            ),
+                          )
+                        : null,
+                    TextButton(
+                      onPressed: () {
+                        if (widget.availableMoney >= widget.gift.price) {
+                          Provider.of<AddictionsProvider>(context,
+                                  listen: false)
+                              .buyGift(widget.gift);
+                        }
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        materialLocal.okButtonLabel,
+                      ),
+                    ),
+                  ],
                 ),
-                child: InkWell(
-                  onTap: () => showDialog(
-                    context: context,
-                    builder: (context) => new AlertDialog(
-                      title: Text(
-                        widget.availableMoney >= widget.gift.price
-                            ? local.purchaseGiftMsg(giftPrice, widget.gift.name)
-                            : local.notEnoughMoney,
-                      ), //'Purchase \"${widget.gift.name}\" for $giftPrice'
-                      actions: [
-                        widget.availableMoney >= widget.gift.price
-                            ? TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: Text(
-                                  materialLocal.cancelButtonLabel,
-                                ),
-                              )
-                            : null,
-                        TextButton(
-                          onPressed: () {
-                            if (widget.availableMoney >= widget.gift.price) {
-                              Provider.of<AddictionsProvider>(context,
-                                      listen: false)
-                                  .buyGift(widget.gift);
-                            }
-                            Navigator.of(context).pop();
-                          },
-                          child: Text(
-                            materialLocal.okButtonLabel,
+              ),
+              child: DefaultTextStyle(
+                style: Theme.of(context).textTheme.bodyText1,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Flex(
+                    mainAxisSize: MainAxisSize.max,
+                    direction: Axis.vertical,
+                    children: [
+                      Flexible(
+                        flex: 3,
+                        fit: FlexFit.tight,
+                        child: Text(
+                          widget.gift.name,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                  child: DefaultTextStyle(
-                    style: Theme.of(context).textTheme.bodyText1,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Flex(
-                        mainAxisSize: MainAxisSize.max,
-                        direction: Axis.vertical,
-                        children: [
-                          Flexible(
-                            flex: 6,
-                            fit: FlexFit.tight,
-                            child: Text(
-                              widget.gift.name,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
+                      ),
+                      // Flexible(
+                      //   flex: 6,
+                      //   fit: FlexFit.tight,
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.center,
+                      //     crossAxisAlignment: CrossAxisAlignment.stretch,
+                      //     children: [
+                      //       Text(
+                      //         (percentage * 100).toStringAsFixed(2),
+                      //         style: TextStyle(
+                      //           fontWeight:
+                      //               percentage == 1 ? FontWeight.w900 : null,
+                      //           fontSize: Theme.of(context)
+                      //               .textTheme
+                      //               .headline6
+                      //               .fontSize,
+                      //         ),
+                      //       ),
+                      //       Text(
+                      //         '%',
+                      //         style: TextStyle(
+                      //           fontWeight:
+                      //               percentage == 1 ? FontWeight.w900 : null,
+                      //           fontSize: Theme.of(context)
+                      //               .textTheme
+                      //               .bodyText1
+                      //               .fontSize,
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
+                      Flexible(
+                        flex: 2,
+                        fit: FlexFit.tight,
+                        child: Text(
+                          giftPrice.toString(),
+                          style: TextStyle(
+                            color: Colors.green,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Flexible(
+                        flex: 2,
+                        fit: FlexFit.tight,
+                        child: Text(
+                          (daysLeft < 1 ? '>' : '') +
+                              daysLeftClamped.toStringAsFixed(0) +
+                              (daysLeft > 365 ? '+' : '') +
+                              ' ' +
+                              local.daysLeft(
+                                daysLeftClamped.toInt(),
+                              ),
+                        ),
+                      ),
+                      Flexible(
+                        flex: 2,
+                        fit: FlexFit.tight,
+                        child: Center(
+                          child: Text(
+                            widget.gift.count.toString() +
+                                ' ' +
+                                local.purchased,
+                          ),
+                        ),
+                      ),
+                      Flexible(
+                        flex: 1,
+                        child: Stack(
+                          alignment: Alignment.center,
+                          fit: StackFit.expand,
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(5),
+                              child: LinearProgressIndicator(
+                                backgroundColor: Theme.of(context).cardColor,
+                                valueColor: AlwaysStoppedAnimation(
+                                  Theme.of(context).accentColor.withOpacity(.8),
+                                ),
+                                value: percentage,
                               ),
                             ),
-                          ),
-                          Flexible(
-                            flex: 6,
-                            fit: FlexFit.tight,
-                            child: Row(
+                            Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Text(
-                                  (percentage * 100).toStringAsFixed(2),
+                                  (percentage * 100)
+                                          .toStringAsFixed(2)
+                                          .padLeft(6) +
+                                      "%",
                                   style: TextStyle(
-                                    fontWeight: percentage == 1
-                                        ? FontWeight.w900
-                                        : null,
-                                    fontSize: Theme.of(context)
-                                        .textTheme
-                                        .headline6
-                                        .fontSize,
-                                  ),
-                                ),
-                                Text(
-                                  '%',
-                                  style: TextStyle(
-                                    fontWeight: percentage == 1
-                                        ? FontWeight.w900
-                                        : null,
-                                    fontSize: Theme.of(context)
+                                    color: Theme.of(context)
                                         .textTheme
                                         .bodyText1
+                                        .color,
+                                    fontWeight: percentage == 1
+                                        ? FontWeight.w900
+                                        : null,
+                                    fontSize: Theme.of(context)
+                                        .textTheme
+                                        .subtitle2
                                         .fontSize,
                                   ),
                                 ),
                               ],
                             ),
-                          ),
-                          Flexible(
-                            flex: 2,
-                            fit: FlexFit.tight,
-                            child: Text(
-                              giftPrice.toString(),
-                              style: TextStyle(
-                                color: Colors.green,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          Flexible(
-                            flex: 2,
-                            fit: FlexFit.tight,
-                            child: Text(
-                              (daysLeft < 1 ? '>' : '') +
-                                  daysLeftClamped.toStringAsFixed(0) +
-                                  (daysLeft > 365 ? '+' : '') +
-                                  ' ' +
-                                  local.daysLeft(
-                                    daysLeftClamped.toInt(),
-                                  ),
-                            ),
-                          ),
-                          Flexible(
-                            flex: 2,
-                            fit: FlexFit.tight,
-                            child: Center(
-                              child: Text(
-                                widget.gift.count.toString() +
-                                    ' ' +
-                                    local.purchased,
-                              ),
-                            ),
-                          ),
-                          Flexible(
-                            flex: 2,
-                            child: Icon(
-                              Icons.drag_handle_rounded,
-                              color: Theme.of(context).highlightColor,
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
+                      Flexible(
+                        flex: 1,
+                        child: Icon(
+                          Icons.drag_handle_rounded,
+                          color: Theme.of(context).highlightColor,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
             ),
-            Positioned(
-              top: 0,
-              right: 0,
-              child: Material(
-                type: MaterialType.circle,
-                color: Colors.transparent,
-                child: InkWell(
-                  splashColor: Theme.of(context).errorColor,
-                  customBorder: CircleBorder(),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(
-                      Icons.delete,
-                      color: Theme.of(context).errorColor.withOpacity(.8),
-                      size: Theme.of(context).textTheme.headline6.fontSize,
-                    ),
-                  ),
-                  onLongPress: _deleteDialog,
-                  onTap: _deleteDialog,
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
-      ),
+        Positioned(
+          top: 0,
+          right: 0,
+          child: Material(
+            type: MaterialType.circle,
+            color: Colors.transparent,
+            child: InkWell(
+              splashColor: Theme.of(context).errorColor,
+              customBorder: CircleBorder(),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Icon(
+                  Icons.delete,
+                  color: Theme.of(context).errorColor.withOpacity(.8),
+                  size: Theme.of(context).textTheme.headline6.fontSize,
+                ),
+              ),
+              onLongPress: _deleteDialog,
+              onTap: _deleteDialog,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

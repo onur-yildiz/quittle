@@ -15,7 +15,7 @@
     }
   },
 
-  "hour": "{count,plural, =0{hours}=1{hour}other{hours}}",
+  "hour": "{count,plural, =0{Hours}=1{Hour}other{Hours}}",
   "@hour": {
     "description": "",
     "placeholders": {
@@ -55,7 +55,7 @@
     }
   },
 
-  "times": "{count,plural, =0{times}=1{time}other{times}}",
+  "times": "{count,plural, =0{Times}=1{Time}other{Times}}",
   "@times": {
     "placeholders": {
       "count": {}
@@ -249,7 +249,7 @@
     "description": ""
   },
   
-  "notEnoughMoney": "Not enough money available.",
+  "notEnoughMoney": "Not enough money.",
   "@notEnoughMoney": {
     "description": ""
   },
@@ -336,6 +336,21 @@
 
   "licenses": "Licenses",
   "@licenses": {
+    "description": ""
+  },
+
+  "overview": "Overview",
+  "@overview": {
+    "description": ""
+  },
+
+  "rewards": "Rewards",
+  "@rewards": {
+    "description": ""
+  },
+
+  "achievements": "Achievements",
+  "@achievements": {
     "description": ""
   }
 }

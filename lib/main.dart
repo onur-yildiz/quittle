@@ -128,7 +128,7 @@ class MyApp extends StatelessWidget {
           primaryColorLight: Color.fromRGBO(230, 86, 81, .8),
           primaryColor: Color.fromRGBO(182, 85, 81, 1),
           primarySwatch: Colors.red,
-          accentColor: Color.fromRGBO(20, 80, 120, 1),
+          accentColor: Color.fromRGBO(40, 100, 140, 1),
           buttonColor: Color.fromRGBO(247, 244, 243, 1),
           cardColor: Color.fromRGBO(55, 55, 55, 1),
           textTheme: Theme.of(context).textTheme.copyWith(

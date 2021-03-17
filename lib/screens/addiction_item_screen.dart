@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
@@ -40,6 +41,7 @@ class _AddictionItemState extends State<AddictionItemScreen> {
   Widget build(BuildContext context) {
     final AddictionItemScreenArgs args =
         ModalRoute.of(context).settings.arguments;
+    final local = AppLocalizations.of(context);
 
     List<Widget> _buildScreens() {
       return [
@@ -53,19 +55,19 @@ class _AddictionItemState extends State<AddictionItemScreen> {
       return [
         PersistentBottomNavBarItem(
           icon: FaIcon(FontAwesomeIcons.infoCircle),
-          title: ("Overview"),
+          title: (local.overview),
           activeColor: Theme.of(context).primaryColor,
           inactiveColor: Theme.of(context).hintColor,
         ),
         PersistentBottomNavBarItem(
           icon: FaIcon(FontAwesomeIcons.gifts),
-          title: ("Rewards"),
+          title: (local.rewards),
           activeColor: Theme.of(context).primaryColor,
           inactiveColor: Theme.of(context).hintColor,
         ),
         PersistentBottomNavBarItem(
           icon: FaIcon(FontAwesomeIcons.trophy),
-          title: ("Achievements"),
+          title: (local.achievements),
           activeColor: Theme.of(context).primaryColor,
           inactiveColor: Theme.of(context).hintColor,
         ),
