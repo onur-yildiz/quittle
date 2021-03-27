@@ -186,11 +186,6 @@ Future<void> _fetchStartupData(BuildContext context) async {
 }
 
 void _setDailyQuoteNotification(BuildContext context) async {
-  final today = DateTime.now();
-  final nextMorning = today.hour >= 9
-      ? DateTime(today.year, today.month, (today.day + 1), 9, 0, 0)
-      : DateTime(today.year, today.month, today.day, 9, 0, 0);
-  final tillNextMorning = nextMorning.difference(today);
   if (Provider.of<SettingsProvider>(context, listen: false)
       .receiveQuoteNotifs) {
     Workmanager.registerPeriodicTask(
@@ -199,7 +194,6 @@ void _setDailyQuoteNotification(BuildContext context) async {
       inputData: {
         'locale': AppLocalizations.of(context).localeName,
       },
-      initialDelay: tillNextMorning,
       frequency: Duration(days: 1),
       existingWorkPolicy: ExistingWorkPolicy.keep,
       constraints: Constraints(
