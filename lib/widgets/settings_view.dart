@@ -38,6 +38,7 @@ class _SettingsViewState extends State<SettingsView> {
   @override
   Widget build(BuildContext context) {
     final local = AppLocalizations.of(context);
+    final isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
 
     return Drawer(
       child: LayoutBuilder(
@@ -79,7 +80,7 @@ class _SettingsViewState extends State<SettingsView> {
                               ),
                             ),
                           ),
-                          CheckboxListTile(
+                          SwitchListTile(
                             contentPadding: const EdgeInsets.symmetric(
                                 vertical: 24, horizontal: 8),
                             title: Text(
@@ -106,7 +107,7 @@ class _SettingsViewState extends State<SettingsView> {
                             height: 0,
                             thickness: 1,
                           ),
-                          CheckboxListTile(
+                          SwitchListTile(
                             contentPadding: const EdgeInsets.symmetric(
                                 vertical: 24, horizontal: 8),
                             title: Text(

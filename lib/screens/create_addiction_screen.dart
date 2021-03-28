@@ -139,9 +139,25 @@ class _AddictionCardState extends State<AddictionCard>
       final newAddiction =
           await Provider.of<AddictionsProvider>(context, listen: false)
               .createAddiction(addictionData);
-      Navigator.of(context).popAndPushNamed(
-        AddictionItemScreen.routeName,
-        arguments: AddictionItemScreenArgs(newAddiction),
+      Navigator.of(context).pushReplacement(
+        PageRouteBuilder(
+          transitionDuration: Duration(milliseconds: 250),
+          reverseTransitionDuration: Duration(milliseconds: 250),
+          pageBuilder: (_, __, ___) => AddictionItemScreen(),
+          settings: RouteSettings(
+            arguments: AddictionItemScreenArgs(newAddiction),
+          ),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            var begin = 0.0;
+            var end = 1.0;
+            var tween = Tween(begin: begin, end: end);
+
+            return FadeTransition(
+              opacity: animation.drive(tween),
+              child: child,
+            );
+          },
+        ),
       );
     }
   }
