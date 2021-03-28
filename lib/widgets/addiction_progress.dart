@@ -18,6 +18,7 @@ class AddictionProgress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = Theme.of(context);
     final local = AppLocalizations.of(context);
     final consumptionType = (addictionData.consumptionType == 1)
         ? local.hour(addictionData.notUsedCount.toInt())
@@ -36,11 +37,10 @@ class AddictionProgress extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 DefaultTextStyle(
-                  style: Theme.of(context).textTheme.bodyText1.copyWith(
-                        fontSize:
-                            Theme.of(context).textTheme.subtitle1.fontSize,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  style: t.textTheme.bodyText1.copyWith(
+                    fontSize: t.textTheme.subtitle1.fontSize,
+                    fontWeight: FontWeight.bold,
+                  ),
                   child: Column(
                     children: [
                       Text(
@@ -59,11 +59,10 @@ class AddictionProgress extends StatelessWidget {
                   thickness: 0,
                 ),
                 DefaultTextStyle(
-                  style: Theme.of(context).textTheme.bodyText1.copyWith(
-                        fontSize:
-                            Theme.of(context).textTheme.subtitle1.fontSize,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  style: t.textTheme.bodyText1.copyWith(
+                    fontSize: t.textTheme.subtitle1.fontSize,
+                    fontWeight: FontWeight.bold,
+                  ),
                   child: FittedBox(
                     fit: BoxFit.contain,
                     child: addictionData.unitCost == 0

@@ -30,6 +30,7 @@ class AddictionItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = Theme.of(context);
     final local = AppLocalizations.of(context);
     final isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
 
@@ -58,20 +59,16 @@ class AddictionItemCard extends StatelessWidget {
           width: 0,
           style: BorderStyle.none,
         ),
-        color: isDark
-            ? Theme.of(context).highlightColor.withOpacity(.1)
-            : Theme.of(context).accentColor,
+        color: isDark ? t.highlightColor.withOpacity(.1) : t.accentColor,
       ),
       padding: const EdgeInsets.only(bottom: 4),
       child: OpenContainer(
-        closedColor: isDark
-            ? Theme.of(context).highlightColor.withOpacity(.1)
-            : Theme.of(context).accentColor,
+        closedColor: isDark ? t.highlightColor.withOpacity(.1) : t.accentColor,
         closedShape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
           side: BorderSide(
             width: 3,
-            color: Theme.of(context).highlightColor,
+            color: t.highlightColor,
           ),
         ),
         transitionDuration: Duration(milliseconds: 250),
@@ -98,7 +95,7 @@ class AddictionItemCard extends StatelessWidget {
           actions: [
             IconSlideAction(
               caption: local.share,
-              color: Theme.of(context).accentColor,
+              color: t.accentColor,
               icon: Icons.share,
               onTap: _share,
             ),
@@ -106,7 +103,7 @@ class AddictionItemCard extends StatelessWidget {
           secondaryActions: [
             IconSlideAction(
               caption: local.delete,
-              color: Theme.of(context).errorColor,
+              color: t.errorColor,
               icon: Icons.delete,
             ),
           ],
@@ -117,7 +114,7 @@ class AddictionItemCard extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 side: BorderSide(
                   width: 1,
-                  color: Theme.of(context).highlightColor,
+                  color: t.highlightColor,
                 ),
               ),
               child: Padding(
@@ -140,8 +137,7 @@ class AddictionItemCard extends StatelessWidget {
                                     .textTheme
                                     .headline5
                                     .fontSize,
-                                color:
-                                    Theme.of(context).textTheme.bodyText1.color,
+                                color: t.textTheme.bodyText1.color,
                               ),
                             ),
                           ),

@@ -125,7 +125,7 @@ class AddictionsProvider with ChangeNotifier {
   }
 
   void reorderAddictions(int oldIndex, int newIndex) async {
-    // if reverting a delete, skip (see insertAddiction func.)
+    // if reverting a delete, skip (see insertAddiction funt.)
     if (oldIndex != _addictions.length) {
       Addiction temp = _addictions.removeAt(oldIndex);
       _addictions.insert(newIndex, temp);

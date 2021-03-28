@@ -15,6 +15,7 @@ class TargetDurationIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = Theme.of(context);
     final Duration time = data.abstinenceTime;
     String targetUnit;
     int targetValue;
@@ -65,27 +66,27 @@ class TargetDurationIndicator extends StatelessWidget {
         infoProperties: InfoProperties(
           bottomLabelText: targetValue.toString() + ' ' + targetUnit,
           bottomLabelStyle: TextStyle(
-            color: Theme.of(context).hintColor,
+            color: t.hintColor,
             fontWeight: FontWeight.bold,
           ),
           mainLabelStyle: TextStyle(
-            color: Theme.of(context).primaryColor,
-            fontSize: Theme.of(context).textTheme.headline5.fontSize,
+            color: t.primaryColor,
+            fontSize: t.textTheme.headline5.fontSize,
             fontWeight: FontWeight.bold,
           ),
         ),
         customWidths: CustomSliderWidths(
           handlerSize: 0,
-          progressBarWidth: Theme.of(context).textTheme.bodyText1.fontSize,
-          trackWidth: Theme.of(context).textTheme.bodyText1.fontSize,
+          progressBarWidth: t.textTheme.bodyText1.fontSize,
+          trackWidth: t.textTheme.bodyText1.fontSize,
         ),
         customColors: CustomSliderColors(
           hideShadow: true,
           progressBarColors: [
-            Theme.of(context).accentColor,
-            Theme.of(context).accentColor.withOpacity(.5),
+            t.accentColor,
+            t.accentColor.withOpacity(.5),
           ],
-          trackColor: Theme.of(context).accentColor.withAlpha(100),
+          trackColor: t.accentColor.withAlpha(100),
         ),
         animationEnabled: false,
       ),

@@ -17,13 +17,14 @@ class CreateAddictionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = Theme.of(context);
     final statusBarHeight = MediaQuery.of(context).padding.top;
     return Hero(
       tag: 'newAddiction',
       transitionOnUserGestures: true,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Theme.of(context).primaryColor,
+          backgroundColor: t.primaryColor,
         ),
         body: AddictionCard(statusBarHeight),
       ),
@@ -182,12 +183,13 @@ class _AddictionCardState extends State<AddictionCard>
 
   @override
   Widget build(BuildContext context) {
+    final t = Theme.of(context);
     final local = AppLocalizations.of(context);
     final deviceSize = MediaQuery.of(context).size;
 
     return Container(
       margin: EdgeInsets.zero,
-      color: Theme.of(context).cardColor,
+      color: t.cardColor,
       child: Form(
         key: _formKey,
         child: SingleChildScrollView(
@@ -216,11 +218,11 @@ class _AddictionCardState extends State<AddictionCard>
                       children: [
                         Material(
                           type: MaterialType.button,
-                          color: Theme.of(context).canvasColor,
+                          color: t.canvasColor,
                           borderRadius: BorderRadius.circular(5),
                           child: InkWell(
                             borderRadius: BorderRadius.circular(5),
-                            splashColor: Theme.of(context).highlightColor,
+                            splashColor: t.highlightColor,
                             onTap: () {
                               setState(() {
                                 FocusScope.of(context).unfocus();
@@ -231,7 +233,7 @@ class _AddictionCardState extends State<AddictionCard>
                               });
                             },
                             child: Container(
-                              height: Theme.of(context).buttonTheme.height * 2,
+                              height: t.buttonTheme.height * 2,
                               padding: const EdgeInsets.all(10),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -246,7 +248,7 @@ class _AddictionCardState extends State<AddictionCard>
                                           .subtitle2
                                           .fontSize,
                                       fontWeight: FontWeight.bold,
-                                      color: Theme.of(context).hintColor,
+                                      color: t.hintColor,
                                     ),
                                   ),
                                   Wrap(
@@ -261,12 +263,12 @@ class _AddictionCardState extends State<AddictionCard>
                                               addictionData['quit_date']),
                                         ),
                                         style: TextStyle(
-                                          color: Theme.of(context).hintColor,
+                                          color: t.hintColor,
                                         ),
                                       ),
                                       Icon(
                                         Icons.date_range,
-                                        color: Theme.of(context).hintColor,
+                                        color: t.hintColor,
                                       ),
                                     ],
                                   ),
@@ -277,12 +279,12 @@ class _AddictionCardState extends State<AddictionCard>
                         ),
                         Material(
                           type: MaterialType.button,
-                          color: Theme.of(context).canvasColor,
+                          color: t.canvasColor,
                           borderRadius: BorderRadius.circular(5),
                           child: InkWell(
                             focusNode: _focusNode,
                             borderRadius: BorderRadius.circular(5),
-                            splashColor: Theme.of(context).highlightColor,
+                            splashColor: t.highlightColor,
                             onTap: () {
                               setState(() {
                                 showModalBottomSheet(
@@ -290,7 +292,7 @@ class _AddictionCardState extends State<AddictionCard>
                                   context: context,
                                   builder: (context) => Container(
                                     decoration: BoxDecoration(
-                                      color: Theme.of(context).cardColor,
+                                      color: t.cardColor,
                                       borderRadius: BorderRadius.only(
                                         topLeft: Radius.circular(10),
                                         topRight: Radius.circular(10),
@@ -318,13 +320,12 @@ class _AddictionCardState extends State<AddictionCard>
                                           },
                                           icon: Icon(
                                             Icons.iso_outlined,
-                                            color: Theme.of(context).hintColor,
+                                            color: t.hintColor,
                                           ),
                                           label: Text(
                                             local.quantity,
                                             style: TextStyle(
-                                              color:
-                                                  Theme.of(context).hintColor,
+                                              color: t.hintColor,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
@@ -351,13 +352,12 @@ class _AddictionCardState extends State<AddictionCard>
                                           },
                                           icon: Icon(
                                             Icons.hourglass_bottom_rounded,
-                                            color: Theme.of(context).hintColor,
+                                            color: t.hintColor,
                                           ),
                                           label: Text(
                                             local.hour(0),
                                             style: TextStyle(
-                                              color:
-                                                  Theme.of(context).hintColor,
+                                              color: t.hintColor,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
@@ -369,11 +369,11 @@ class _AddictionCardState extends State<AddictionCard>
                               });
                             },
                             child: Container(
-                              height: Theme.of(context).buttonTheme.height * 2,
+                              height: t.buttonTheme.height * 2,
                               padding: const EdgeInsets.all(10),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(5),
-                                color: Theme.of(context).canvasColor,
+                                color: t.canvasColor,
                               ),
                               child: Column(
                                 mainAxisAlignment:
@@ -388,7 +388,7 @@ class _AddictionCardState extends State<AddictionCard>
                                           .subtitle2
                                           .fontSize,
                                       fontWeight: FontWeight.bold,
-                                      color: Theme.of(context).hintColor,
+                                      color: t.hintColor,
                                     ),
                                   ),
                                   Text(
@@ -400,7 +400,7 @@ class _AddictionCardState extends State<AddictionCard>
                                           .textTheme
                                           .subtitle2
                                           .fontSize,
-                                      color: Theme.of(context).hintColor,
+                                      color: t.hintColor,
                                     ),
                                   ),
                                 ],
@@ -456,8 +456,7 @@ class _AddictionCardState extends State<AddictionCard>
                     child: Text(
                       local.quitAddiction,
                       style: TextStyle(
-                        fontSize:
-                            Theme.of(context).textTheme.headline6.fontSize,
+                        fontSize: t.textTheme.headline6.fontSize,
                       ),
                     ),
                   ),

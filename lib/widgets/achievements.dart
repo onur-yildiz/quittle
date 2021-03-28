@@ -105,6 +105,7 @@ class _AchievementsState extends State<Achievements> {
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
+    final t = Theme.of(context);
 
     final double tileHeight = deviceSize.width;
     double totalHeight = 0.0;
@@ -138,7 +139,7 @@ class _AchievementsState extends State<Achievements> {
                     LiquidLinearProgressIndicator(
                       value: .8,
                       valueColor: AlwaysStoppedAnimation(
-                        Theme.of(context).accentColor.withOpacity(.5),
+                        t.accentColor.withOpacity(.5),
                       ),
                       backgroundColor: Colors.transparent,
                       direction: Axis.vertical,
@@ -157,7 +158,7 @@ class _AchievementsState extends State<Achievements> {
                       FontAwesomeIcons.checkCircle,
                       color: achLevel == maxAchLevel
                           ? Colors.amber
-                          : Theme.of(context).highlightColor,
+                          : t.highlightColor,
                       size: tileHeight / 2,
                     ),
                   ),
@@ -173,8 +174,8 @@ class _AchievementsState extends State<Achievements> {
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             colors: [
-                              Theme.of(context).accentColor,
-                              Theme.of(context).accentColor.withOpacity(.5),
+                              t.accentColor,
+                              t.accentColor.withOpacity(.5),
                             ],
                             stops: [percentage.clamp(.0, .8), 1],
                             begin: Alignment.bottomCenter,
@@ -191,10 +192,7 @@ class _AchievementsState extends State<Achievements> {
                             // subtitle: localizedAchDurations[index + 1],
                             level: index + 1,
                             height: achievementHeights[index],
-                            trophySize: Theme.of(context)
-                                    .textTheme
-                                    .headline3
-                                    .fontSize *
+                            trophySize: t.textTheme.headline3.fontSize *
                                 (index + 1).clamp(0.0, deviceSize.width * .5),
                             active: index + 1 <= achLevel ? true : false,
                           ),
@@ -263,8 +261,8 @@ class _TrophyState extends State<Trophy> {
 
   @override
   Widget build(BuildContext context) {
-    final color =
-        widget.active ? Colors.amber : Theme.of(context).highlightColor;
+    final t = Theme.of(context);
+    final color = widget.active ? Colors.amber : t.highlightColor;
     final stars = List<FaIcon>.filled(
       widget.level,
       FaIcon(
@@ -275,16 +273,16 @@ class _TrophyState extends State<Trophy> {
     );
 
     final bool isTitleOverflowed = widget.trophySize / widget.title.length <
-        Theme.of(context).textTheme.bodyText1.fontSize;
+        t.textTheme.bodyText1.fontSize;
     final bool isSubtitleOverflowed =
         widget.trophySize / widget.subtitle.length <
-            Theme.of(context).textTheme.bodyText1.fontSize;
+            t.textTheme.bodyText1.fontSize;
 
     return ConfettiWidget(
       confettiController: _confettiController,
       blastDirectionality: BlastDirectionality.explosive,
       colors: [
-        Theme.of(context).primaryColor,
+        t.primaryColor,
         Colors.amber,
       ],
       numberOfParticles: widget.level,
@@ -302,7 +300,7 @@ class _TrophyState extends State<Trophy> {
                 Padding(
                   padding: EdgeInsets.only(
                     top: isTitleOverflowed
-                        ? Theme.of(context).textTheme.bodyText1.fontSize *
+                        ? t.textTheme.bodyText1.fontSize *
                             (isSubtitleOverflowed ? 2 : 1)
                         : 0.0,
                   ),
@@ -318,23 +316,23 @@ class _TrophyState extends State<Trophy> {
                     widget.title,
                     style: TextStyle(
                       color: !widget.active
-                          ? Theme.of(context).hintColor.withOpacity(.5)
+                          ? t.hintColor.withOpacity(.5)
                           : isTitleOverflowed
                               ? Colors.amber
-                              : Theme.of(context).accentColor,
+                              : t.accentColor,
                     ),
                   ),
                 ),
                 Positioned(
                   top: isSubtitleOverflowed
-                      ? Theme.of(context).textTheme.bodyText1.fontSize
+                      ? t.textTheme.bodyText1.fontSize
                       : widget.trophySize * .4,
                   child: Text(
                     widget.subtitle,
                     style: TextStyle(
                       color: widget.active
                           ? Colors.amber
-                          : Theme.of(context).hintColor.withOpacity(.5),
+                          : t.hintColor.withOpacity(.5),
                     ),
                   ),
                 ),

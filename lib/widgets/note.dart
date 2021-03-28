@@ -13,16 +13,17 @@ class Note extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = Theme.of(context);
     final _controller = TextEditingController(text: data.text);
     final local = AppLocalizations.of(context);
     final quitDateFormatted =
         DateFormat.yMMMd(local.localeName).format(DateTime.parse(data.date));
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).canvasColor,
+        color: t.canvasColor,
         borderRadius: BorderRadius.circular(5.0),
         border: Border.all(
-          color: Theme.of(context).highlightColor,
+          color: t.highlightColor,
           width: 1,
         ),
       ),
@@ -42,7 +43,7 @@ class Note extends StatelessWidget {
                 child: Text(
                   data.title,
                   style: TextStyle(
-                    color: Theme.of(context).hintColor,
+                    color: t.hintColor,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -54,7 +55,7 @@ class Note extends StatelessWidget {
                   quitDateFormatted,
                   textAlign: TextAlign.right,
                   style: TextStyle(
-                    color: Theme.of(context).hintColor,
+                    color: t.hintColor,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -71,7 +72,7 @@ class Note extends StatelessWidget {
               scrollPhysics: PageScrollPhysics(),
               enabled: true,
               style: TextStyle(
-                color: Theme.of(context).hintColor,
+                color: t.hintColor,
                 fontWeight: FontWeight.normal,
               ),
               decoration: InputDecoration(

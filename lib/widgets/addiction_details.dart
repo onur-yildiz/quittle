@@ -16,6 +16,7 @@ class AddictionDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = Theme.of(context);
     final double notUsedCount = addictionData.notUsedCount;
     final Duration abstinenceTime = addictionData.abstinenceTime;
     final double dailySavings =
@@ -33,9 +34,9 @@ class AddictionDetails extends StatelessWidget {
           ));
 
     return DefaultTextStyle(
-      style: Theme.of(context).textTheme.bodyText2.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+      style: t.textTheme.bodyText2.copyWith(
+        fontWeight: FontWeight.bold,
+      ),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Wrap(

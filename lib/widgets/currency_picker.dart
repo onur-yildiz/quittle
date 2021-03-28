@@ -35,12 +35,13 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
 
   @override
   Widget build(BuildContext context) {
+    final t = Theme.of(context);
     final mediaQuery = MediaQuery.of(context);
     final deviceHeight = mediaQuery.size.height;
     final deviceWidth = mediaQuery.size.width;
 
     return new SimpleDialog(
-      backgroundColor: Theme.of(context).cardColor,
+      backgroundColor: t.cardColor,
       contentPadding: EdgeInsets.zero,
       children: [
         SingleChildScrollView(
@@ -56,10 +57,10 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
                     BeveledRectangleBorder(),
                   ),
                   backgroundColor: MaterialStateProperty.all(
-                    Theme.of(context).canvasColor,
+                    t.canvasColor,
                   ),
                   foregroundColor: MaterialStateProperty.all(
-                    Theme.of(context).hintColor,
+                    t.hintColor,
                   ),
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   padding: MaterialStateProperty.all(
@@ -75,7 +76,7 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
                 child: Text(
                   _currencies[index]['code'],
                   style: TextStyle(
-                    color: Theme.of(context).accentColor,
+                    color: t.accentColor,
                   ),
                 ),
               ),

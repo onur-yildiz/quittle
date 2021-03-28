@@ -70,6 +70,7 @@ class _GiftsState extends State<Gifts> {
 
   @override
   Widget build(BuildContext context) {
+    final t = Theme.of(context);
     final local = AppLocalizations.of(context);
     final deviceSize = MediaQuery.of(context).size;
 
@@ -100,7 +101,7 @@ class _GiftsState extends State<Gifts> {
                       Text(
                         local.available + ' ',
                         style: TextStyle(
-                          color: Theme.of(context).hintColor,
+                          color: t.hintColor,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -121,7 +122,7 @@ class _GiftsState extends State<Gifts> {
                       Text(
                         local.spent + ' ',
                         style: TextStyle(
-                          color: Theme.of(context).hintColor,
+                          color: t.hintColor,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -182,6 +183,7 @@ class _GiftCardState extends State<GiftCard> {
 
   @override
   Widget build(BuildContext context) {
+    final t = Theme.of(context);
     final local = AppLocalizations.of(context);
     final materialLocal = MaterialLocalizations.of(context);
     final deviceSize = MediaQuery.of(context).size;
@@ -238,7 +240,7 @@ class _GiftCardState extends State<GiftCard> {
               borderRadius: BorderRadius.circular(5),
               side: BorderSide(
                 width: 8,
-                color: Theme.of(context).highlightColor,
+                color: t.highlightColor,
               ),
             ),
             child: InkWell(
@@ -278,7 +280,7 @@ class _GiftCardState extends State<GiftCard> {
                 ),
               ),
               child: DefaultTextStyle(
-                style: Theme.of(context).textTheme.bodyText1,
+                style: t.textTheme.bodyText1,
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Flex(
@@ -295,38 +297,6 @@ class _GiftCardState extends State<GiftCard> {
                           ),
                         ),
                       ),
-                      // Flexible(
-                      //   flex: 6,
-                      //   fit: FlexFit.tight,
-                      //   child: Row(
-                      //     mainAxisAlignment: MainAxisAlignment.center,
-                      //     crossAxisAlignment: CrossAxisAlignment.stretch,
-                      //     children: [
-                      //       Text(
-                      //         (percentage * 100).toStringAsFixed(2),
-                      //         style: TextStyle(
-                      //           fontWeight:
-                      //               percentage == 1 ? FontWeight.w900 : null,
-                      //           fontSize: Theme.of(context)
-                      //               .textTheme
-                      //               .headline6
-                      //               .fontSize,
-                      //         ),
-                      //       ),
-                      //       Text(
-                      //         '%',
-                      //         style: TextStyle(
-                      //           fontWeight:
-                      //               percentage == 1 ? FontWeight.w900 : null,
-                      //           fontSize: Theme.of(context)
-                      //               .textTheme
-                      //               .bodyText1
-                      //               .fontSize,
-                      //         ),
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
                       Flexible(
                         flex: 2,
                         fit: FlexFit.tight,
@@ -371,9 +341,9 @@ class _GiftCardState extends State<GiftCard> {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(5),
                               child: LinearProgressIndicator(
-                                backgroundColor: Theme.of(context).cardColor,
+                                backgroundColor: t.cardColor,
                                 valueColor: AlwaysStoppedAnimation(
-                                  Theme.of(context).accentColor.withOpacity(.8),
+                                  t.accentColor.withOpacity(.8),
                                 ),
                                 value: percentage,
                               ),
@@ -409,7 +379,7 @@ class _GiftCardState extends State<GiftCard> {
                         flex: 1,
                         child: Icon(
                           Icons.drag_handle_rounded,
-                          color: Theme.of(context).highlightColor,
+                          color: t.highlightColor,
                         ),
                       ),
                     ],
@@ -426,14 +396,14 @@ class _GiftCardState extends State<GiftCard> {
             type: MaterialType.circle,
             color: Colors.transparent,
             child: InkWell(
-              splashColor: Theme.of(context).errorColor,
+              splashColor: t.errorColor,
               customBorder: CircleBorder(),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Icon(
                   Icons.delete,
-                  color: Theme.of(context).errorColor.withOpacity(.8),
-                  size: Theme.of(context).textTheme.headline6.fontSize,
+                  color: t.errorColor.withOpacity(.8),
+                  size: t.textTheme.headline6.fontSize,
                 ),
               ),
               onLongPress: _deleteDialog,
@@ -453,20 +423,21 @@ class AddGiftButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = Theme.of(context);
     final deviceSize = MediaQuery.of(context).size;
     return ClipRRect(
       borderRadius: BorderRadius.circular(5),
       child: Container(
         height: deviceSize.width * .46,
         width: deviceSize.width * .46,
-        color: Theme.of(context).highlightColor,
+        color: t.highlightColor,
         child: Material(
           type: MaterialType.transparency,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5),
             side: BorderSide(
               width: 8,
-              color: Theme.of(context).highlightColor,
+              color: t.highlightColor,
             ),
           ),
           child: InkWell(
@@ -482,8 +453,8 @@ class AddGiftButton extends StatelessWidget {
             child: Center(
               child: Icon(
                 Icons.add,
-                size: Theme.of(context).textTheme.headline4.fontSize,
-                // color: Theme.of(context).hintColor,
+                size: t.textTheme.headline4.fontSize,
+                // color: t.hintColor,
               ),
             ),
           ),

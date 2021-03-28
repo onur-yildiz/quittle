@@ -73,21 +73,22 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
 
   @override
   Widget build(BuildContext context) {
+    final t = Theme.of(context);
     final local = AppLocalizations.of(context);
     final deviceWidth = MediaQuery.of(context).size.width;
-    final inputBackgroundColor = Theme.of(context).canvasColor;
-    final buttonHeight = Theme.of(context).buttonTheme.height * 2;
+    final inputBackgroundColor = t.canvasColor;
+    final buttonHeight = t.buttonTheme.height * 2;
 
     return DefaultTextStyle(
       style: TextStyle(
-        color: Theme.of(context).hintColor,
+        color: t.hintColor,
         fontWeight: FontWeight.bold,
       ),
       child: Form(
         key: _formKey,
         child: Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).cardColor,
+            color: t.cardColor,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(10),
               topRight: Radius.circular(10),
@@ -111,7 +112,7 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
                 backgroundColor: inputBackgroundColor,
               ),
               TextFormField(
-                cursorColor: Theme.of(context).primaryColor,
+                cursorColor: t.primaryColor,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: inputBackgroundColor,
@@ -126,14 +127,14 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
                     borderRadius: BorderRadius.circular(5),
                     borderSide: BorderSide(
                       width: 0,
-                      color: Theme.of(context).primaryColorLight,
+                      color: t.primaryColorLight,
                       style: BorderStyle.solid,
                     ),
                   ),
                   hintText: local.note,
                 ),
                 style: TextStyle(
-                  color: Theme.of(context).hintColor,
+                  color: t.hintColor,
                 ),
                 keyboardType: TextInputType.multiline,
                 textInputAction: TextInputAction.newline,
@@ -160,7 +161,7 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
                             });
                           }
                         },
-                        splashColor: Theme.of(context).primaryColor,
+                        splashColor: t.primaryColor,
                         borderRadius: BorderRadius.circular(5),
                         child: Padding(
                           padding: const EdgeInsets.all(10),
@@ -173,14 +174,14 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
                                     DateTime.parse(noteData['date']),
                                   ),
                                   style: TextStyle(
-                                      color: Theme.of(context).hintColor,
+                                      color: t.hintColor,
                                       fontWeight: FontWeight.bold),
                                 ),
                                 SizedBox(
                                   width: deviceWidth * .1,
                                   child: Icon(
                                     Icons.date_range,
-                                    color: Theme.of(context).primaryColor,
+                                    color: t.primaryColor,
                                   ),
                                 ),
                               ],
@@ -201,19 +202,18 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
                         },
                         child: Padding(
                           padding: EdgeInsets.symmetric(
-                            horizontal:
-                                Theme.of(context).textTheme.headline6.fontSize,
+                            horizontal: t.textTheme.headline6.fontSize,
                           ),
                           child: Row(
                             children: [
                               Icon(
                                 Icons.save,
-                                color: Theme.of(context).primaryColor,
+                                color: t.primaryColor,
                               ),
                               Text(
                                 local.save,
                                 style: TextStyle(
-                                  color: Theme.of(context).primaryColor,
+                                  color: t.primaryColor,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),

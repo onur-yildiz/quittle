@@ -39,6 +39,7 @@ class _AddictionItemState extends State<AddictionItemScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final t = Theme.of(context);
     final AddictionItemScreenArgs args =
         ModalRoute.of(context).settings.arguments;
     final local = AppLocalizations.of(context);
@@ -56,20 +57,20 @@ class _AddictionItemState extends State<AddictionItemScreen> {
         PersistentBottomNavBarItem(
           icon: FaIcon(FontAwesomeIcons.infoCircle),
           title: (local.overview),
-          activeColor: Theme.of(context).primaryColor,
-          inactiveColor: Theme.of(context).hintColor,
+          activeColor: t.primaryColor,
+          inactiveColor: t.hintColor,
         ),
         PersistentBottomNavBarItem(
           icon: FaIcon(FontAwesomeIcons.gifts),
           title: (local.rewards),
-          activeColor: Theme.of(context).primaryColor,
-          inactiveColor: Theme.of(context).hintColor,
+          activeColor: t.primaryColor,
+          inactiveColor: t.hintColor,
         ),
         PersistentBottomNavBarItem(
           icon: FaIcon(FontAwesomeIcons.trophy),
           title: (local.achievements),
-          activeColor: Theme.of(context).primaryColor,
-          inactiveColor: Theme.of(context).hintColor,
+          activeColor: t.primaryColor,
+          inactiveColor: t.hintColor,
         ),
       ];
     }
@@ -96,14 +97,14 @@ class _AddictionItemState extends State<AddictionItemScreen> {
           screens: _buildScreens(),
           items: _navBarItems(),
           confineInSafeArea: true,
-          backgroundColor: Theme.of(context).cardColor,
+          backgroundColor: t.cardColor,
           handleAndroidBackButtonPress: true,
           resizeToAvoidBottomInset: true,
           stateManagement: true,
           hideNavigationBarWhenKeyboardShows: true,
           decoration: NavBarDecoration(
             borderRadius: BorderRadius.circular(0.0),
-            colorBehindNavBar: Theme.of(context).canvasColor,
+            colorBehindNavBar: t.canvasColor,
           ),
           popAllScreensOnTapOfSelectedTab: true,
           popActionScreens: PopActionScreensType.all,

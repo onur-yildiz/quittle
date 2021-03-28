@@ -20,6 +20,7 @@ class PersonalNotesView extends StatefulWidget {
 class _PersonalNotesViewState extends State<PersonalNotesView> {
   @override
   Widget build(BuildContext context) {
+    final t = Theme.of(context);
     final local = AppLocalizations.of(context);
     return Stack(
       alignment: Alignment.topCenter,
@@ -84,7 +85,7 @@ class _PersonalNotesViewState extends State<PersonalNotesView> {
               },
             );
           },
-          backgroundColor: Theme.of(context).primaryColor,
+          backgroundColor: t.primaryColor,
           child: Icon(
             Icons.add,
             color: Colors.white,

@@ -32,6 +32,7 @@ class CustomTextFormField extends StatelessWidget {
     if (onSubmit == null && inputAction == TextInputAction.done)
       throw 'Error: onSubmit == null && inputAction == TextInputAction.done. Provide an onSubmit function.';
 
+    final t = Theme.of(context);
     return TextFormField(
       onFieldSubmitted: (_) {
         if (inputAction != TextInputAction.done) return;
@@ -41,9 +42,7 @@ class CustomTextFormField extends StatelessWidget {
       key: ValueKey(valKey),
       decoration: InputDecoration(
         filled: true,
-        fillColor: backgroundColor != null
-            ? backgroundColor
-            : Theme.of(context).canvasColor,
+        fillColor: backgroundColor != null ? backgroundColor : t.canvasColor,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(5),
           borderSide: BorderSide(
@@ -55,7 +54,7 @@ class CustomTextFormField extends StatelessWidget {
           borderRadius: BorderRadius.circular(5),
           borderSide: BorderSide(
             width: 0,
-            color: Theme.of(context).primaryColorDark,
+            color: t.primaryColorDark,
             style: BorderStyle.solid,
           ),
         ),
@@ -65,9 +64,9 @@ class CustomTextFormField extends StatelessWidget {
         ),
       ),
       style: TextStyle(
-        color: Theme.of(context).hintColor,
+        color: t.hintColor,
       ),
-      cursorColor: Theme.of(context).primaryColor,
+      cursorColor: t.primaryColor,
       keyboardType: inputType,
       validator: validator,
       textInputAction: inputAction,

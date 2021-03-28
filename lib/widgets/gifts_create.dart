@@ -52,20 +52,21 @@ class _CreateGiftNoteState extends State<CreateGift> {
 
   @override
   Widget build(BuildContext context) {
+    final t = Theme.of(context);
     final local = AppLocalizations.of(context);
-    final inputBackgroundColor = Theme.of(context).canvasColor;
-    final buttonHeight = Theme.of(context).buttonTheme.height * 2;
+    final inputBackgroundColor = t.canvasColor;
+    final buttonHeight = t.buttonTheme.height * 2;
 
     return DefaultTextStyle(
       style: TextStyle(
-        color: Theme.of(context).hintColor,
+        color: t.hintColor,
         fontWeight: FontWeight.bold,
       ),
       child: Form(
         key: _formKey,
         child: Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).cardColor,
+            color: t.cardColor,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(10),
               topRight: Radius.circular(10),
@@ -120,12 +121,12 @@ class _CreateGiftNoteState extends State<CreateGift> {
                     children: [
                       Icon(
                         Icons.save,
-                        color: Theme.of(context).primaryColorLight,
+                        color: t.primaryColorLight,
                       ),
                       Text(
                         local.save,
                         style: TextStyle(
-                          color: Theme.of(context).primaryColorLight,
+                          color: t.primaryColorLight,
                           fontWeight: FontWeight.bold,
                         ),
                       ),

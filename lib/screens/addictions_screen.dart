@@ -87,6 +87,7 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final t = Theme.of(context);
     final deviceSize = MediaQuery.of(context).size;
     final local = AppLocalizations.of(context);
 
@@ -114,7 +115,7 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
         child: FloatingActionButton(
           heroTag: 'newAddiction',
           onPressed: pushCreateAddictionScreen,
-          backgroundColor: Theme.of(context).primaryColor,
+          backgroundColor: t.primaryColor,
           tooltip: local.newMsg,
           child: Icon(Icons.add),
         ),
@@ -133,8 +134,8 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
           _setProgNotifTasks(addictionsData.addictions);
           return addictionsData.addictions.length > 0
               ? Theme(
-                  data: Theme.of(context).copyWith(
-                    cardColor: Theme.of(context).canvasColor,
+                  data: t.copyWith(
+                    cardColor: t.canvasColor,
                     canvasColor: Colors.transparent,
                     shadowColor: Colors.black26,
                   ),
@@ -167,11 +168,11 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
                     child: FloatingActionButton(
                       heroTag: 'newAddiction',
                       elevation: 0,
-                      backgroundColor: Theme.of(context).primaryColor,
-                      foregroundColor: Theme.of(context).canvasColor,
+                      backgroundColor: t.primaryColor,
+                      foregroundColor: t.canvasColor,
                       child: Icon(
                         Icons.add,
-                        size: Theme.of(context).textTheme.headline1.fontSize,
+                        size: t.textTheme.headline1.fontSize,
                       ),
                       onPressed: null,
                     ),
@@ -184,9 +185,8 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
                     child: Text(
                       local.appName,
                       style: TextStyle(
-                        fontSize:
-                            Theme.of(context).textTheme.headline2.fontSize,
-                        color: Theme.of(context).primaryColor,
+                        fontSize: t.textTheme.headline2.fontSize,
+                        color: t.primaryColor,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

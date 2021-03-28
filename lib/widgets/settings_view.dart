@@ -37,8 +37,8 @@ class _SettingsViewState extends State<SettingsView> {
 
   @override
   Widget build(BuildContext context) {
+    final t = Theme.of(context);
     final local = AppLocalizations.of(context);
-    final isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
 
     return Drawer(
       child: LayoutBuilder(
@@ -63,7 +63,7 @@ class _SettingsViewState extends State<SettingsView> {
                                 border: Border(
                                   bottom: BorderSide(
                                     width: 0,
-                                    color: Theme.of(context).primaryColor,
+                                    color: t.primaryColor,
                                   ),
                                 ),
                               ),
@@ -75,7 +75,7 @@ class _SettingsViewState extends State<SettingsView> {
                                       .headline6
                                       .fontSize,
                                   fontWeight: FontWeight.bold,
-                                  color: Theme.of(context).primaryColor,
+                                  color: t.primaryColor,
                                 ),
                               ),
                             ),
@@ -89,11 +89,11 @@ class _SettingsViewState extends State<SettingsView> {
                             subtitle: Text(
                               local.progressNotificationDesc,
                               style: TextStyle(
-                                color: Theme.of(context).hintColor,
+                                color: t.hintColor,
                               ),
                             ),
                             value: _progressCheck,
-                            activeColor: Theme.of(context).accentColor,
+                            activeColor: t.accentColor,
                             onChanged: (value) {
                               if (mounted) {
                                 setState(() {
@@ -116,11 +116,11 @@ class _SettingsViewState extends State<SettingsView> {
                             subtitle: Text(
                               local.quoteOfTheDayDesc,
                               style: TextStyle(
-                                color: Theme.of(context).hintColor,
+                                color: t.hintColor,
                               ),
                             ),
                             value: _quoteCheck,
-                            activeColor: Theme.of(context).accentColor,
+                            activeColor: t.accentColor,
                             onChanged: (value) {
                               if (mounted) {
                                 setState(() {
@@ -151,7 +151,7 @@ class _SettingsViewState extends State<SettingsView> {
                                     .textTheme
                                     .subtitle2
                                     .fontSize,
-                                color: Theme.of(context).hintColor,
+                                color: t.hintColor,
                               ),
                             ),
                             trailing: Text(
@@ -160,7 +160,7 @@ class _SettingsViewState extends State<SettingsView> {
                                 locale: local.localeName,
                               ).currencySymbol})',
                               style: TextStyle(
-                                color: Theme.of(context).accentColor,
+                                color: t.accentColor,
                                 fontWeight: FontWeight.bold,
                                 fontSize: Theme.of(context)
                                     .textTheme
@@ -188,7 +188,7 @@ class _SettingsViewState extends State<SettingsView> {
                                   Text(
                                     local.appName.toUpperCase(),
                                     style: TextStyle(
-                                      color: Theme.of(context).primaryColor,
+                                      color: t.primaryColor,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -197,7 +197,7 @@ class _SettingsViewState extends State<SettingsView> {
                                       IconButton(
                                         icon: FaIcon(
                                           FontAwesomeIcons.infoCircle,
-                                          color: Theme.of(context).primaryColor,
+                                          color: t.primaryColor,
                                         ),
                                         tooltip: local.licenses,
                                         onPressed: () {
