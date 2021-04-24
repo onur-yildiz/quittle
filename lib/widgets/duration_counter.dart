@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class DurationCounter extends StatefulWidget {
   const DurationCounter({
-    @required this.duration,
+    required this.duration,
   });
 
   final Duration duration;
@@ -15,7 +15,7 @@ class DurationCounter extends StatefulWidget {
 
 class _DurationCounterState extends State<DurationCounter> {
   String durationAsString = '';
-  Duration updatedDuration;
+  late Duration updatedDuration;
 
   String durationString(Duration duration) {
     String twoDigits(int n) => n.toString().padLeft(2, '0');

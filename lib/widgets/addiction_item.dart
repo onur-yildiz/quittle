@@ -7,7 +7,7 @@ import 'package:quittle/widgets/personal_notes_view.dart';
 
 class AddictionItem extends StatelessWidget {
   const AddictionItem({
-    @required this.args,
+    required this.args,
   });
 
   final AddictionItemScreenArgs args;

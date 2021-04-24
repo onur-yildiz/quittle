@@ -43,7 +43,7 @@ const _levelNames = {
 };
 
 List<String> getLevelNames(String locale) {
-  return [..._levelNames[locale]];
+  return [..._levelNames[locale]!];
 }
 
 const _achievementDurations = [

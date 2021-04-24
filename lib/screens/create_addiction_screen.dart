@@ -45,9 +45,9 @@ class AddictionCard extends StatefulWidget {
 class _AddictionCardState extends State<AddictionCard>
     with SingleTickerProviderStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey();
-  String _consumptionType;
-  FocusNode _focusNode;
-  AnimationController _dpAnimController;
+  String? _consumptionType;
+  FocusNode? _focusNode;
+  late AnimationController _dpAnimController;
   var addictionData = {
     'name': '',
     'quit_date': DateTime.now().toString(),
@@ -60,7 +60,7 @@ class _AddictionCardState extends State<AddictionCard>
 
   void _selectDate(context, DateTime currentlyPicked) async {
     //pick date
-    DateTime date = await showDatePicker(
+    DateTime? date = await showDatePicker(
       context: context,
       builder: (context, child) {
         _dpAnimController.forward();
@@ -77,7 +77,7 @@ class _AddictionCardState extends State<AddictionCard>
 
     // check if datepicker canceled
     if (date != null) {
-      TimeOfDay time = await showTimePicker(
+      TimeOfDay? time = await showTimePicker(
         context: context,
         builder: (context, child) {
           _dpAnimController.forward();
@@ -104,7 +104,7 @@ class _AddictionCardState extends State<AddictionCard>
               ..showSnackBar(
                 SnackBar(
                   content: Text(
-                    AppLocalizations.of(context).cantPickFutureTime,
+                    AppLocalizations.of(context)!.cantPickFutureTime,
                   ),
                 ),
               );
@@ -132,11 +132,11 @@ class _AddictionCardState extends State<AddictionCard>
   }
 
   void trySubmit() async {
-    final isValid = _formKey.currentState.validate();
+    final isValid = _formKey.currentState!.validate();
     FocusScope.of(context).unfocus();
 
     if (isValid) {
-      _formKey.currentState.save();
+      _formKey.currentState!.save();
       final newAddiction =
           await Provider.of<AddictionsProvider>(context, listen: false)
               .createAddiction(addictionData);
@@ -177,14 +177,14 @@ class _AddictionCardState extends State<AddictionCard>
   @override
   void dispose() {
     _dpAnimController.dispose();
-    _focusNode.dispose();
+    _focusNode!.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context);
-    final local = AppLocalizations.of(context);
+    final local = AppLocalizations.of(context)!;
     final deviceSize = MediaQuery.of(context).size;
 
     return Container(
@@ -228,7 +228,7 @@ class _AddictionCardState extends State<AddictionCard>
                                 FocusScope.of(context).unfocus();
                                 _selectDate(
                                   context,
-                                  DateTime.parse(addictionData['quit_date']),
+                                  DateTime.parse(addictionData['quit_date'] as String),
                                 );
                               });
                             },
@@ -245,7 +245,7 @@ class _AddictionCardState extends State<AddictionCard>
                                     style: TextStyle(
                                       fontSize: Theme.of(context)
                                           .textTheme
-                                          .subtitle2
+                                          .subtitle2!
                                           .fontSize,
                                       fontWeight: FontWeight.bold,
                                       color: t.hintColor,
@@ -260,7 +260,7 @@ class _AddictionCardState extends State<AddictionCard>
                                       Text(
                                         DateFormat('dd/MM/yyyy').format(
                                           DateTime.parse(
-                                              addictionData['quit_date']),
+                                              addictionData['quit_date'] as String),
                                         ),
                                         style: TextStyle(
                                           color: t.hintColor,
@@ -385,7 +385,7 @@ class _AddictionCardState extends State<AddictionCard>
                                     style: TextStyle(
                                       fontSize: Theme.of(context)
                                           .textTheme
-                                          .subtitle2
+                                          .subtitle2!
                                           .fontSize,
                                       fontWeight: FontWeight.bold,
                                       color: t.hintColor,
@@ -393,12 +393,12 @@ class _AddictionCardState extends State<AddictionCard>
                                   ),
                                   Text(
                                     _consumptionType != null
-                                        ? _consumptionType
+                                        ? _consumptionType!
                                         : local.quantity,
                                     style: TextStyle(
                                       fontSize: Theme.of(context)
                                           .textTheme
-                                          .subtitle2
+                                          .subtitle2!
                                           .fontSize,
                                       color: t.hintColor,
                                     ),
@@ -456,7 +456,7 @@ class _AddictionCardState extends State<AddictionCard>
                     child: Text(
                       local.quitAddiction,
                       style: TextStyle(
-                        fontSize: t.textTheme.headline6.fontSize,
+                        fontSize: t.textTheme.headline6!.fontSize,
                       ),
                     ),
                   ),

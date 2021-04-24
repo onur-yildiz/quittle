@@ -10,8 +10,8 @@ import 'package:quittle/widgets/target_duration_indicator.dart';
 
 class AddictionProgress extends StatelessWidget {
   const AddictionProgress({
-    Key key,
-    @required this.addictionData,
+    Key? key,
+    required this.addictionData,
   }) : super(key: key);
 
   final Addiction addictionData;
@@ -19,7 +19,7 @@ class AddictionProgress extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context);
-    final local = AppLocalizations.of(context);
+    final local = AppLocalizations.of(context)!;
     final consumptionType = (addictionData.consumptionType == 1)
         ? local.hour(addictionData.notUsedCount.toInt())
         : local.times(addictionData.notUsedCount.toInt());
@@ -37,8 +37,8 @@ class AddictionProgress extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 DefaultTextStyle(
-                  style: t.textTheme.bodyText1.copyWith(
-                    fontSize: t.textTheme.subtitle1.fontSize,
+                  style: t.textTheme.bodyText1!.copyWith(
+                    fontSize: t.textTheme.subtitle1!.fontSize,
                     fontWeight: FontWeight.bold,
                   ),
                   child: Column(
@@ -46,10 +46,10 @@ class AddictionProgress extends StatelessWidget {
                       Text(
                         local.level +
                             ' ' +
-                            (addictionData.level + 1).toString(),
+                            (addictionData.level! + 1).toString(),
                       ),
                       Text(
-                        getLevelNames(local.localeName)[addictionData.level],
+                        getLevelNames(local.localeName)[addictionData.level!],
                       )
                     ],
                   ),
@@ -59,8 +59,8 @@ class AddictionProgress extends StatelessWidget {
                   thickness: 0,
                 ),
                 DefaultTextStyle(
-                  style: t.textTheme.bodyText1.copyWith(
-                    fontSize: t.textTheme.subtitle1.fontSize,
+                  style: t.textTheme.bodyText1!.copyWith(
+                    fontSize: t.textTheme.subtitle1!.fontSize,
                     fontWeight: FontWeight.bold,
                   ),
                   child: FittedBox(

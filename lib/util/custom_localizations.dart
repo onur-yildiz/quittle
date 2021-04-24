@@ -1,4 +1,4 @@
-String progressNotificationMsg(int newLevel, String locale) {
+String progressNotificationMsg(int newLevel, String? locale) {
   switch (locale) {
     case 'en':
       return 'You have reached level $newLevel!';

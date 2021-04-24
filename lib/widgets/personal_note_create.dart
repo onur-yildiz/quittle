@@ -9,17 +9,17 @@ import 'package:quittle/widgets/custom_text_form_field.dart';
 
 class CreatePersonalNote extends StatefulWidget {
   CreatePersonalNote({
-    @required this.addictionId,
+    required this.addictionId,
   });
 
-  final String addictionId;
+  final String? addictionId;
   @override
   _CreatePersonalNoteState createState() => _CreatePersonalNoteState();
 }
 
 class _CreatePersonalNoteState extends State<CreatePersonalNote> {
   final GlobalKey<FormState> _formKey = GlobalKey();
-  FocusNode formFocusNode;
+  late FocusNode formFocusNode;
   var noteData = {
     'title': '',
     'text': '',
@@ -45,11 +45,11 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
   }
 
   void trySubmit(BuildContext ctx) {
-    final isValid = _formKey.currentState.validate();
+    final isValid = _formKey.currentState!.validate();
     FocusScope.of(context).unfocus();
 
     if (isValid) {
-      _formKey.currentState.save();
+      _formKey.currentState!.save();
       Provider.of<AddictionsProvider>(context, listen: false).createNote(
         noteData,
         widget.addictionId,
@@ -74,7 +74,7 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context);
-    final local = AppLocalizations.of(context);
+    final local = AppLocalizations.of(context)!;
     final deviceWidth = MediaQuery.of(context).size.width;
     final inputBackgroundColor = t.canvasColor;
     final buttonHeight = t.buttonTheme.height * 2;
@@ -142,7 +142,7 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
                 maxLines: null,
                 maxLength: 100,
                 maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                onSaved: (newValue) => noteData['text'] = newValue.trim(),
+                onSaved: (newValue) => noteData['text'] = newValue!.trim(),
               ),
               SizedBox(
                 height: buttonHeight,
@@ -171,7 +171,7 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
                               children: [
                                 Text(
                                   DateFormat('dd/MM/yyyy').format(
-                                    DateTime.parse(noteData['date']),
+                                    DateTime.parse(noteData['date']!),
                                   ),
                                   style: TextStyle(
                                       color: t.hintColor,
@@ -202,7 +202,7 @@ class _CreatePersonalNoteState extends State<CreatePersonalNote> {
                         },
                         child: Padding(
                           padding: EdgeInsets.symmetric(
-                            horizontal: t.textTheme.headline6.fontSize,
+                            horizontal: t.textTheme.headline6!.fontSize!,
                           ),
                           child: Row(
                             children: [

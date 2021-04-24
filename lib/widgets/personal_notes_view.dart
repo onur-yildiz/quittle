@@ -10,7 +10,7 @@ import 'package:quittle/widgets/note.dart';
 
 class PersonalNotesView extends StatefulWidget {
   PersonalNotesView({
-    @required this.addictionData,
+    required this.addictionData,
   });
   final Addiction addictionData;
   @override
@@ -21,7 +21,7 @@ class _PersonalNotesViewState extends State<PersonalNotesView> {
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context);
-    final local = AppLocalizations.of(context);
+    final local = AppLocalizations.of(context)!;
     return Stack(
       alignment: Alignment.topCenter,
       children: [
@@ -39,7 +39,7 @@ class _PersonalNotesViewState extends State<PersonalNotesView> {
                     )
                   : Consumer<AddictionsProvider>(
                       builder: (_, addictionsData, _child) =>
-                          widget.addictionData.personalNotes.length == 0
+                          widget.addictionData.personalNotes!.length == 0
                               ? Note(
                                   data: PersonalNote(
                                     title: local.yourJourneyBegins,
@@ -51,7 +51,7 @@ class _PersonalNotesViewState extends State<PersonalNotesView> {
                                   shrinkWrap: true,
                                   physics: BouncingScrollPhysics(),
                                   itemCount:
-                                      widget.addictionData.personalNotes.length,
+                                      widget.addictionData.personalNotes!.length,
                                   itemBuilder: (_, index) {
                                     return Padding(
                                       padding: const EdgeInsets.only(top: 8.0),

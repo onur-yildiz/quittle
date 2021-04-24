@@ -23,15 +23,15 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
 
   _setProgNotifTasks(List<Addiction> addictions) async {
     if (Provider.of<SettingsProvider>(context, listen: false)
-        .receiveProgressNotifs) {
+        .receiveProgressNotifs!) {
       for (var addiction in addictions) {
-        if (addiction.level < levelDurations.length - 1) {
-          Workmanager.registerPeriodicTask(
+        if (addiction.level! < levelDurations.length - 1) {
+          Workmanager().registerPeriodicTask(
             addiction.id,
             'progress-notification',
             inputData: {
               'id': addiction.id,
-              'locale': AppLocalizations.of(context).localeName,
+              'locale': AppLocalizations.of(context)!.localeName,
             },
             frequency: Duration(minutes: 15),
             existingWorkPolicy: ExistingWorkPolicy.keep,
@@ -44,7 +44,7 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
             ),
           );
         } else {
-          Workmanager.cancelByUniqueName(addiction.id);
+          Workmanager().cancelByUniqueName(addiction.id);
         }
       }
     }
@@ -64,7 +64,7 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
               '${removedAddiction.name} deleted.',
             ),
             action: SnackBarAction(
-              label: local.undo,
+              label: local!.undo,
               onPressed: () {
                 Provider.of<AddictionsProvider>(context, listen: false)
                     .insertAddiction(removedAddiction);
@@ -89,7 +89,7 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
   Widget build(BuildContext context) {
     final t = Theme.of(context);
     final deviceSize = MediaQuery.of(context).size;
-    final local = AppLocalizations.of(context);
+    final local = AppLocalizations.of(context)!;
 
     void pushCreateAddictionScreen() {
       Navigator.of(context).push(
@@ -107,7 +107,7 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
         leading: IconButton(
           icon: Icon(Icons.menu),
           onPressed: () {
-            _scaffoldKey.currentState.openDrawer();
+            _scaffoldKey.currentState!.openDrawer();
           },
         ),
       ),
@@ -152,7 +152,7 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
                     onReorder: _onReorder,
                   ),
                 )
-              : child;
+              : child!;
         },
         child: InkWell(
           onTap: pushCreateAddictionScreen,
@@ -172,7 +172,7 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
                       foregroundColor: t.canvasColor,
                       child: Icon(
                         Icons.add,
-                        size: t.textTheme.headline1.fontSize,
+                        size: t.textTheme.headline1!.fontSize,
                       ),
                       onPressed: null,
                     ),
@@ -185,7 +185,7 @@ class _AddictionsScreenState extends State<AddictionsScreen> {
                     child: Text(
                       local.appName,
                       style: TextStyle(
-                        fontSize: t.textTheme.headline2.fontSize,
+                        fontSize: t.textTheme.headline2!.fontSize,
                         color: t.primaryColor,
                         fontWeight: FontWeight.bold,
                       ),

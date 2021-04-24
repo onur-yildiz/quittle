@@ -21,7 +21,7 @@ class DBHelper {
     );
   }
 
-  static Future<void> insert(String table, Map<String, Object> data) async {
+  static Future<int> insert(String table, Map<String, Object?> data) async {
     final db = await DBHelper.database();
     return db.insert(
       table,
@@ -30,10 +30,10 @@ class DBHelper {
     );
   }
 
-  static Future<void> update(
+  static Future<int> update(
     String table,
     String column,
-    String id,
+    String? id,
     dynamic data,
   ) async {
     final db = await DBHelper.database();
@@ -46,7 +46,7 @@ class DBHelper {
     String column,
     int oldIndex,
     int newIndex, [
-    String groupingColStr = '',
+    String? groupingColStr = '',
     String groupingCol = '',
   ]) async {
     final db = await DBHelper.database();
@@ -78,7 +78,7 @@ class DBHelper {
     );
   }
 
-  static Future<void> reorderGroupedBy(
+  static Future<int> reorderGroupedBy(
     String table,
     String column,
     String groupingColVal,
@@ -101,15 +101,15 @@ class DBHelper {
     );
   }
 
-  static Future<void> delete(String table, String id) async {
+  static Future<int> delete(String table, String? id) async {
     final db = await DBHelper.database();
     return db.rawDelete('DELETE FROM $table WHERE id = ?', [id]);
   }
 
-  static Future<List<Map<String, Object>>> getData(
+  static Future<List<Map<String, Object?>>> getData(
     String table, [
     String column = '',
-    String id = '',
+    String? id = '',
   ]) async {
     final db = await DBHelper.database();
     if (id == '' || column == '') {

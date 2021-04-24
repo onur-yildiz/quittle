@@ -14,10 +14,10 @@ class SettingsView extends StatefulWidget {
 }
 
 class _SettingsViewState extends State<SettingsView> {
-  bool _progressCheck = false;
-  bool _quoteCheck = false;
-  SettingsProvider settings;
-  String currency;
+  bool? _progressCheck = false;
+  bool? _quoteCheck = false;
+  late SettingsProvider settings;
+  String? currency;
 
   @override
   void initState() {
@@ -68,11 +68,11 @@ class _SettingsViewState extends State<SettingsView> {
                                 ),
                               ),
                               child: Text(
-                                local.settings,
+                                local!.settings,
                                 style: TextStyle(
                                   fontSize: Theme.of(context)
                                       .textTheme
-                                      .headline6
+                                      .headline6!
                                       .fontSize,
                                   fontWeight: FontWeight.bold,
                                   color: t.primaryColor,
@@ -92,7 +92,7 @@ class _SettingsViewState extends State<SettingsView> {
                                 color: t.hintColor,
                               ),
                             ),
-                            value: _progressCheck,
+                            value: _progressCheck!,
                             activeColor: t.accentColor,
                             onChanged: (value) {
                               if (mounted) {
@@ -119,7 +119,7 @@ class _SettingsViewState extends State<SettingsView> {
                                 color: t.hintColor,
                               ),
                             ),
-                            value: _quoteCheck,
+                            value: _quoteCheck!,
                             activeColor: t.accentColor,
                             onChanged: (value) {
                               if (mounted) {
@@ -149,7 +149,7 @@ class _SettingsViewState extends State<SettingsView> {
                               style: TextStyle(
                                 fontSize: Theme.of(context)
                                     .textTheme
-                                    .subtitle2
+                                    .subtitle2!
                                     .fontSize,
                                 color: t.hintColor,
                               ),
@@ -164,7 +164,7 @@ class _SettingsViewState extends State<SettingsView> {
                                 fontWeight: FontWeight.bold,
                                 fontSize: Theme.of(context)
                                     .textTheme
-                                    .subtitle1
+                                    .subtitle1!
                                     .fontSize,
                               ),
                             ),
@@ -212,7 +212,7 @@ class _SettingsViewState extends State<SettingsView> {
                                                   'assets/images/font_awesome_chain.png',
                                                 ),
                                               ),
-                                              applicationVersion: '1.0.0',
+                                              applicationVersion: '1.0.1',
                                               children: [
                                                 Column(
                                                   crossAxisAlignment:

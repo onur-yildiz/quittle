@@ -15,37 +15,36 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0+1
+version: 1.0.1+1
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  sqflite: ^1.3.1+1
-  path: ^1.7.0
+  sqflite: ^2.0.0+3
+  path: ^1.8.0
   intl: ^0.17.0
-  uuid: ^2.2.2
-  provider: ^4.3.2+2
-  persistent_bottom_nav_bar: ^3.1.0
-  reorderables: ^0.3.2
-  sleek_circular_slider: ^1.2.0+web
-  flutter_local_notifications: ^4.0.1+1
-  rxdart: ^0.25.0
-  flutter_native_timezone: ^1.0.4
-  workmanager: ^0.2.3
-  url_launcher: ^6.0.2
-  font_awesome_flutter: ^8.11.0
+  uuid: ^3.0.4
+  provider: ^5.0.0
+  persistent_bottom_nav_bar: ^4.0.2
+  reorderables: ^0.4.1
+  sleek_circular_slider: ^2.0.0
+  flutter_local_notifications: ^5.0.0+1
+  rxdart: ^0.26.0
+  flutter_native_timezone: ^1.0.10
+  workmanager: ^0.4.0
+  url_launcher: ^6.0.3
+  font_awesome_flutter: ^9.0.0
   animations: ^2.0.0
-  liquid_progress_indicator: ^0.3.2
-  confetti: ^0.5.5
-  flutter_slidable: ^0.5.7
-  share: ^2.0.0
+  confetti: ^0.6.0-nullsafety
+  flutter_slidable: ^0.6.0
+  share: ^2.0.1
   path_provider: ^2.0.1
-  shared_preferences: ^2.0.3
+  shared_preferences: ^2.0.5
 
 
   
@@ -53,11 +52,12 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+  liquid_progress_indicator_ns: ^1.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: "^0.8.0"
+  flutter_launcher_icons: ^0.9.0
 
 flutter_icons:
   android: "font_awesome_chain"

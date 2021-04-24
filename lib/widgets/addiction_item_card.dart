@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:ui' as ui;
 import 'dart:typed_data';
@@ -19,9 +20,9 @@ import 'package:quittle/widgets/addiction_progress.dart';
 
 class AddictionItemCard extends StatelessWidget {
   AddictionItemCard({
-    @required this.addictionData,
-    @required this.onDelete,
-    @required key,
+    required this.addictionData,
+    required this.onDelete,
+    required key,
   }) : super(key: key);
 
   final Addiction addictionData;
@@ -36,17 +37,17 @@ class AddictionItemCard extends StatelessWidget {
 
     _share() async {
       RenderRepaintBoundary boundary =
-          _cardKey.currentContext.findRenderObject();
+          _cardKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
       ui.Image image = await boundary.toImage(pixelRatio: 2.0);
-      ByteData byteData =
-          await image.toByteData(format: ui.ImageByteFormat.png);
+      ByteData byteData = await (image.toByteData(
+          format: ui.ImageByteFormat.png) as FutureOr<ByteData>);
       Uint8List pngBytes = byteData.buffer.asUint8List();
       final directory = (await getApplicationDocumentsDirectory()).path;
       File imgFile = File('$directory/screenshot_shared.png');
       await imgFile.writeAsBytes(pngBytes);
       Share.shareFiles(
         ['$directory/screenshot_shared.png'],
-        text: local.shareMsg,
+        text: local!.shareMsg,
         subject: local.shareMsgSubject,
       );
     }
@@ -94,7 +95,7 @@ class AddictionItemCard extends StatelessWidget {
           ),
           actions: [
             IconSlideAction(
-              caption: local.share,
+              caption: local!.share,
               color: t.accentColor,
               icon: Icons.share,
               onTap: _share,
@@ -135,9 +136,9 @@ class AddictionItemCard extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                                 fontSize: Theme.of(context)
                                     .textTheme
-                                    .headline5
+                                    .headline5!
                                     .fontSize,
-                                color: t.textTheme.bodyText1.color,
+                                color: t.textTheme.bodyText1!.color,
                               ),
                             ),
                           ),

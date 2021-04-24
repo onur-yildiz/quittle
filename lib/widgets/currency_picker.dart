@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:quittle/providers/settings_provider.dart';
 
 class CurrencyPicker extends StatefulWidget {
-  final Function onUpdate;
+  final Function? onUpdate;
 
   const CurrencyPicker({
     this.onUpdate,
@@ -18,7 +18,7 @@ class CurrencyPicker extends StatefulWidget {
 }
 
 class _CurrencyPickerState extends State<CurrencyPicker> {
-  List _currencies = [];
+  List? _currencies = [];
 
   Future<void> getJson() async {
     final String response =
@@ -50,7 +50,7 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
             height: deviceHeight * .8,
             width: deviceWidth * .4,
             child: ListView.builder(
-              itemCount: _currencies.length,
+              itemCount: _currencies!.length,
               itemBuilder: (context, index) => TextButton(
                 style: ButtonStyle(
                   shape: MaterialStateProperty.all(
@@ -69,12 +69,12 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
                 ),
                 onPressed: () {
                   Provider.of<SettingsProvider>(context, listen: false)
-                      .updateCurrency(_currencies[index]['code']);
-                  widget.onUpdate(_currencies[index]['code']);
-                  Navigator.of(context).pop(_currencies[index]['code']);
+                      .updateCurrency(_currencies![index]['code']);
+                  widget.onUpdate!(_currencies![index]['code']);
+                  Navigator.of(context).pop(_currencies![index]['code']);
                 },
                 child: Text(
-                  _currencies[index]['code'],
+                  _currencies![index]['code'],
                   style: TextStyle(
                     color: t.accentColor,
                   ),

@@ -12,19 +12,19 @@ class Addiction {
   final int consumptionType;
   final double dailyConsumption;
   final double unitCost;
-  List<PersonalNote> personalNotes;
-  List<Gift> gifts;
-  int level;
-  int achievementLevel;
-  int sortOrder;
+  List<PersonalNote>? personalNotes;
+  List<Gift>? gifts;
+  int? level;
+  int? achievementLevel;
+  int? sortOrder;
 
   Addiction({
-    @required this.id,
-    @required this.name,
-    @required this.quitDate,
-    @required this.consumptionType,
-    @required this.dailyConsumption,
-    @required this.unitCost,
+    required this.id,
+    required this.name,
+    required this.quitDate,
+    required this.consumptionType,
+    required this.dailyConsumption,
+    required this.unitCost,
     this.personalNotes,
     this.gifts,
     this.level,
@@ -56,8 +56,8 @@ class Addiction {
 
   double get totalSpent {
     double total = 0.0;
-    gifts.forEach((gift) {
-      total += gift.price * gift.count;
+    gifts!.forEach((gift) {
+      total += gift.price! * gift.count!;
     });
     return total;
   }
@@ -67,9 +67,9 @@ class Addiction {
   }
 
   List<PersonalNote> get personalNotesDateSorted {
-    List<PersonalNote> list = [...personalNotes];
+    List<PersonalNote> list = [...personalNotes!];
     list.sort((a, b) {
-      return DateTime.parse(b.date).compareTo(DateTime.parse(a.date));
+      return DateTime.parse(b.date!).compareTo(DateTime.parse(a.date!));
     });
     return list;
   }

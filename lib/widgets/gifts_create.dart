@@ -7,28 +7,28 @@ import 'package:quittle/widgets/custom_text_form_field.dart';
 
 class CreateGift extends StatefulWidget {
   CreateGift({
-    @required this.addictionId,
+    required this.addictionId,
   });
 
-  final String addictionId;
+  final String? addictionId;
   @override
   _CreateGiftNoteState createState() => _CreateGiftNoteState();
 }
 
 class _CreateGiftNoteState extends State<CreateGift> {
   final GlobalKey<FormState> _formKey = GlobalKey();
-  FocusNode formFocusNode;
+  late FocusNode formFocusNode;
   var giftData = {
     'name': '',
     'price': 0.0,
   };
 
   void trySubmit(BuildContext ctx) {
-    final isValid = _formKey.currentState.validate();
+    final isValid = _formKey.currentState!.validate();
     FocusScope.of(context).unfocus();
 
     if (isValid) {
-      _formKey.currentState.save();
+      _formKey.currentState!.save();
       Provider.of<AddictionsProvider>(context, listen: false).createGift(
         giftData,
         widget.addictionId,
@@ -53,7 +53,7 @@ class _CreateGiftNoteState extends State<CreateGift> {
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context);
-    final local = AppLocalizations.of(context);
+    final local = AppLocalizations.of(context)!;
     final inputBackgroundColor = t.canvasColor;
     final buttonHeight = t.buttonTheme.height * 2;
 

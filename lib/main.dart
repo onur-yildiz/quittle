@@ -26,15 +26,15 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 final BehaviorSubject<ReceivedNotification> didReceiveLocalNotificationSubject =
     BehaviorSubject<ReceivedNotification>();
 
-final BehaviorSubject<String> selectNotificationSubject =
-    BehaviorSubject<String>();
+final BehaviorSubject<String?> selectNotificationSubject =
+    BehaviorSubject<String?>();
 
 class ReceivedNotification {
   ReceivedNotification({
-    @required this.id,
-    @required this.title,
-    @required this.body,
-    @required this.payload,
+    required this.id,
+    required this.title,
+    required this.body,
+    required this.payload,
   });
 
   final int id;
@@ -43,12 +43,12 @@ class ReceivedNotification {
   final String payload;
 }
 
-String selectedNotificationPayload;
+String? selectedNotificationPayload;
 // String _initialRoute;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Workmanager.initialize(
+  Workmanager().initialize(
     callbackDispatcher,
   );
 
@@ -70,7 +70,7 @@ void main() async {
   );
 
   await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-      onSelectNotification: (String payload) async {
+      onSelectNotification: (String? payload) async {
     if (payload != null) {
       debugPrint('notification payload: $payload');
     }
@@ -187,12 +187,12 @@ Future<void> _fetchStartupData(BuildContext context) async {
 
 void _setDailyQuoteNotification(BuildContext context) async {
   if (Provider.of<SettingsProvider>(context, listen: false)
-      .receiveQuoteNotifs) {
-    Workmanager.registerPeriodicTask(
+      .receiveQuoteNotifs!) {
+    Workmanager().registerPeriodicTask(
       'quote-notification',
       'quote-notification',
       inputData: {
-        'locale': AppLocalizations.of(context).localeName,
+        'locale': AppLocalizations.of(context)!.localeName,
       },
       frequency: Duration(days: 1),
       existingWorkPolicy: ExistingWorkPolicy.keep,
@@ -205,26 +205,26 @@ void _setDailyQuoteNotification(BuildContext context) async {
       ),
     );
   } else {
-    Workmanager.cancelByUniqueName('quote-notification');
+    Workmanager().cancelByUniqueName('quote-notification');
   }
 }
 
 void callbackDispatcher() {
-  Workmanager.executeTask((taskName, inputData) async {
+  Workmanager().executeTask((taskName, inputData) async {
     switch (taskName) {
       case 'progress-notification':
         final addictionData =
-            await DBHelper.getData('addictions', 'id', inputData['id']);
+            await DBHelper.getData('addictions', 'id', inputData!['id']);
         final addiction = Addiction(
-          id: addictionData[0]['id'],
-          name: addictionData[0]['name'],
-          quitDate: addictionData[0]['quit_date'],
-          consumptionType: addictionData[0]['consumption_type'],
-          dailyConsumption: addictionData[0]['daily_consumption'],
-          unitCost: addictionData[0]['unit_cost'],
-          level: addictionData[0]['level'],
+          id: addictionData[0]['id'] as String,
+          name: addictionData[0]['name'] as String,
+          quitDate: addictionData[0]['quit_date'] as String,
+          consumptionType: addictionData[0]['consumption_type'] as int,
+          dailyConsumption: addictionData[0]['daily_consumption'] as double,
+          unitCost: addictionData[0]['unit_cost'] as double,
+          level: addictionData[0]['level'] as int?,
         );
-        final nextLevel = addiction.level + 1;
+        final nextLevel = addiction.level! + 1;
         if (addiction.abstinenceTime.inSeconds >=
             levelDurations[nextLevel].inSeconds) {
           await DBHelper.update(
@@ -240,11 +240,11 @@ void callbackDispatcher() {
         }
         // if last achievement level, cancel
         if (addiction.level == 8) {
-          Workmanager.cancelByUniqueName(addiction.id);
+          Workmanager().cancelByUniqueName(addiction.id);
         }
         break;
       case 'quote-notification':
-        final quoteList = quotes[inputData['locale']];
+        final quoteList = quotes[inputData!['locale']]!;
         Random random = new Random(DateTime.now().millisecondsSinceEpoch);
         int rndi = random.nextInt(quoteList.length);
         showQuoteNotification(
@@ -276,7 +276,8 @@ void showProgressNotification(
   );
 }
 
-void showQuoteNotification(String notificationTitle, String notificationBody) {
+void showQuoteNotification(
+    String? notificationTitle, String? notificationBody) {
   final androidDetails = AndroidNotificationDetails(
     'quitAllProgress',
     'progressNotifications',

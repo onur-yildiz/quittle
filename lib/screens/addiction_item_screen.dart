@@ -41,7 +41,7 @@ class _AddictionItemState extends State<AddictionItemScreen> {
   Widget build(BuildContext context) {
     final t = Theme.of(context);
     final AddictionItemScreenArgs args =
-        ModalRoute.of(context).settings.arguments;
+        ModalRoute.of(context)!.settings.arguments as AddictionItemScreenArgs;
     final local = AppLocalizations.of(context);
 
     List<Widget> _buildScreens() {
@@ -56,21 +56,21 @@ class _AddictionItemState extends State<AddictionItemScreen> {
       return [
         PersistentBottomNavBarItem(
           icon: FaIcon(FontAwesomeIcons.infoCircle),
-          title: (local.overview),
-          activeColor: t.primaryColor,
-          inactiveColor: t.hintColor,
+          title: (local!.overview),
+          activeColorPrimary: t.primaryColor,
+          inactiveColorPrimary: t.hintColor,
         ),
         PersistentBottomNavBarItem(
           icon: FaIcon(FontAwesomeIcons.gifts),
           title: (local.rewards),
-          activeColor: t.primaryColor,
-          inactiveColor: t.hintColor,
+          activeColorPrimary: t.primaryColor,
+          inactiveColorPrimary: t.hintColor,
         ),
         PersistentBottomNavBarItem(
           icon: FaIcon(FontAwesomeIcons.trophy),
           title: (local.achievements),
-          activeColor: t.primaryColor,
-          inactiveColor: t.hintColor,
+          activeColorPrimary: t.primaryColor,
+          inactiveColorPrimary: t.hintColor,
         ),
       ];
     }
@@ -84,10 +84,10 @@ class _AddictionItemState extends State<AddictionItemScreen> {
       ),
       body: GestureDetector(
         onHorizontalDragEnd: (details) {
-          if (details.primaryVelocity < -400 &&
+          if (details.primaryVelocity! < -400 &&
               _controller.index < tabLength - 1) {
             _controller.jumpToTab(_controller.index + 1);
-          } else if (details.primaryVelocity > 400 && _controller.index > 0) {
+          } else if (details.primaryVelocity! > 400 && _controller.index > 0) {
             _controller.jumpToTab(_controller.index - 1);
           }
         },

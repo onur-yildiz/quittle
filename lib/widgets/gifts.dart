@@ -13,7 +13,7 @@ import 'package:quittle/providers/settings_provider.dart';
 import 'package:quittle/widgets/gifts_create.dart';
 
 class Gifts extends StatefulWidget {
-  final Addiction data;
+  final Addiction? data;
 
   Gifts({
     this.data,
@@ -24,11 +24,11 @@ class Gifts extends StatefulWidget {
 }
 
 class _GiftsState extends State<Gifts> {
-  List<Widget> _tiles;
-  String currency;
+  List<Widget>? _tiles;
+  String? currency;
 
-  List<Widget> _getTiles(Addiction data) {
-    _tiles = data.gifts
+  List<Widget>? _getTiles(Addiction data) {
+    _tiles = data.gifts!
         .map<Widget>(
           (gift) => GiftCard(
             gift: gift,
@@ -47,12 +47,12 @@ class _GiftsState extends State<Gifts> {
 
   void _onReorder(int oldIndex, int newIndex) {
     setState(() {
-      if (_tiles.elementAt(oldIndex).runtimeType == AddGiftButton ||
-          newIndex == _tiles.length - 1) {
+      if (_tiles!.elementAt(oldIndex).runtimeType == AddGiftButton ||
+          newIndex == _tiles!.length - 1) {
         return;
       }
       Provider.of<AddictionsProvider>(context, listen: false)
-          .reorderGifts(oldIndex, newIndex, widget.data.id);
+          .reorderGifts(oldIndex, newIndex, widget.data!.id);
     });
   }
 
@@ -61,7 +61,7 @@ class _GiftsState extends State<Gifts> {
     Future.delayed(Duration.zero, () {
       setState(() {
         Provider.of<AddictionsProvider>(context, listen: false)
-            .fetchGifts(widget.data.id);
+            .fetchGifts(widget.data!.id);
       });
     });
     currency = Provider.of<SettingsProvider>(context, listen: false).currency;
@@ -88,59 +88,61 @@ class _GiftsState extends State<Gifts> {
             maxMainAxisCount: 2,
             spacing: deviceSize.width * .0399,
             runSpacing: deviceSize.width * .04,
-            children: _getTiles(widget.data),
+            children: _getTiles(widget.data!)!,
             onReorder: _onReorder,
             needsLongPressDraggable: true,
-            header: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        local.available + ' ',
-                        style: TextStyle(
-                          color: t.hintColor,
-                          fontWeight: FontWeight.bold,
+            header: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          local!.available + ' ',
+                          style: TextStyle(
+                            color: t.hintColor,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      Text(
-                        NumberFormat.simpleCurrency(
-                          name: currency,
-                          locale: local.localeName,
-                        ).format(widget.data.availableMoney),
-                        style: TextStyle(
-                          color: Colors.green[800],
-                          fontWeight: FontWeight.bold,
+                        Text(
+                          NumberFormat.simpleCurrency(
+                            name: currency,
+                            locale: local.localeName,
+                          ).format(widget.data!.availableMoney),
+                          style: TextStyle(
+                            color: Colors.green[800],
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        local.spent + ' ',
-                        style: TextStyle(
-                          color: t.hintColor,
-                          fontWeight: FontWeight.bold,
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          local.spent + ' ',
+                          style: TextStyle(
+                            color: t.hintColor,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      Text(
-                        NumberFormat.simpleCurrency(
-                          name: currency,
-                          locale: local.localeName,
-                        ).format(widget.data.totalSpent),
-                        style: TextStyle(
-                          color: Colors.green[800],
-                          fontWeight: FontWeight.bold,
+                        Text(
+                          NumberFormat.simpleCurrency(
+                            name: currency,
+                            locale: local.localeName,
+                          ).format(widget.data!.totalSpent),
+                          style: TextStyle(
+                            color: Colors.green[800],
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
+                      ],
+                    ),
+                  ],
+                ),
+              )
+            ],
           ),
         );
       }),
@@ -150,10 +152,10 @@ class _GiftsState extends State<Gifts> {
 
 class GiftCard extends StatefulWidget {
   const GiftCard({
-    Key key,
-    @required this.gift,
-    @required this.availableMoney,
-    @required this.dailyGain,
+    Key? key,
+    required this.gift,
+    required this.availableMoney,
+    required this.dailyGain,
   }) : super(key: key);
 
   final Gift gift;
@@ -165,26 +167,26 @@ class GiftCard extends StatefulWidget {
 }
 
 class _GiftCardState extends State<GiftCard> {
-  double percentage;
-  String currency;
+  double? percentage;
+  String? currency;
 
   @override
   void initState() {
-    percentage = (widget.availableMoney / widget.gift.price).clamp(0.0, 1.0);
+    percentage = (widget.availableMoney / widget.gift.price!).clamp(0.0, 1.0);
     currency = Provider.of<SettingsProvider>(context, listen: false).currency;
     super.initState();
   }
 
   @override
   void didUpdateWidget(covariant GiftCard oldWidget) {
-    percentage = (widget.availableMoney / widget.gift.price).clamp(0.0, 1.0);
+    percentage = (widget.availableMoney / widget.gift.price!).clamp(0.0, 1.0);
     super.didUpdateWidget(oldWidget);
   }
 
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context);
-    final local = AppLocalizations.of(context);
+    final local = AppLocalizations.of(context)!;
     final materialLocal = MaterialLocalizations.of(context);
     final deviceSize = MediaQuery.of(context).size;
     final giftPrice = NumberFormat.compactSimpleCurrency(
@@ -192,7 +194,7 @@ class _GiftCardState extends State<GiftCard> {
       locale: local.localeName,
     ).format(widget.gift.price);
     final daysLeft =
-        ((widget.gift.price - widget.availableMoney) / widget.dailyGain);
+        ((widget.gift.price! - widget.availableMoney) / widget.dailyGain);
     final daysLeftClamped = daysLeft.clamp(1, 365);
 
     _deleteDialog() {
@@ -248,12 +250,12 @@ class _GiftCardState extends State<GiftCard> {
                 context: context,
                 builder: (context) => new AlertDialog(
                   title: Text(
-                    widget.availableMoney >= widget.gift.price
-                        ? local.purchaseGiftMsg(giftPrice, widget.gift.name)
+                    widget.availableMoney >= widget.gift.price!
+                        ? local.purchaseGiftMsg(giftPrice, widget.gift.name!)
                         : local.notEnoughMoney,
-                  ), //'Purchase \"${widget.gift.name}\" for $giftPrice'
+                  ), //'Purchase \"${widget.gift.name!}\" for $giftPrice'
                   actions: [
-                    widget.availableMoney >= widget.gift.price
+                    widget.availableMoney >= widget.gift.price!
                         ? TextButton(
                             onPressed: () {
                               Navigator.of(context).pop();
@@ -262,10 +264,10 @@ class _GiftCardState extends State<GiftCard> {
                               materialLocal.cancelButtonLabel,
                             ),
                           )
-                        : null,
+                        : SizedBox.shrink(),
                     TextButton(
                       onPressed: () {
-                        if (widget.availableMoney >= widget.gift.price) {
+                        if (widget.availableMoney >= widget.gift.price!) {
                           Provider.of<AddictionsProvider>(context,
                                   listen: false)
                               .buyGift(widget.gift);
@@ -280,7 +282,7 @@ class _GiftCardState extends State<GiftCard> {
                 ),
               ),
               child: DefaultTextStyle(
-                style: t.textTheme.bodyText1,
+                style: t.textTheme.bodyText1!,
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Flex(
@@ -291,7 +293,7 @@ class _GiftCardState extends State<GiftCard> {
                         flex: 3,
                         fit: FlexFit.tight,
                         child: Text(
-                          widget.gift.name,
+                          widget.gift.name!,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
@@ -352,21 +354,21 @@ class _GiftCardState extends State<GiftCard> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  (percentage * 100)
+                                  (percentage! * 100)
                                           .toStringAsFixed(2)
                                           .padLeft(6) +
                                       "%",
                                   style: TextStyle(
                                     color: Theme.of(context)
                                         .textTheme
-                                        .bodyText1
+                                        .bodyText1!
                                         .color,
                                     fontWeight: percentage == 1
                                         ? FontWeight.w900
                                         : null,
                                     fontSize: Theme.of(context)
                                         .textTheme
-                                        .subtitle2
+                                        .subtitle2!
                                         .fontSize,
                                   ),
                                 ),
@@ -403,7 +405,7 @@ class _GiftCardState extends State<GiftCard> {
                 child: Icon(
                   Icons.delete,
                   color: t.errorColor.withOpacity(.8),
-                  size: t.textTheme.headline6.fontSize,
+                  size: t.textTheme.headline6!.fontSize,
                 ),
               ),
               onLongPress: _deleteDialog,
@@ -417,9 +419,9 @@ class _GiftCardState extends State<GiftCard> {
 }
 
 class AddGiftButton extends StatelessWidget {
-  const AddGiftButton({@required this.id});
+  const AddGiftButton({required this.id});
 
-  final String id;
+  final String? id;
 
   @override
   Widget build(BuildContext context) {
@@ -453,7 +455,7 @@ class AddGiftButton extends StatelessWidget {
             child: Center(
               child: Icon(
                 Icons.add,
-                size: t.textTheme.headline4.fontSize,
+                size: t.textTheme.headline4!.fontSize,
                 // color: t.hintColor,
               ),
             ),

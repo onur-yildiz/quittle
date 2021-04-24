@@ -17,7 +17,7 @@ class AddictionsProvider with ChangeNotifier {
     if (addiction.sortOrder == _addictions.length)
       _addictions.add(addiction);
     else
-      _addictions.insert(addiction.sortOrder, addiction);
+      _addictions.insert(addiction.sortOrder!, addiction);
 
     notifyListeners();
     await DBHelper.insert(
@@ -34,7 +34,7 @@ class AddictionsProvider with ChangeNotifier {
         'sort_order': _addictions.length,
       },
     );
-    reorderAddictions(_addictions.length, addiction.sortOrder);
+    reorderAddictions(_addictions.length, addiction.sortOrder!);
   }
 
   Future<Addiction> createAddiction(Map<String, dynamic> data) async {
@@ -85,15 +85,15 @@ class AddictionsProvider with ChangeNotifier {
     addictionsTable.forEach(
       (addiction) async {
         var temp = Addiction(
-          id: addiction['id'],
-          name: addiction['name'],
-          quitDate: addiction['quit_date'],
-          consumptionType: addiction['consumption_type'],
-          dailyConsumption: addiction['daily_consumption'],
-          unitCost: addiction['unit_cost'],
-          level: addiction['level'],
-          achievementLevel: addiction['achievement_level'],
-          sortOrder: addiction['sort_order'],
+          id: addiction['id'] as String,
+          name: addiction['name'] as String,
+          quitDate: addiction['quit_date'] as String,
+          consumptionType: addiction['consumption_type'] as int,
+          dailyConsumption: addiction['daily_consumption'] as double,
+          unitCost: addiction['unit_cost'] as double,
+          level: addiction['level'] as int?,
+          achievementLevel: addiction['achievement_level'] as int?,
+          sortOrder: addiction['sort_order'] as int?,
           personalNotes: [],
           gifts: [],
         );
@@ -102,7 +102,7 @@ class AddictionsProvider with ChangeNotifier {
       },
     );
     loadedAddictions.sort((a, b) {
-      return a.sortOrder.compareTo(b.sortOrder);
+      return a.sortOrder!.compareTo(b.sortOrder!);
     });
     _addictions = loadedAddictions;
     notifyListeners();
@@ -113,9 +113,9 @@ class AddictionsProvider with ChangeNotifier {
     final addiction = _addictions.firstWhere((addiction) => addiction.id == id);
     _addictions.remove(addiction);
     notifyListeners();
-    final temp = _addictions.where((a) => a.sortOrder > addiction.sortOrder);
+    final temp = _addictions.where((a) => a.sortOrder! > addiction.sortOrder!);
     temp.forEach((a) async {
-      a.sortOrder--;
+      a.sortOrder = a.sortOrder! - 1;
       await DBHelper.update('addictions', 'sort_order', a.id, a.sortOrder);
     });
     await DBHelper.delete('addictions', id);
@@ -140,7 +140,7 @@ class AddictionsProvider with ChangeNotifier {
     // add a code that reverts the reorder if db fails
   }
 
-  void createNote(Map<String, dynamic> data, String id) async {
+  void createNote(Map<String, dynamic> data, String? id) async {
     final addiction = _addictions.firstWhere((addiction) => addiction.id == id);
     final newNote = PersonalNote(
       title: data['title'],
@@ -156,11 +156,11 @@ class AddictionsProvider with ChangeNotifier {
         'date': data['date'],
       },
     );
-    addiction.personalNotes.add(newNote);
+    addiction.personalNotes!.add(newNote);
     notifyListeners();
   }
 
-  Future<void> fetchNotes(String id) async {
+  Future<void> fetchNotes(String? id) async {
     final List<PersonalNote> loadedNotes = [];
     final addiction = _addictions.firstWhere((addiction) => addiction.id == id);
     final notes = await DBHelper.getData(
@@ -171,16 +171,16 @@ class AddictionsProvider with ChangeNotifier {
     notes.forEach((note) {
       loadedNotes.add(
         PersonalNote(
-          title: note['title'],
-          text: note['text'],
-          date: note['date'],
+          title: note['title'] as String?,
+          text: note['text'] as String?,
+          date: note['date'] as String?,
         ),
       );
     });
     addiction.personalNotes = loadedNotes;
   }
 
-  void createGift(Map<String, dynamic> data, String id) async {
+  void createGift(Map<String, dynamic> data, String? id) async {
     final addiction = _addictions.firstWhere((addiction) => addiction.id == id);
     final giftId = Uuid().v1();
     final newGift = Gift(
@@ -188,7 +188,7 @@ class AddictionsProvider with ChangeNotifier {
       addictionId: id,
       name: data['name'],
       price: data['price'],
-      sortOrder: addiction.gifts.length,
+      sortOrder: addiction.gifts!.length,
     );
     await DBHelper.insert(
       'gifts',
@@ -198,14 +198,14 @@ class AddictionsProvider with ChangeNotifier {
         'name': data['name'],
         'price': data['price'],
         'count': 0,
-        'sort_order': addiction.gifts.length,
+        'sort_order': addiction.gifts!.length,
       },
     );
-    addiction.gifts.add(newGift);
+    addiction.gifts!.add(newGift);
     notifyListeners();
   }
 
-  Future<void> fetchGifts(String id) async {
+  Future<void> fetchGifts(String? id) async {
     final List<Gift> loadedGifts = [];
     final addiction = _addictions.firstWhere((addiction) => addiction.id == id);
     final gifts = await DBHelper.getData(
@@ -216,16 +216,16 @@ class AddictionsProvider with ChangeNotifier {
     gifts.forEach((gift) {
       loadedGifts.add(
         Gift(
-          id: gift['id'],
-          addictionId: gift['addiction_id'],
-          name: gift['name'],
-          price: gift['price'],
-          count: gift['count'],
-          sortOrder: gift['sort_order'],
+          id: gift['id'] as String?,
+          addictionId: gift['addiction_id'] as String?,
+          name: gift['name'] as String?,
+          price: gift['price'] as double?,
+          count: gift['count'] as int?,
+          sortOrder: gift['sort_order'] as int?,
         ),
       );
     });
-    loadedGifts.sort((a, b) => a.sortOrder.compareTo(b.sortOrder));
+    loadedGifts.sort((a, b) => a.sortOrder!.compareTo(b.sortOrder!));
     addiction.gifts = loadedGifts;
     notifyListeners();
   }
@@ -233,21 +233,21 @@ class AddictionsProvider with ChangeNotifier {
   void deleteGift(Gift gift) async {
     final addiction =
         _addictions.firstWhere((addiction) => addiction.id == gift.addictionId);
-    addiction.gifts.remove(gift);
+    addiction.gifts!.remove(gift);
     notifyListeners();
     final temp =
-        addiction.gifts.where((g) => g.sortOrder > addiction.sortOrder);
+        addiction.gifts!.where((g) => g.sortOrder! > addiction.sortOrder!);
     temp.forEach((g) async {
-      g.sortOrder--;
+      g.sortOrder = g.sortOrder! - 1;
       await DBHelper.update('gifts', 'sort_order', g.id, g.sortOrder);
     });
     await DBHelper.delete('gifts', gift.id);
   }
 
-  Future<void> reorderGifts(int oldIndex, int newIndex, String id) async {
+  Future<void> reorderGifts(int oldIndex, int newIndex, String? id) async {
     final addiction = _addictions.firstWhere((addiction) => addiction.id == id);
-    final temp = addiction.gifts.removeAt(oldIndex);
-    addiction.gifts.insert(newIndex, temp);
+    final temp = addiction.gifts!.removeAt(oldIndex);
+    addiction.gifts!.insert(newIndex, temp);
     await DBHelper.reorder(
       'gifts',
       'sort_order',
@@ -261,7 +261,7 @@ class AddictionsProvider with ChangeNotifier {
   }
 
   void buyGift(Gift gift) async {
-    gift.count = gift.count + 1;
+    gift.count = gift.count! + 1;
     await DBHelper.update(
       'gifts',
       'count',

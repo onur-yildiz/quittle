@@ -6,8 +6,8 @@ import 'package:quittle/models/addiction.dart';
 
 class TargetDurationIndicator extends StatelessWidget {
   TargetDurationIndicator({
-    @required this.data,
-    @required this.local,
+    required this.data,
+    required this.local,
   });
 
   final Addiction data;
@@ -71,14 +71,14 @@ class TargetDurationIndicator extends StatelessWidget {
           ),
           mainLabelStyle: TextStyle(
             color: t.primaryColor,
-            fontSize: t.textTheme.headline5.fontSize,
+            fontSize: t.textTheme.headline5!.fontSize,
             fontWeight: FontWeight.bold,
           ),
         ),
         customWidths: CustomSliderWidths(
           handlerSize: 0,
-          progressBarWidth: t.textTheme.bodyText1.fontSize,
-          trackWidth: t.textTheme.bodyText1.fontSize,
+          progressBarWidth: t.textTheme.bodyText1!.fontSize,
+          trackWidth: t.textTheme.bodyText1!.fontSize,
         ),
         customColors: CustomSliderColors(
           hideShadow: true,

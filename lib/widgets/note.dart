@@ -8,16 +8,16 @@ class Note extends StatelessWidget {
   final PersonalNote data;
 
   Note({
-    @required this.data,
+    required this.data,
   });
 
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context);
     final _controller = TextEditingController(text: data.text);
-    final local = AppLocalizations.of(context);
+    final local = AppLocalizations.of(context)!;
     final quitDateFormatted =
-        DateFormat.yMMMd(local.localeName).format(DateTime.parse(data.date));
+        DateFormat.yMMMd(local.localeName).format(DateTime.parse(data.date!));
     return Container(
       decoration: BoxDecoration(
         color: t.canvasColor,
@@ -41,7 +41,7 @@ class Note extends StatelessWidget {
                 flex: 2,
                 fit: FlexFit.tight,
                 child: Text(
-                  data.title,
+                  data.title!,
                   style: TextStyle(
                     color: t.hintColor,
                     fontWeight: FontWeight.bold,

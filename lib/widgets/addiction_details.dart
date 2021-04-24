@@ -9,7 +9,7 @@ import 'package:quittle/widgets/duration_counter.dart';
 
 class AddictionDetails extends StatelessWidget {
   const AddictionDetails({
-    @required this.addictionData,
+    required this.addictionData,
   });
 
   final Addiction addictionData;
@@ -21,7 +21,7 @@ class AddictionDetails extends StatelessWidget {
     final Duration abstinenceTime = addictionData.abstinenceTime;
     final double dailySavings =
         addictionData.dailyConsumption * addictionData.unitCost;
-    final local = AppLocalizations.of(context);
+    final local = AppLocalizations.of(context)!;
     final currency = Provider.of<SettingsProvider>(context).currency;
     final String quitDateFormatted =
         DateFormat.yMMMd(local.localeName).format(addictionData.quitDateTime);
@@ -34,7 +34,7 @@ class AddictionDetails extends StatelessWidget {
           ));
 
     return DefaultTextStyle(
-      style: t.textTheme.bodyText2.copyWith(
+      style: t.textTheme.bodyText2!.copyWith(
         fontWeight: FontWeight.bold,
       ),
       child: Padding(

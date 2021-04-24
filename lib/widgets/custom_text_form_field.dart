@@ -3,10 +3,10 @@ import 'package:flutter/services.dart';
 
 class CustomTextFormField extends StatelessWidget {
   const CustomTextFormField(
-      {Key key,
-      @required this.valKey,
-      @required this.data,
-      @required this.inputName,
+      {Key? key,
+      required this.valKey,
+      required this.data,
+      required this.inputName,
       this.focusNode,
       this.inputType,
       this.validator,
@@ -17,15 +17,15 @@ class CustomTextFormField extends StatelessWidget {
       : super(key: key);
 
   final String valKey;
-  final Map<String, Object> data;
+  final Map<String, Object?> data;
   final String inputName;
-  final TextInputType inputType;
-  final Function validator;
-  final FocusNode focusNode;
-  final TextInputAction inputAction;
-  final Color backgroundColor;
-  final Function onSubmit;
-  final int maxLength;
+  final TextInputType? inputType;
+  final Function? validator;
+  final FocusNode? focusNode;
+  final TextInputAction? inputAction;
+  final Color? backgroundColor;
+  final Function? onSubmit;
+  final int? maxLength;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,7 @@ class CustomTextFormField extends StatelessWidget {
     return TextFormField(
       onFieldSubmitted: (_) {
         if (inputAction != TextInputAction.done) return;
-        onSubmit();
+        onSubmit!();
       },
       focusNode: focusNode,
       key: ValueKey(valKey),
@@ -68,7 +68,7 @@ class CustomTextFormField extends StatelessWidget {
       ),
       cursorColor: t.primaryColor,
       keyboardType: inputType,
-      validator: validator,
+      validator: validator as String? Function(String?)?,
       textInputAction: inputAction,
       maxLength: maxLength,
       maxLengthEnforcement: MaxLengthEnforcement.enforced,
@@ -80,10 +80,10 @@ class CustomTextFormField extends StatelessWidget {
         var value;
         switch (data[valKey].runtimeType) {
           case int:
-            value = input is int ? input : int.parse(input);
+            value = input is int ? input : int.parse(input!);
             break;
           case double:
-            value = input is double ? input : double.parse(input);
+            value = input is double ? input : double.parse(input!);
             break;
           case String:
             value = input is String ? input : input.toString();

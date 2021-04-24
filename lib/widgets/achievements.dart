@@ -3,15 +3,15 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
 import 'package:confetti/confetti.dart';
+import 'package:liquid_progress_indicator_ns/liquid_progress_indicator.dart';
 
 import 'package:quittle/extensions/duration_extension.dart';
 import 'package:quittle/models/addiction.dart';
 import 'package:quittle/util/progress_constants.dart';
 
 class Achievements extends StatefulWidget {
-  final Addiction data;
+  final Addiction? data;
 
   const Achievements({
     this.data,
@@ -22,16 +22,16 @@ class Achievements extends StatefulWidget {
 }
 
 class _AchievementsState extends State<Achievements> {
-  int maxAchLevel;
-  List localizedAchDurations;
-  int achLevel;
-  double percentage;
+  int? maxAchLevel;
+  late List localizedAchDurations;
+  int? achLevel;
+  late double percentage;
 
   initialAnimation() {
-    final targetPercentage = (widget.data.abstinenceTime.inMinutes /
+    final num targetPercentage = (widget.data!.abstinenceTime.inMinutes /
             achievementDurations.last.inMinutes)
         .clamp(0.0, 1.0);
-    final targetLevel = widget.data.achievementLevel;
+    final targetLevel = widget.data!.achievementLevel;
     int nextAchLevel = 1;
     Timer.periodic(Duration(milliseconds: 100), (timer) {
       if (percentage < targetPercentage && mounted) {
@@ -40,7 +40,7 @@ class _AchievementsState extends State<Achievements> {
           if ((achievementDurations[nextAchLevel].inMinutes /
                       achievementDurations.last.inMinutes) <=
                   percentage &&
-              achLevel < targetLevel) {
+              achLevel! < targetLevel!) {
             achLevel = nextAchLevel;
             nextAchLevel++;
           }
@@ -78,25 +78,25 @@ class _AchievementsState extends State<Achievements> {
     return pos;
   }
 
-  void _getLocalizedAchievementDurations(AppLocalizations local) {
+  void _getLocalizedAchievementDurations(AppLocalizations? local) {
     localizedAchDurations[0] = 'A New Start!';
     for (var i = 1; i < achievementDurations.length; i++) {
       if (achievementDurations[i].inDays < 30) {
         localizedAchDurations[i] =
-            ('${achievementDurations[i].inDays} ${local.day(achievementDurations[i].inDays)}');
+            ('${achievementDurations[i].inDays} ${local!.day(achievementDurations[i].inDays)}');
       } else if (achievementDurations[i].inDays < 360) {
         final int inMonths = (achievementDurations[i].inDays / 30).floor();
-        localizedAchDurations[i] = ('$inMonths ${local.month(inMonths)}');
+        localizedAchDurations[i] = ('$inMonths ${local!.month(inMonths)}');
       } else {
         final int inYears = (achievementDurations[i].inDays / 360).floor();
-        localizedAchDurations[i] = ('$inYears ${local.year(inYears)}');
+        localizedAchDurations[i] = ('$inYears ${local!.year(inYears)}');
       }
     }
   }
 
   @override
   void didUpdateWidget(covariant Achievements oldWidget) {
-    percentage = (widget.data.abstinenceTime.inMinutes /
+    percentage = (widget.data!.abstinenceTime.inMinutes /
             achievementDurations.last.inMinutes)
         .clamp(0.0, 1.0);
     super.didUpdateWidget(oldWidget);
@@ -110,7 +110,7 @@ class _AchievementsState extends State<Achievements> {
     final double tileHeight = deviceSize.width;
     double totalHeight = 0.0;
     List achievementHeights = [];
-    for (var i = 0; i < maxAchLevel; i++) {
+    for (var i = 0; i < maxAchLevel!; i++) {
       achievementHeights.add(
         tileHeight *
             (achievementDurations[i + 1] - achievementDurations[i]).in30s,
@@ -143,6 +143,9 @@ class _AchievementsState extends State<Achievements> {
                       ),
                       backgroundColor: Colors.transparent,
                       direction: Axis.vertical,
+                      borderWidth: 0,
+                      borderColor: Colors.transparent,
+                      borderRadius: 0,
                     ),
                   ],
                 ),
@@ -184,7 +187,7 @@ class _AchievementsState extends State<Achievements> {
                         ),
                       ),
                       ...List<Widget>.generate(
-                        maxAchLevel,
+                        maxAchLevel!,
                         (index) => Positioned(
                           bottom: getVerticalPosition(tileHeight, index),
                           child: Trophy(
@@ -192,9 +195,9 @@ class _AchievementsState extends State<Achievements> {
                             // subtitle: localizedAchDurations[index + 1],
                             level: index + 1,
                             height: achievementHeights[index],
-                            trophySize: t.textTheme.headline3.fontSize *
+                            trophySize: t.textTheme.headline3!.fontSize! *
                                 (index + 1).clamp(0.0, deviceSize.width * .5),
-                            active: index + 1 <= achLevel ? true : false,
+                            active: index + 1 <= achLevel! ? true : false,
                           ),
                         ),
                       ).reversed
@@ -232,7 +235,7 @@ class Trophy extends StatefulWidget {
 }
 
 class _TrophyState extends State<Trophy> {
-  ConfettiController _confettiController;
+  late ConfettiController _confettiController;
   bool _isPlayed = false;
 
   @override
@@ -273,10 +276,10 @@ class _TrophyState extends State<Trophy> {
     );
 
     final bool isTitleOverflowed = widget.trophySize / widget.title.length <
-        t.textTheme.bodyText1.fontSize;
+        t.textTheme.bodyText1!.fontSize!;
     final bool isSubtitleOverflowed =
         widget.trophySize / widget.subtitle.length <
-            t.textTheme.bodyText1.fontSize;
+            t.textTheme.bodyText1!.fontSize!;
 
     return ConfettiWidget(
       confettiController: _confettiController,
@@ -300,7 +303,7 @@ class _TrophyState extends State<Trophy> {
                 Padding(
                   padding: EdgeInsets.only(
                     top: isTitleOverflowed
-                        ? t.textTheme.bodyText1.fontSize *
+                        ? t.textTheme.bodyText1!.fontSize! *
                             (isSubtitleOverflowed ? 2 : 1)
                         : 0.0,
                   ),
@@ -325,7 +328,7 @@ class _TrophyState extends State<Trophy> {
                 ),
                 Positioned(
                   top: isSubtitleOverflowed
-                      ? t.textTheme.bodyText1.fontSize
+                      ? t.textTheme.bodyText1!.fontSize
                       : widget.trophySize * .4,
                   child: Text(
                     widget.subtitle,
